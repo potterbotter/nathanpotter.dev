@@ -1,0 +1,10 @@
+// Cloudflare Workers config: serves public/ as static assets. No Worker script yet.
+// Later, for server-side code (e.g. the CV chat API), add "main": "src/worker.js".
+{
+  "name": "nathanpotter-dev",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./public",
+    "not_found_handling": "404-page"
+  }
+}
