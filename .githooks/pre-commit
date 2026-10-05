@@ -1,0 +1,16 @@
+#!/bin/sh
+# Blocks commits that look like personal data (DESIGN.md, "Data and privacy").
+# Enable once per clone:  git config core.hooksPath .githooks
+
+allowed='^public/nathan-potter-resume\.pdf$'
+blocked='\.(pdf|docx?|rtf|odt|csv|tsv|xlsx?|json\.bak|sqlite3?|db|sql|eml|msg|mbox)$|(^|/)(data|exports?|private|applications|job-descriptions)/|\.dev\.vars$|(^|/)\.env'
+
+hits=$(git diff --cached --name-only --diff-filter=ACR | grep -Ei "$blocked" | grep -Ev "$allowed")
+
+if [ -n "$hits" ]; then
+  echo "pre-commit: blocked files that may contain personal data:" >&2
+  echo "$hits" | sed 's/^/  /' >&2
+  echo "Private data belongs in Cloudflare D1/R2, not in this public repo." >&2
+  echo "If a file is genuinely public, add it to 'allowed' in .githooks/pre-commit." >&2
+  exit 1
+fi

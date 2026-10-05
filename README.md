@@ -24,6 +24,14 @@ Adding a page: create `public/<name>/index.html`. It's served at `/<name>/`.
 
 Dropping in the CV: replace `public/cv/index.html` with the CV file (keep the name), remove its `noindex` meta tag, commit and push.
 
+## Privacy guardrail (run once per clone)
+
+This repo is public, and personal data lives in Cloudflare D1/R2 (see DESIGN.md, "Data and privacy"). Enable the pre-commit hook that blocks data-looking files:
+
+```
+git config core.hooksPath .githooks
+```
+
 ## Local preview
 
 Any static server works, for example (with Python installed):
@@ -75,4 +83,10 @@ DNS and email are on Cloudflare too:
 | 2026-10-05 | Edit mode commits to GitHub | Git stays the source of truth and history serves as undo. Edits deploy through the same pipeline as code. |
 | 2026-10-05 | Backbone is public-only to start; job descriptions and generated résumés never committed | The repo is public. Committing applications would reveal where Nathan is applying. Private facts get a private store if they're ever needed. |
 | 2026-10-05 | Access login via GitHub (1-month session), not email codes or custom authenticator-app codes | One click when already signed in, and GitHub's authenticator-app 2FA provides the second factor. Home-built authenticator-code auth would mean maintaining sessions, brute-force protection and recovery for the page that can rewrite the CV. |
+| 2026-10-05 | Scope grows: the site becomes the CV plus a private job-search system (analytics, tracker, résumé generator, automation) | One backbone of facts serves both the public showcase and Nathan's own job search, and the system itself is portfolio evidence. |
+| 2026-10-05 | One public repo; all personal data in Cloudflare D1/R2 | Repo choice doesn't change storage cost (data lives in Cloudflare either way; 1,000 applications is about 100 MB). One repo avoids duplicating the engine, `cv.json` and the design system. The risk of accidental leaks is handled by a written rule plus a pre-commit hook. |
+| 2026-10-05 | Two locks on private routes: Cloudflare Access plus the Worker verifying the Access token | The code is public, so a single misconfigured rule shouldn't be enough to expose data. |
+| 2026-10-05 | Only notes / number provenance is a private outcome field | Everything else about an outcome is fine to show. Private fields use the same IDs in D1. |
+| 2026-10-05 | Nathan always submits applications for now; built for auto-submit later | Duplicate detection, source adapters with capability flags, quality evidence per application, and safety rails exist from the start, so automation becomes a setting rather than a rebuild. No ToS or CAPTCHA workarounds. |
+| 2026-10-05 | Build order puts the job-fit engine, tracker and generator before edit mode | Nathan is job searching now. CV edits can go through Claude Code until edit mode exists. |
 | 2026-10-05 | Built with Claude Code (AI-assisted) | Scaffolding, README and deploy steps were produced in a Claude Code session, with dashboard steps done by hand. |
