@@ -5,6 +5,7 @@
   X-Frame-Options: DENY
   Permissions-Policy: camera=(), microphone=(), geolocation=()
 
-# Keep workers.dev and preview URLs out of search results; the custom domain is canonical.
-https://*.workers.dev/*
+# Keep workers.dev and preview URLs (e.g. <id>-nathanpotter-dev.potterjnathan.workers.dev)
+# out of search results; the custom domain is canonical.
+https://:host.potterjnathan.workers.dev/*
   X-Robots-Tag: noindex
