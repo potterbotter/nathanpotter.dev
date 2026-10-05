@@ -70,4 +70,8 @@ DNS and email are on Cloudflare too:
 | 2026-10-05 | Site voice derived from a private "Nathan voice" skill | The skill was built from real Slack writing and stays private because its examples name colleagues and internal projects. A new public register was added for the site, and only those rules live here. |
 | 2026-10-05 | AI tools that assess Nathan speak in a neutral third person | A first-person self-assessment reads as self-promotion and undercuts the job-fit tool's honesty. |
 | 2026-10-05 | Confident CV copy, candid write-ups | Résumé language needs some self-promotion to compete. Honesty is enforced at the level of facts (no inflated numbers or scope) rather than tone. |
+| 2026-10-05 | CV content in `content/cv.json` plus a small build step (reverses "no build step") | Edit mode needs to know where each piece of text lives, and the AI tools need the same facts as data. A tiny script, with no framework, keeps the output plain static HTML. |
+| 2026-10-05 | Private `/admin/` tools behind Cloudflare Access | Edit mode and the résumé generator are for Nathan only. Access handles login at Cloudflare's edge, so there's no auth code or password to maintain. |
+| 2026-10-05 | Edit mode commits to GitHub | Git stays the source of truth and history serves as undo. Edits deploy through the same pipeline as code. |
+| 2026-10-05 | Backbone is public-only to start; job descriptions and generated résumés never committed | The repo is public. Committing applications would reveal where Nathan is applying. Private facts get a private store if they're ever needed. |
 | 2026-10-05 | Built with Claude Code (AI-assisted) | Scaffolding, README and deploy steps were produced in a Claude Code session, with dashboard steps done by hand. |
