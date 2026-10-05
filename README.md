@@ -74,4 +74,5 @@ DNS and email are on Cloudflare too:
 | 2026-10-05 | Private `/admin/` tools behind Cloudflare Access | Edit mode and the résumé generator are for Nathan only. Access handles login at Cloudflare's edge, so there's no auth code or password to maintain. |
 | 2026-10-05 | Edit mode commits to GitHub | Git stays the source of truth and history serves as undo. Edits deploy through the same pipeline as code. |
 | 2026-10-05 | Backbone is public-only to start; job descriptions and generated résumés never committed | The repo is public. Committing applications would reveal where Nathan is applying. Private facts get a private store if they're ever needed. |
+| 2026-10-05 | Access login via GitHub (1-month session), not email codes or custom authenticator-app codes | One click when already signed in, and GitHub's authenticator-app 2FA provides the second factor. Home-built authenticator-code auth would mean maintaining sessions, brute-force protection and recovery for the page that can rewrite the CV. |
 | 2026-10-05 | Built with Claude Code (AI-assisted) | Scaffolding, README and deploy steps were produced in a Claude Code session, with dashboard steps done by hand. |

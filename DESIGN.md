@@ -58,7 +58,7 @@ CV content lives in one structured file, `content/cv.json`. Every role, bullet, 
 
 ## Private tools (`/admin/`)
 
-Protected by Cloudflare Access (email one-time code, Nathan's address only). It's configured in the dashboard, with no login code in the repo. The same principles apply, especially 3.
+Protected by Cloudflare Access using **GitHub login**, restricted to Nathan's GitHub account (whose 2FA is the second factor), with a **1-month session** so logins are rare. It's configured in the dashboard, with no login code in the repo. The same principles apply, especially 3.
 
 **Edit mode** (`/admin/`): the real page with every content field editable in place. Save writes `cv.json` and commits to GitHub through a repo-scoped token stored as a Cloudflare secret, with a descriptive commit message. The push redeploys the site. A save is refused if the file changed since the editor opened, never silently overwritten. Git history is the undo.
 
