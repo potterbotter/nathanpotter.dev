@@ -1,13 +1,32 @@
 // Cloudflare Workers config. `wrangler deploy` runs the build (content/cv.json → dist/),
-// then serves dist/ as static assets. No Worker script yet; server code will add "main".
+// serves dist/ as static assets, and runs src/worker.js only for /admin/* and /api/*.
 {
   "name": "nathanpotter-dev",
+  "main": "src/worker.js",
   "compatibility_date": "2026-10-01",
   "build": {
     "command": "node build/build.mjs"
   },
   "assets": {
     "directory": "./dist",
-    "not_found_handling": "404-page"
-  }
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/admin", "/admin/*", "/api/*"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "nathanpotter-dev",
+      "database_id": "REPLACE_WITH_D1_DATABASE_ID",
+      "migrations_dir": "migrations"
+    }
+  ],
+  // Not secret. ACCESS_* come from the Cloudflare Access application (Zero Trust dashboard).
+  // Secrets (set in the dashboard, never here): GITHUB_TOKEN, ADMIN_EMAIL.
+  "vars": {
+    "GITHUB_REPO": "potterbotter/nathanpotter.dev",
+    "ACCESS_TEAM_DOMAIN": "",
+    "ACCESS_AUD": ""
+  },
+  "observability": { "enabled": true }
 }

@@ -1,5 +1,5 @@
 {
-  "_note": "Canonical content for nathanpotter.dev v1, extracted from the design prototype. Copy is Nathan's, from his v1 CV, except headlines marked as condensed. Bracketed text = placeholder still to be written by Nathan. Card ids are permanent: never renumber or reuse them; display order is array order.",
+  "_note": "Canonical content for nathanpotter.dev v1, extracted from the design prototype. Copy is Nathan's, from his v1 CV, except headlines marked as condensed. Bracketed text = placeholder still to be written by Nathan. Card ids are permanent: never renumber or reuse them; display order is array order. New cards in a role get id <role>-<nextCard>, then nextCard increases.",
   "person": {
     "name": "Nathan Potter",
     "title": "Senior Product Manager",
@@ -74,6 +74,7 @@
         "title": "Senior Product Manager, Client Onboarding & Risk Platform",
         "dates": "Jan 2025 – present",
         "note": "Moved from Client Insights & Automation to take over Client Onboarding & Risk when the team needed a PM to lead it.",
+        "nextCard": 8,
         "cards": [
           {
             "id": "anchorage-0",
@@ -148,6 +149,7 @@
         "title": "Senior Product Manager, Originations",
         "dates": "Mar 2023 – Dec 2023",
         "note": null,
+        "nextCard": 3,
         "cards": [
           {
             "id": "jaris-0",
@@ -182,6 +184,7 @@
         "title": "Product Analyst → Product Manager",
         "dates": "Oct 2018 – Mar 2023",
         "note": null,
+        "nextCard": 8,
         "cards": [
           {
             "id": "mosaic-0",

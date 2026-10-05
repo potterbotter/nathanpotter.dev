@@ -2,7 +2,8 @@
 # Blocks commits that look like personal data (DESIGN.md, "Data and privacy").
 # Enable once per clone:  git config core.hooksPath .githooks
 
-allowed='^public/nathan-potter-resume\.pdf$'
+# Allowed: the public résumé PDF, and D1 schema migrations (table definitions only, never data).
+allowed='^public/nathan-potter-resume\.pdf$|^migrations/[0-9]{4}_[a-z0-9_]+\.sql$'
 blocked='\.(pdf|docx?|rtf|odt|csv|tsv|xlsx?|json\.bak|sqlite3?|db|sql|eml|msg|mbox)$|(^|/)(data|exports?|private|applications|job-descriptions)/|\.dev\.vars$|(^|/)\.env'
 
 hits=$(git diff --cached --name-only --diff-filter=ACR | grep -Ei "$blocked" | grep -Ev "$allowed")

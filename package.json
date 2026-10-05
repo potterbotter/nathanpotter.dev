@@ -5,6 +5,11 @@
   "scripts": {
     "build": "node build/build.mjs",
     "build:draft": "node build/build.mjs --show-placeholders",
-    "preview": "node build/build.mjs && node build/serve.mjs"
+    "preview": "node build/build.mjs && node build/serve.mjs",
+    "dev": "wrangler dev",
+    "test": "node --test \"tests/**/*.test.mjs\""
+  },
+  "devDependencies": {
+    "wrangler": "^4.147.0"
   }
 }

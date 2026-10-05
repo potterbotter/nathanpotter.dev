@@ -246,8 +246,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .footer-contact h2 { font-size: var(--fs-5); }
 .footer-contact .open-to { max-width: 40ch; opacity: .92; }
 .footer-buttons { display: flex; flex-wrap: wrap; gap: var(--sp-3); }
-.btn--on-band { background: var(--band-ink); color: var(--band); }
-.footer-band .btn--on-band:hover { color: var(--band); }
+.footer-band .btn--on-band, .footer-band .btn--on-band:hover { background: var(--band-ink); color: var(--band); }
 .btn--outline-band { border-color: currentColor; color: var(--band-ink); font-weight: 400; }
 .sitemap { flex: 1 1 360px; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--sp-5); }
 .sitemap div { display: flex; flex-direction: column; gap: var(--sp-2); }

@@ -19,9 +19,15 @@ public/                 ← static files copied into dist/ as-is
   assets/js/site.js     ← small enhancements; every page works without it
   _headers, favicon.svg, robots.txt
 design/handoff/         ← Claude Design handoff: tokens, components, navigation, pages, prototype
+src/worker.js           ← Worker: runs only for /admin/* and /api/* (auth, drafts, publish)
+src/access.js           ← Cloudflare Access token verification (tested in tests/)
+admin/                  ← admin-only JS/CSS, served behind sign-in at /admin/assets/
+migrations/             ← D1 schema (edit-mode drafts)
 dist/                   ← build output (git-ignored)
-wrangler.jsonc          ← Cloudflare config: runs the build, serves dist/
+wrangler.jsonc          ← Cloudflare config: build, assets, Worker, D1 binding, vars
 ```
+
+**Admin / edit mode:** `/sign-in/` → `/admin/` (Cloudflare Access, GitHub login, one account) → `/admin/edit/`. Edits save as drafts in D1; **Publish** commits `content/cv.json` to `main` through the GitHub API, which redeploys. The Worker re-verifies Access's signed token and the allowed email on every request and fails closed if anything is missing. Secrets (`GITHUB_TOKEN`, `ADMIN_EMAIL`) live only in Cloudflare.
 
 **Editing content:** change `content/cv.json`, then commit and push. Placeholder copy written as `[in brackets]` is hidden on the live site until it's replaced.
 
@@ -44,6 +50,8 @@ npm run preview
 ```
 
 Then open http://localhost:8787. `npm run build:draft` builds with the `[placeholder]` copy visible.
+
+Admin locally: create `.dev.vars` (git-ignored) with `DEV_BYPASS_ACCESS=true` and `DEV_USE_BUNDLED_CV=true`, run `npx wrangler d1 migrations apply nathanpotter-dev --local` once, then `npm run dev` and open http://localhost:8788/admin/edit/. The bypass only works on localhost. `npm test` runs the Access verification tests.
 
 ## Deployment
 
@@ -102,4 +110,9 @@ DNS and email are on Cloudflare too:
 | 2026-10-05 | `[Bracketed]` placeholders hidden on the live site; unbuilt features behind flags | The PDF résumé already points recruiters here, so the live site shouldn't show unfinished copy or a fit CTA that leads to a placeholder. |
 | 2026-10-05 | "5e-compatible", not "D&D 5e", in the DPR description | Follows the brief's rule against using official branding. |
 | 2026-10-05 | v1 reviewed on a preview branch before replacing "coming soon" | Going live is public. The `workers.dev` preview lets Nathan review it first. |
+| 2026-10-05 | Edit mode built ahead of the job-fit engine | Nathan wanted to polish CV content in the tool itself. Access, the Worker and D1 are reused by the tracker and generator, so the foundation just moved earlier. |
+| 2026-10-05 | The Worker shares the build's templates and validation | Edit mode renders the real page from the draft, so what you edit is what ships. The same checks run at build time and on every draft save. |
+| 2026-10-05 | Every edit saves the whole draft, then reloads the page | Simpler and harder to get wrong than syncing the page by hand. The cost is a quick reload per change. |
+| 2026-10-05 | Access token verification extracted and unit-tested (forged, tampered, expired, wrong-audience, unsigned) | It's the lock that matters if an Access rule is ever misconfigured, and the code is public. |
+| 2026-10-05 | Footer email button fixed (white on white) | Caught in an edit-mode screenshot. The footer link colour overrode the button's colour. |
 | 2026-10-05 | Built with Claude Code (AI-assisted) | Scaffolding, README and deploy steps were produced in a Claude Code session, with dashboard steps done by hand. |

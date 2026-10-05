@@ -9,6 +9,10 @@ const isPlaceholder = (s) => /\[[^\]]*\]/.test(String(s ?? ''));
 // Placeholder copy ([bracketed]) is hidden on the live site unless --show-placeholders.
 const visible = (ctx, s) => s && (ctx.flags.showPlaceholders || !isPlaceholder(s));
 const join = (items, fn) => items.map(fn).join('');
+// Edit-mode hook: marks text as inline-editable at a cv.json path. Renders nothing on public pages.
+const ep = (ctx, path) => (ctx.edit ? ` data-edit-path="${esc(path)}" contenteditable="true" spellcheck="true"` : '');
+
+export const formatDate = (d) => d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'America/Los_Angeles' });
 
 const svg = (d, size = 16, stroke = 2) =>
   `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${stroke}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
@@ -20,13 +24,18 @@ const I = {
   mail: svg('<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>'),
   external: svg('<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>'),
   lock: svg('<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>', 14),
+  lockBig: svg('<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>', 28),
+  pencil: svg('<path d="M4 20h4L19 9l-4-4L4 16v4z"/>', 13, 2.25),
+  grip: svg('<path d="M9 6h.01M15 6h.01M9 12h.01M15 12h.01M9 18h.01M15 18h.01"/>', 14),
+  plus: svg('<path d="M12 5v14M5 12h14"/>', 14, 2.5),
 };
 
 const linkedinHandle = (url) => url.replace(/^https?:\/\/(www\.)?linkedin\.com\//, '').replace(/\/$/, '');
 
 // ---------- layout ----------
-function layout(ctx, { title, description, path, current, main, footer = 'slim', jsonld = '', noindex = false }) {
+function layout(ctx, { title, description, path, current, main, footer = 'slim', jsonld = '', noindex = false, admin = '', bare = false }) {
   const url = SITE + path;
+  if (admin) noindex = true;
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -44,12 +53,13 @@ ${noindex ? '<meta name="robots" content="noindex">\n' : ''}<link rel="canonical
 <link rel="stylesheet" href="/assets/css/tokens.css">
 <link rel="stylesheet" href="/assets/css/site.css">
 <script src="/assets/js/site.js" defer></script>
-${jsonld}</head>
+${admin ? '<link rel="stylesheet" href="/admin/assets/admin.css">\n' : ''}${ctx.edit ? '<script src="/admin/assets/admin.js" defer></script>\n' : ''}${jsonld}</head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-${header(ctx, path, current)}
+${admin}
+${bare ? bareHeader(ctx) : header(ctx, path, current)}
 ${main}
-${footer === 'band' ? bandFooter(ctx) : slimFooter(ctx)}
+${bare ? '' : footer === 'band' ? bandFooter(ctx) : slimFooter(ctx)}
 </body>
 </html>
 `;
@@ -111,7 +121,7 @@ function bandFooter(ctx) {
 <div class="wrap">
 <div class="footer-contact">
 <h2 id="h-contact">Contact</h2>
-${visible(ctx, openTo) ? `<p class="open-to">${esc(openTo)}</p>` : ''}
+${visible(ctx, openTo) ? `<p class="open-to"${ep(ctx, 'contact.openTo')}>${esc(openTo)}</p>` : ''}
 <div class="footer-buttons">
 <a class="btn btn--on-band" href="mailto:${esc(person.email)}">${esc(person.email)}</a>
 <a class="btn btn--outline-band" href="${esc(person.linkedin)}">LinkedIn</a>
@@ -120,7 +130,7 @@ ${visible(ctx, openTo) ? `<p class="open-to">${esc(openTo)}</p>` : ''}
 <nav class="sitemap noprint" aria-label="Site map">
 <div><span class="eyebrow">CV</span><a href="/">Full CV</a><a href="/views/">Role views</a><a href="/builder/">Builder</a><a href="/fintech/">Fintech</a><a href="/climate/">Climate</a></div>
 <div><span class="eyebrow">Builds</span><a href="/builds/">All builds</a><a href="/tools/job-fit/">Job-fit</a><a href="/tools/dpr/">DPR calculator</a></div>
-${ctx.flags.adminLive ? `<div><span class="eyebrow">Site</span><a href="/admin/">${I.lock}Admin</a></div>` : ''}
+${ctx.flags.adminLive ? `<div><span class="eyebrow">Site</span><a href="/sign-in/">${I.lock}Admin</a></div>` : ''}
 </nav>
 <p class="updated">Last updated ${esc(ctx.updated)}</p>
 </div>
@@ -135,7 +145,7 @@ function slimFooter(ctx) {
 <nav aria-label="Contact">
 <a href="mailto:${esc(person.email)}">${esc(person.email)}</a>
 <a href="${esc(person.linkedin)}">LinkedIn</a>
-${ctx.flags.adminLive ? `<a href="/admin/">${I.lock}Admin</a>` : ''}
+${ctx.flags.adminLive ? `<a href="/sign-in/">${I.lock}Admin</a>` : ''}
 </nav>
 </div>
 </footer>`;
@@ -156,13 +166,14 @@ function fitCta(ctx, variant) {
 }
 
 // ---------- CV page (/, /builder/, /fintech/, /climate/) ----------
+// ctx.edit (admin only) adds edit hooks and controls; ctx.adminBar is the admin strip's HTML.
 export function cvPage(ctx, viewKey) {
   const { cv } = ctx;
   const view = cv.views[viewKey];
   const curated = viewKey !== 'all';
   const viewKeys = ['all', 'builder', 'fintech', 'climate'];
-  const aboutParas = cv.about.filter((p) => visible(ctx, p));
-  const steps = cv.aiMethod.steps.filter((s) => visible(ctx, s.title) && visible(ctx, s.body));
+  const aboutParas = ctx.edit ? cv.about : cv.about.filter((p) => visible(ctx, p));
+  const steps = cv.aiMethod.steps.map((s, i) => ({ ...s, i })).filter((s) => visible(ctx, s.title) && visible(ctx, s.body));
 
   const sections = [
     ['summary', 'Summary'],
@@ -170,7 +181,7 @@ export function cvPage(ctx, viewKey) {
     ['experience', 'Experience'],
     ['ai-method', 'How I work with AI'],
     ['builds', 'Builds'],
-    aboutParas.length && ['about', 'About'],
+    (aboutParas.length || ctx.edit) && ['about', 'About'],
     ['skills', 'Skills'],
     ['education', 'Education'],
     ['site-build', 'How this site was built'],
@@ -185,8 +196,8 @@ export function cvPage(ctx, viewKey) {
 <p class="eyebrow">${esc(cv.person.title)} · ${esc(cv.person.location)}</p>
 <div class="hero-title"><h1 id="h-summary">${esc(cv.person.name)}</h1><div class="rule"></div></div>
 <div class="hero-copy">
-<p class="hero-headline">${esc(cv.summary.headline)}</p>
-<p class="hero-lede">${esc(cv.summary.lede)}</p>
+<p class="hero-headline"${ep(ctx, 'summary.headline')}>${esc(cv.summary.headline)}</p>
+<p class="hero-lede"${ep(ctx, 'summary.lede')}>${esc(cv.summary.lede)}</p>
 </div>
 <ul class="metrics" aria-label="Key numbers">
 ${join(cv.heroMetrics, (m) => `<li><strong>${esc(m.value)}</strong><span>${esc(m.label)}</span></li>`)}
@@ -219,7 +230,7 @@ ${fitCta(ctx, 'hero')}
 </section>` : '';
 
   const arc = `<section id="career-arc" class="section" aria-labelledby="h-arc">
-<header class="section-head"><h2 id="h-arc">Career arc</h2><p class="section-lede">${esc(cv.careerArc.intro)}</p></header>
+<header class="section-head"><h2 id="h-arc">Career arc</h2><p class="section-lede"${ep(ctx, 'careerArc.intro')}>${esc(cv.careerArc.intro)}</p></header>
 <ol class="arc">
 ${join(cv.careerArc.stops, (s) => `<li${s.current ? ' class="current"' : ''}><span class="years">${esc(s.years)}</span><span class="industry">${esc(s.industry)}</span><a href="${esc(s.anchor)}">${esc(s.company)}</a><span class="muted">${esc(s.line)}</span></li>`)}
 </ol>
@@ -227,17 +238,30 @@ ${join(cv.careerArc.stops, (s) => `<li${s.current ? ' class="current"' : ''}><sp
 
   const builds = buildsSection(ctx);
 
-  const about = aboutParas.length ? `<section id="about" class="section" aria-labelledby="h-about">
-<h2 id="h-about">About</h2>
-<div class="prose">${join(aboutParas, (p) => `<p>${esc(p)}</p>`)}</div>
+  const about = (aboutParas.length || ctx.edit) ? `<section id="about" class="section" aria-labelledby="h-about">
+<div class="section-head section-head--row"><h2 id="h-about">About</h2>${ctx.edit ? `<button type="button" class="edit-btn" data-edit-about>${I.pencil}Edit About</button>` : ''}</div>
+<div class="prose" data-about>${join(aboutParas, (p) => `<p>${esc(p)}</p>`)}</div>
 </section>` : '';
+
+  // Public: plain text. Edit mode: every skill is a button that opens its wordings panel.
+  const skillItems = (g, gi) => {
+    if (!ctx.edit) {
+      return g.display === 'line'
+        ? `<p>${esc(g.items.map((i) => i.forms[i.shown]).join(' · '))}</p>`
+        : `<div class="skill-chips">${join(g.items, (i) => `<span class="skill">${esc(i.forms[i.shown])}</span>`)}</div>`;
+    }
+    return `<div class="skill-edit" data-skill-group="${gi}">
+<div class="skill-chips">${join(g.items, (s, si) => `<button type="button" class="skill skill--edit" data-skill="${gi}.${si}" aria-expanded="false">${esc(s.forms[s.shown])}${s.forms.length > 1 ? `<span class="syn-count">+${s.forms.length - 1}</span>` : ''}</button>`)}</div>
+<div class="skill-panel-slot"></div>
+<div class="inline-add"><input type="text" placeholder="Add a skill" aria-label="Add a skill to ${esc(g.name)}" data-add-skill-input="${gi}"><button type="button" class="edit-btn" data-add-skill="${gi}">${I.plus}Add</button></div>
+</div>`;
+  };
 
   const skills = `<div class="two-col">
 <section id="skills" class="section" aria-labelledby="h-skills">
 <h2 id="h-skills">Skills</h2>
-${join(cv.skills.groups, (g) => `<div class="skill-group"><h3>${esc(g.name)}</h3>${g.display === 'line'
-    ? `<p>${esc(g.items.map((i) => i.forms[i.shown]).join(' · '))}</p>`
-    : `<div class="skill-chips">${join(g.items, (i) => `<span class="skill">${esc(i.forms[i.shown])}</span>`)}</div>`}</div>`)}
+${ctx.edit ? '<p class="muted edit-hint">Click a skill to add synonyms and pick which wording the site shows. The résumé generator can use any of them.</p>' : ''}
+${join(cv.skills.groups, (g, gi) => `<div class="skill-group"><h3>${esc(g.name)}</h3>${skillItems(g, gi)}</div>`)}
 </section>
 <section id="education" class="section" aria-labelledby="h-edu">
 <h2 id="h-edu">Education</h2>
@@ -248,9 +272,9 @@ ${join(cv.education, (e) => `<div class="edu"><strong>${esc(e.school)}</strong><
   const sb = cv.siteBuild;
   const siteBuild = `<section id="site-build" class="section site-build" aria-labelledby="h-site">
 <h2 id="h-site">How this site was built</h2>
-${visible(ctx, sb.intro) ? `<p class="muted measure">${esc(sb.intro)}</p>` : ''}
-<details><summary>Stack and decisions ${I.chev(14)}</summary>
-<ul>${join(sb.stack.filter((s) => visible(ctx, s)), (s) => `<li>${esc(s)}</li>`)}<li>The code and the decision log are public: <a href="${esc(sb.repo)}">${esc(sb.repo.replace('https://', ''))}</a>.</li></ul>
+${visible(ctx, sb.intro) ? `<p class="muted measure"${ep(ctx, 'siteBuild.intro')}>${esc(sb.intro)}</p>` : ''}
+<details${ctx.edit ? ' open' : ''}><summary>Stack and decisions ${I.chev(14)}</summary>
+<ul>${join(sb.stack.map((s, i) => [s, i]).filter(([s]) => visible(ctx, s)), ([s, i]) => `<li${ep(ctx, `siteBuild.stack.${i}`)}>${esc(s)}</li>`)}<li>The code and the decision log are public: <a href="${esc(sb.repo)}">${esc(sb.repo.replace('https://', ''))}</a>.</li></ul>
 </details>
 </section>`;
 
@@ -262,8 +286,8 @@ ${banner}
 ${arc}
 ${experienceSection(ctx, viewKey)}
 <section id="ai-method" class="section" aria-labelledby="h-ai">
-<header class="section-head"><h2 id="h-ai">How I work with AI</h2><p class="section-lede">${esc(cv.aiMethod.intro)}</p></header>
-${steps.length ? `<ol class="steps">${join(steps, (s) => `<li><span class="n">${esc(s.n)}</span><strong>${esc(s.title)}</strong><span class="muted">${esc(s.body)}</span></li>`)}</ol>` : ''}
+<header class="section-head"><h2 id="h-ai">How I work with AI</h2><p class="section-lede"${ep(ctx, 'aiMethod.intro')}>${esc(cv.aiMethod.intro)}</p></header>
+${steps.length ? `<ol class="steps">${join(steps, (s) => `<li><span class="n">${esc(s.n)}</span><strong${ep(ctx, `aiMethod.steps.${s.i}.title`)}>${esc(s.title)}</strong><span class="muted"${ep(ctx, `aiMethod.steps.${s.i}.body`)}>${esc(s.body)}</span></li>`)}</ol>` : ''}
 </section>
 ${builds}
 ${about}
@@ -275,8 +299,8 @@ ${siteBuild}
   const title = curated ? `${cv.person.name} — CV, curated for ${view.label} roles` : `${cv.person.name} — ${cv.person.title}`;
   const description = curated ? `${view.focus} ${cv.summary.headline}` : `${cv.summary.headline} ${cv.summary.lede}`;
   return layout(ctx, {
-    title, description, path: view.path, current: 'cv', footer: 'band', jsonld: personJsonLd(cv),
-    main: `${hero}\n${main}`,
+    title, description, path: view.path, current: 'cv', footer: 'band', jsonld: ctx.adminBar ? '' : personJsonLd(cv),
+    main: `${hero}\n${main}`, admin: ctx.adminBar || '',
   });
 }
 
@@ -306,29 +330,37 @@ ${join(cv.experience.tags.filter((t) => counts[t]), (t) => `<button type="button
 <p class="status-line" aria-live="polite">${esc(statusText)}</p>
 </div>`;
 
-  const card = (c) => `<li class="card" id="${esc(c.id)}" data-tag="${esc(c.tag)}">
+  const editFoot = ctx.edit ? `<div class="card__edit noprint">
+<span class="grip" title="Drag to reorder">${I.grip}Drag to reorder</span>
+<span class="card__edit-actions"><button type="button" class="move-btn" data-move="-1" aria-label="Move earlier">←</button><button type="button" class="move-btn" data-move="1" aria-label="Move later">→</button><button type="button" class="edit-btn" data-edit-card>${I.pencil}Edit</button></span>
+</div>` : '';
+
+  const card = (c) => `<li class="card" id="${esc(c.id)}" data-tag="${esc(c.tag)}"${ctx.edit ? ' draggable="true"' : ''}>
 <div class="card__top"><span class="card__metric">${esc(c.metric)}</span><span class="tag">${esc(c.tag)}</span></div>
 <p class="card__headline">${esc(c.headline)}</p>
 <details><summary>Detail ${I.chev()}</summary><p>${esc(c.detail)}</p></details>
+${editFoot}
 </li>`;
 
   const roleBlock = (r) => {
+    const ri = cv.experience.roles.indexOf(r);
     const shown = r.cards.filter((c) => upFront(c, r));
     const folded = r.cards.filter((c) => !upFront(c, r));
     const moreLabel = shown.length ? `Show ${folded.length} more from ${r.company}` : `Show ${folded.length} results from ${r.company}`;
+    const addTile = ctx.edit ? `<li class="add-tile noprint"><button type="button" data-add-card="${esc(r.anchor)}">${I.plus}Add a result to ${esc(r.company)}</button></li>` : '';
     return `<article id="${esc(r.anchor)}" class="role" aria-labelledby="h-${esc(r.anchor)}">
 <header class="role-head">
 <div><h3 id="h-${esc(r.anchor)}">${esc(r.company)} <span class="kind">· ${esc(r.kind)}</span></h3><span class="title">${esc(r.title)}</span></div>
 <span class="dates">${esc(r.dates)}</span>
 </header>
-${r.note ? `<p class="role-note">${esc(r.note)}</p>` : ''}
-${shown.length ? `<ul class="cards">${join(shown, card)}</ul>` : ''}
+${r.note ? `<p class="role-note"${ep(ctx, `experience.roles.${ri}.note`)}>${esc(r.note)}</p>` : ''}
+${shown.length || ctx.edit ? `<ul class="cards" data-role="${esc(r.anchor)}">${join(shown, card)}${addTile}</ul>` : ''}
 ${folded.length ? `<details class="more"><summary>${esc(moreLabel)} ${I.chev()}</summary><ul class="cards">${join(folded, card)}</ul></details>` : ''}
 </article>`;
   };
 
   return `<section id="experience" class="section" aria-labelledby="h-exp">
-<header class="section-head"><h2 id="h-exp">Experience</h2><p class="section-lede">${esc(cv.experience.intro)}</p>
+<header class="section-head"><h2 id="h-exp">Experience</h2><p class="section-lede"${ep(ctx, 'experience.intro')}>${esc(cv.experience.intro)}</p>
 ${filters}
 </header>
 ${join(roles, roleBlock)}
@@ -453,6 +485,76 @@ ${kind === 'dpr' && ctx.flags.jobFitLive ? '<a class="btn btn--primary" href="/t
 </div>
 </main>`;
   return layout(ctx, { title: `${h1} — ${cv.person.name}`, description: b.summary, path: b.route, current: 'builds', main, noindex: true });
+}
+
+// ---------- sign-in and admin (admin pages are rendered by the Worker, after Access) ----------
+function bareHeader(ctx) {
+  return `<header class="site-header noprint"><div class="wrap">
+<a class="brand-link" href="/"><strong>${esc(ctx.cv.person.name)}</strong><span>nathanpotter.dev</span></a>
+<a class="textlink" href="/">Back to the CV</a>
+</div></header>`;
+}
+
+// Public page. The button enters /admin/, where Cloudflare Access asks GitHub who you are.
+export function signInPage(ctx) {
+  const main = `<main id="main" class="wrap admin-center">
+<section class="gate-card">
+<span class="gate-icon">${I.lockBig}</span>
+<h1>Admin</h1>
+<p class="muted">Confirm you are, in fact, ${esc(ctx.cv.person.name)}.</p>
+<a class="btn btn--dark" href="/admin/">Continue with GitHub</a>
+</section>
+</main>`;
+  return layout(ctx, { title: `Admin — ${ctx.cv.person.name}`, description: 'Admin sign-in.', path: '/sign-in/', current: null, main, noindex: true, bare: true });
+}
+
+export function adminBar(ctx, { mode, drafts }) {
+  const handle = esc(ctx.cv.person.github);
+  const label = drafts ? `${drafts} draft change${drafts === 1 ? '' : 's'}` : 'Published · no unsaved changes';
+  const right = mode === 'edit'
+    ? `<a class="admin-link" href="/admin/">Admin home</a>
+<a class="admin-link admin-link--outline" href="/admin/edit/?preview=1">Preview as visitor</a>
+<button type="button" class="admin-link" data-discard${drafts ? '' : ' hidden'}>Discard draft</button>
+<button type="button" class="admin-publish" data-publish${drafts ? '' : ' disabled'}>Publish</button>`
+    : mode === 'preview'
+      ? `<a class="admin-link admin-link--outline" href="/admin/edit/">Back to editing</a>`
+      : `<a class="admin-link" href="/admin/edit/">Edit the CV</a>`;
+  return `<div class="admin-bar noprint" role="region" aria-label="Admin">
+<div class="wrap">
+<div class="admin-bar__left">
+<span class="admin-badge">${mode === 'edit' ? 'Edit mode' : mode === 'preview' ? 'Preview' : 'Admin'}</span>
+<span>Signed in with GitHub as <strong>${handle}</strong></span>
+<span class="admin-drafts" aria-live="polite" data-draft-label>${esc(label)}</span>
+</div>
+<div class="admin-bar__right">
+${right}
+<a class="admin-link admin-link--quiet" href="/cdn-cgi/access/logout">Sign out</a>
+</div>
+</div>
+<p class="admin-msg" role="status" data-admin-msg hidden></p>
+</div>`;
+}
+
+export function adminHomePage(ctx, { drafts, lastPublished }) {
+  const main = `<main id="main" class="wrap page-main" style="padding-top: var(--sp-7)">
+<header class="page-title" style="padding-top:0">
+<p class="muted">Signed in with GitHub as ${esc(ctx.cv.person.github)}</p>
+<h1>Admin</h1><div class="rule"></div>
+</header>
+<div class="tiles">
+<a class="tile" href="/admin/edit/">
+<span class="tile__head"><span class="tile__name">Edit the CV</span><span class="status">Ready</span></span>
+<span class="muted">Edit results, About, skills and wordings in place. Changes save as drafts until you publish.</span>
+<span class="tile__action">Open edit mode</span>
+</a>
+<div class="tile tile--unbuilt" aria-disabled="true">
+<span class="tile__head"><span class="tile__name">Résumé generator</span><span class="status status--unbuilt">Not built yet</span></span>
+<span class="muted">Tailored, ATS-safe résumés from the same facts. Comes with the job-fit engine.</span>
+</div>
+</div>
+<p class="mono muted">Last published: ${esc(lastPublished || '—')} · Drafts: ${drafts}</p>
+</main>`;
+  return layout(ctx, { title: `Admin — ${ctx.cv.person.name}`, description: 'Admin.', path: '/admin/', current: null, main, admin: adminBar(ctx, { mode: 'home', drafts }), bare: true });
 }
 
 export function notFoundPage(ctx) {
