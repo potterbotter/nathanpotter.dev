@@ -4,6 +4,8 @@ Personal site of Nathan Potter: an interactive HTML CV plus a portfolio of proje
 
 **Live:** https://nathanpotter.dev · **Host:** Cloudflare Workers (static assets) · **Stack:** plain HTML/CSS, no build step
 
+Design principles and site structure: see [DESIGN.md](DESIGN.md).
+
 ## Structure
 
 ```
@@ -60,4 +62,9 @@ DNS and email are on Cloudflare too:
 | 2026-10-05 | Workers (static assets) instead of Pages | Cloudflare's dashboard routed Git imports to Workers, its recommended path for new projects. Same free static hosting, plus server-side code later goes in one Worker script. Required adding `wrangler.jsonc`. |
 | 2026-10-05 | Root domain is canonical; `www` 301-redirects to it | One address to share and for search engines. `www` is handled by a Redirect Rule at Cloudflare's edge, not by the Worker. |
 | 2026-10-05 | Always Use HTTPS on; Cloudflare-managed HSTS left off | `.dev` is already HSTS-preloaded in browsers. Always Use HTTPS covers non-browser clients, and Cloudflare's own HSTS setting adds risk for no gain. |
+| 2026-10-05 | Design principles locked in `DESIGN.md` | One source of truth for the CV chat, Claude Design and coding sessions. Key ideas: skim first with depth on demand; AI output is always inspectable and correctable. |
+| 2026-10-05 | Generic CV is the homepage; tools on their own pages | The PDF résumé links to the root domain, and recruiters skim for about 10 seconds. Tools are apps, not résumé content. |
+| 2026-10-05 | Role views at paths (`/fintech/`, `/builder/`, `/climate/`) | Optimised for sending tailored links to recruiters, combined with `?ref=`. |
+| 2026-10-05 | Public contact is `hello@` plus LinkedIn, no phone | Keeps personal details away from scrapers. The phone number stays on the PDF. |
+| 2026-10-05 | Visual system and navigation pattern go to Claude Design | Visual iteration against a style reference (a prior stylized CV) suits a design tool better. Tokens come back here as CSS custom properties. |
 | 2026-10-05 | Built with Claude Code (AI-assisted) | Scaffolding, README and deploy steps were produced in a Claude Code session, with dashboard steps done by hand. |
