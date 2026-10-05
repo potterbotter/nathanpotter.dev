@@ -1,0 +1,10 @@
+# Cloudflare Pages response headers. https://developers.cloudflare.com/pages/configuration/headers/
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+
+# Keep preview deployments (*.pages.dev) out of search results; the custom domain is canonical.
+https://:project.pages.dev/*
+  X-Robots-Tag: noindex
