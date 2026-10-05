@@ -1,6 +1,6 @@
 # nathanpotter.dev — Design principles
 
-**Status: principles locked 2026-10-05. Visual system and voice pending.** This file is the source of truth for how the site works. The CV chat, Claude Design and every coding session should follow it. When something changes, update it here and log the change in the README.
+**Status: principles locked 2026-10-05. Voice (public register) drafted. Visual system pending.** This file is the source of truth for how the site works. The CV chat, Claude Design and every coding session should follow it. When something changes, update it here and log the change in the README.
 
 ## Purpose
 
@@ -19,6 +19,18 @@ The site is the human-readable version of Nathan's résumé, and it proves the c
 7. **Real text and stable URLs.** Name in the `<h1>`, plain section headings, no key content in images or canvas. Collapsed content stays in the DOM (hidden visually, never lazy-loaded). Every CV section and role has a permanent anchor ID, so tools and links can point to it. Tool state is shareable in the URL.
 8. **Every build ships with its write-up**: what was tried, what failed, what changed. Decisions keep going into the README log.
 9. **Private by default.** No cookies, and no third-party trackers beyond cookieless analytics. Public contact is `hello@nathanpotter.dev` plus LinkedIn; the phone number stays on the PDF only. API keys live server-side only.
+
+## Voice
+
+Site copy is written in Nathan's voice, public register. The full guide is Nathan's private `nathan-voice` skill (register 6). The site rules:
+
+- **First person, headline first.** Lead with the result, then the detail.
+- **Facts flat, opinions hedged.** Outcomes and numbers stated plainly. Judgments as "I think" / "I'd".
+- **Flag what isn't resolved.** Write-ups say what failed, what's still rough and what would change. Frame honestly ("hardening in progress", not "solved").
+- **Show the trade-off.** For a decision: what was chosen, the real counter-argument, and why it lost this time.
+- **Plain words, no hype.** Concrete nouns and numbers over adjectives.
+- **Personality in proportion.** Dry humor fits About and the DPR calculator. CV bullets and the job-fit tool stay straight. No slang or profanity. Complete punctuation, no exclamation points.
+- **Tool output is not Nathan's voice.** AI tools that assess Nathan (e.g. the job-fit report) speak as a neutral third-person analyst, because first-person self-assessment reads as self-promotion. Interface copy around the tool is in Nathan's voice.
 
 ## Structure
 
@@ -56,7 +68,6 @@ The pattern is decided in the Claude Design pass. Requirements it must meet:
 `#summary` · `#career-arc` · `#experience` · `#exp-anchorage` · `#exp-jaris` · `#exp-mosaic` · `#ai-method` · `#builds` · `#about` · `#skills` · `#education` · `#contact`
 
 ## Open questions
-- **Voice:** a "Nathan voice" guide or skill, so the copy, the write-ups and the tools' output sound like Nathan. Source file pending.
 - **Analytics for `?ref=`:** Cloudflare Web Analytics (free) if it reports query strings, otherwise log `ref` in the Worker. Plausible is the paid fallback.
 - **Grounding source for the AI tools:** a plain-text or Markdown copy of the CV kept in the repo, in sync with the page.
 - **DPR calculator:** where the existing code lives and how it's brought in.

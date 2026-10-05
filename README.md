@@ -67,4 +67,6 @@ DNS and email are on Cloudflare too:
 | 2026-10-05 | Role views at paths (`/fintech/`, `/builder/`, `/climate/`) | Optimised for sending tailored links to recruiters, combined with `?ref=`. |
 | 2026-10-05 | Public contact is `hello@` plus LinkedIn, no phone | Keeps personal details away from scrapers. The phone number stays on the PDF. |
 | 2026-10-05 | Visual system and navigation pattern go to Claude Design | Visual iteration against a style reference (a prior stylized CV) suits a design tool better. Tokens come back here as CSS custom properties. |
+| 2026-10-05 | Site voice derived from a private "Nathan voice" skill | The skill was built from real Slack writing and stays private because its examples name colleagues and internal projects. A new public register was added for the site, and only those rules live here. |
+| 2026-10-05 | AI tools that assess Nathan speak in a neutral third person | A first-person self-assessment reads as self-promotion and undercuts the job-fit tool's honesty. |
 | 2026-10-05 | Built with Claude Code (AI-assisted) | Scaffolding, README and deploy steps were produced in a Claude Code session, with dashboard steps done by hand. |
