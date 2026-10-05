@@ -28,7 +28,7 @@ Site copy is written in Nathan's voice, public register. The full guide is Natha
 - **Facts flat, opinions hedged.** Outcomes and numbers stated plainly. Judgments as "I think" / "I'd".
 - **Flag what isn't resolved.** Write-ups say what failed, what's still rough and what would change. Frame honestly ("hardening in progress", not "solved").
 - **Show the trade-off.** For a decision: what was chosen, the real counter-argument, and why it lost this time.
-- **Plain words, no hype.** Concrete nouns and numbers over adjectives.
+- **Confident on the CV, candid in the write-ups.** CV and hero copy sell, in the confident register a résumé needs ("leverage" is in-voice). Write-ups and tool pages are candid about what failed. In both, the facts are never inflated: every number and scope claim must hold up, because the job-fit tool cites them.
 - **Personality in proportion.** Dry humor fits About and the DPR calculator. CV bullets and the job-fit tool stay straight. No slang or profanity. Complete punctuation, no exclamation points.
 - **Tool output is not Nathan's voice.** AI tools that assess Nathan (e.g. the job-fit report) speak as a neutral third-person analyst, because first-person self-assessment reads as self-promotion. Interface copy around the tool is in Nathan's voice.
 
