@@ -44,7 +44,7 @@ Cloudflare Workers Builds is connected to this GitHub repo (Workers project `nat
 DNS and email are on Cloudflare too:
 
 - `nathanpotter.dev` is attached to the Worker as a **Custom Domain**. Cloudflare creates the DNS record and certificate itself.
-- `www.nathanpotter.dev` redirects to the root domain.
+- `www.nathanpotter.dev` → proxied `AAAA 100::` placeholder record, plus a Redirect Rule (`https://www.*` → `https://${1}`, 301, query string preserved) sending it to the root domain.
 - HTTPS: `.dev` is on the browser HSTS preload list, so HTTPS is mandatory. Cloudflare issues the certificate automatically. SSL/TLS mode is **Full (strict)** and **Always Use HTTPS** is on.
 - Email: Cloudflare Email Routing forwards `hello@nathanpotter.dev` to a personal inbox (receive only).
 
@@ -58,4 +58,6 @@ DNS and email are on Cloudflare too:
 | 2026-10-05 | Site lives in `public/` | Keeps the README and config out of the deployed site. |
 | 2026-10-05 | Installed Git and the GitHub CLI via winget | Standard tooling, so the repo is created and pushed from the command line. |
 | 2026-10-05 | Workers (static assets) instead of Pages | Cloudflare's dashboard routed Git imports to Workers, its recommended path for new projects. Same free static hosting, plus server-side code later goes in one Worker script. Required adding `wrangler.jsonc`. |
+| 2026-10-05 | Root domain is canonical; `www` 301-redirects to it | One address to share and for search engines. `www` is handled by a Redirect Rule at Cloudflare's edge, not by the Worker. |
+| 2026-10-05 | Always Use HTTPS on; Cloudflare-managed HSTS left off | `.dev` is already HSTS-preloaded in browsers. Always Use HTTPS covers non-browser clients, and Cloudflare's own HSTS setting adds risk for no gain. |
 | 2026-10-05 | Built with Claude Code (AI-assisted) | Scaffolding, README and deploy steps were produced in a Claude Code session, with dashboard steps done by hand. |
