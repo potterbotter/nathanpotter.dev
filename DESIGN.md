@@ -1,6 +1,6 @@
 # nathanpotter.dev — Design principles
 
-**Status: principles locked 2026-10-05. Voice (public register) drafted. Visual system pending.** This file is the source of truth for how the site works. The CV chat, Claude Design and every coding session should follow it. When something changes, update it here and log the change in the README.
+**Status: principles locked 2026-10-05. Voice (public register) drafted. Visual system delivered (Claude Design handoff v1).** This file is the source of truth for principles, data, privacy and the private system. The design handoff in [`design/handoff/`](design/handoff/README.md) is the source of truth for tokens, components, navigation and page specs. Where they conflict, the "Design handoff reconciliation" section below decides. Every coding session should follow both. When something changes, update it here and log the change in the README.
 
 ## Purpose
 
@@ -62,54 +62,48 @@ PUBLIC
 /builder/  /fintech/  /climate/
                       Role views of the same CV: same facts, different order and emphasis.
                       Paths, so a tailored link is easy to send: nathanpotter.dev/fintech/?ref=acme
+/views/               Role views landing (pick a view)
+/builds/              Builds landing
 /tools/job-fit/       Job-fit tool, then its write-up and published test results
 /tools/dpr/           Damage-per-round calculator (5e-compatible, SRD content only), then its write-up
 /how-i-built-this/    Long-form site write-up
 /api/…                Public endpoints (rate limits, spend caps)
 
 PRIVATE (Cloudflare Access + Worker token check)
-/admin/               Dashboard: analytics, application pipeline, alerts
+/admin/               Sign-in card (public shell) → admin home once signed in
+/admin/edit/          Edit mode: the CV template rendered with edit controls
+/admin/resume/        Résumé generator: the job-fit page template plus the generator panel
 /admin/applications/  Tracker: jobs, applications, statuses, email events
-/admin/resume/        Tailored résumé generator (creates the application record)
-/admin/edit/          Edit mode for CV content
+/admin/dashboard/     Analytics and application pipeline
 /admin/settings/      Scan targets, search terms, automation thresholds, off switch
 /api/admin/…          Private endpoints
 ```
 
+Page-by-page specs: [`design/handoff/pages.md`](design/handoff/pages.md). Private pages not covered by the handoff (tracker, dashboard, settings) reuse its components.
+
 ### Content backbone
-CV content lives in one structured file, `content/cv.json`. Every role, outcome, number and skill has a stable ID. A small build script (no framework) combines it with templates into the static HTML pages, so the public site stays plain HTML that scrapers can read. The same file grounds the job-fit engine, the résumé generator and the future chat. The CV chat's HTML is split into `cv.json` plus a template when it arrives. Private fields live in D1 under the same IDs.
+CV content lives in one structured file, [`content/cv.json`](content/cv.json), in the shape defined by the design handoff. A small build script (no framework) combines it with templates into static HTML pages for `/`, each role view and the landings, so the public site stays plain HTML that scrapers can read. The same file grounds the job-fit engine, the résumé generator and the future chat. Private fields live in D1 under the same IDs.
 
-### Outcome data model
-Each outcome (a result under a role):
-
-| Field | Store | Notes |
-|---|---|---|
-| ID | public | Automatic and permanent, e.g. `anchorage-onboarding-throughput` |
-| Text | public | The CV bullet. Required |
-| Short version | public | ≤ ~90 characters, for collapsed cards and the hero |
-| Metrics | public | Structured: value, unit, label, before → after, timeframe |
-| Status | public | Shipped · In progress · Ongoing (drives tense) |
-| Ownership | public | Built solo · Led · Co-led · Contributed (tools may never inflate it) |
-| Featured rank | public | Order within the role; the top 2–3 show collapsed |
-| Skills | public | Tags from the controlled skills list |
-| Keywords | public | True alternate terms for ATS matching |
-| Role-view weight | public | Per view: Hide · Normal · Lead with |
-| Hero eligible | public | A metric may be a headline number |
-| Context | public | The "how", in 1–2 sentences, for the expanded view and AI grounding |
-| Approved alternate phrasings | public | Vetted rewordings the generator prefers over new wording |
-| Team / scope, timeframe, links | public | Optional |
-| State | public | Published · Draft (a draft is hidden on the site but visible on GitHub) |
-| **Notes / number provenance** | **private (D1)** | How each figure is known. Shown with a 🔒 in the editor |
-
-**The edit modal** shows the essentials first, with Targeting and Advanced collapsed. It warns when a number in the text isn't in Metrics (or the other way round), and previews the card, expanded and print renderings. Save commits public fields to Git and writes private fields to D1. Role-level fields (company, title, dates, company descriptor, context line) use a simpler role modal.
+### Data model (v1)
+- **Result card:** `id`, `metric`, `tag` (one of the experience tags), `headline` (under 12 words), `detail` (the original CV bullet).
+- **Card IDs are permanent.** Existing IDs (`anchorage-0` …) are frozen: never renumbered or reused. Display order is array order, so drag-to-reorder changes order, not IDs. New cards get new IDs.
+- **Skills:** `{ forms: [...], shown: n }`. The site renders only `forms[shown]`; the generator may pick any form.
+- **Role views:** tag rules per view (`views` in `cv.json`), not per-card weights.
+- **Planned card fields**, added with edit mode once Nathan sets the values (never inferred): `ownership` (Built solo · Led · Co-led · Contributed) and `status` (Shipped · Underway), so tools can't overstate a role. Also approved alternate phrasings if the generator needs them.
+- **Private (D1):** notes / number provenance per card, Nathan's phone number (used only on downloaded résumés), and approved summary variants if Nathan wants them private.
 
 ## Private job-search system
 
-**Edit mode** (`/admin/edit/`): the real page with every content field editable in place, using the modal above. Public fields commit to GitHub through a repo-scoped token, and the push redeploys the site. A save is refused if the file changed since the editor opened, never silently overwritten. Git history is the undo.
+**Access:** Cloudflare Access with GitHub login, restricted to `@potterbotter`, with a 1-month session and its login-method chooser skipped. `/admin/` shows the designed sign-in card ("Confirm you are, in fact, Nathan Potter." with **Continue with GitHub**), and the button enters Access. The designed "You're not the right Nathan" page is used if Access can redirect blocked users to a custom page; otherwise Cloudflare's block page shows.
+
+**Edit mode** (`/admin/edit/`): the CV template rendered with the edit controls from [`design/handoff/behaviors/admin-and-edit.md`](design/handoff/behaviors/admin-and-edit.md). Edits save as **drafts in D1** (never visible on GitHub). **Publish** commits `content/cv.json` through a repo-scoped GitHub token, and the push redeploys the site. Publishing is refused if `cv.json` changed since the editor opened, never silently overwritten. Git history is the undo. Nothing writes CV content automatically.
 
 **Job-fit engine:** one engine, used privately first. It powers the résumé generator and job scoring, and later the public job-fit tool once its test set shows it can be trusted.
 
-**Résumé generator** (`/admin/resume/`): paste a job description or open a scanned job. The engine produces requirements, matched facts and gaps. The generator then selects, orders and rephrases facts in the job's own terms where they're true. Output is an editable preview where every bullet traces back to its fact. Missing keywords are listed as gaps and never inserted. Export as an ATS-safe `.docx` and PDF (single column, standard headings, no tables or graphics), stored in R2. Generating creates the application record. Confident wording is fine; invented or inflated facts are not.
+**Résumé generator** (`/admin/resume/`), spec in [`design/handoff/behaviors/resume-generator.md`](design/handoff/behaviors/resume-generator.md).
+- **It never adds anything.** It may only select cards and skills, order them, trim (drop cards, cut clauses without rewording claims) and choose among Nathan's own skill `forms`. The summary is chosen from approved variants Nathan writes, never reworded. Keywords the CV can't back are reported as missing.
+- **Phone number:** included on downloaded résumés from private storage. Never on the public site or in the repo.
+- **Output:** a match dashboard, then a paper-white preview where every bullet carries its card ID, then ATS-safe `.docx` and PDF stored in R2. Generating creates the application record. Each run logs the posting, CV commit, model, prompt version and output (admin-only).
 
 **Application tracker** (`/admin/applications/`)
 - **Jobs and applications are separate records.** A job can be seen on several sources and links to at most one application.
@@ -127,7 +121,7 @@ Each outcome (a result under a role):
 - **Notifications:** a scheduled Worker (cron) sends strong matches with the listing link, fit summary and tailored résumé. Channel to be decided (Telegram bot, email digest or ntfy).
 
 ## Build order
-1. Visual system (Claude Design) → shared stylesheet and page shell
+1. Visual system ✓ (Claude Design handoff) → shared stylesheet and page shell
 2. CV live at `/`, already split into `cv.json`, templates and build script. Event logging on from day one
 3. Job-fit engine and its test set (used privately first)
 4. Access, D1/R2, tracker and résumé generator: usable for real applications from here
@@ -138,35 +132,37 @@ Each outcome (a result under a role):
 9. Public job-fit tool (same engine), DPR calculator, `/how-i-built-this/`, "ask me about my experience" chat, role-view polish
 10. Auto-submit, per source, once the quality evidence supports it
 
-### CV section order (from the brief)
-1. Hero: name, title line, one-sentence positioning, 3–4 headline numbers, actions (PDF · LinkedIn · Email), plus a call to action for the job-fit tool
-2. Career arc (three-industry timeline)
-3. Experience (one card per role, top 2–3 results, expand for the full list)
-4. How I work with AI
-5. Builds (internal builds described; public tools linked)
-6. About
-7. How I built this site (short, linking to the long form)
-8. Contact / footer
-
 ### Navigation
-The pattern is decided in the Claude Design pass. Requirements it must meet:
-- From any public page, one tap reaches: the CV (home), each role view, each tool, and email.
-- On the CV, a visitor can jump to any section, and the role-view switcher is visible near the hero.
-- Works at 375px, by keyboard, and with JavaScript off (links still work).
-- Hidden in print.
-- Private pages have their own navigation (dashboard, applications, résumé, edit, settings). Nothing on public pages links to `/admin`.
+Defined in [`design/handoff/navigation.md`](design/handoff/navigation.md): header (CV · Role views · Builds · Contact menu · theme toggle), a phone menu under 640px, the CV rail (Curated for · On this page), the curated-view banner, the band and slim footers, breadcrumbs and the admin bar. The **Admin** link lives only in the footer (lock icon). Admin markup never ships in public pages.
 
 ### Stable anchor IDs (CV)
-`#summary` · `#career-arc` · `#experience` · `#exp-anchorage` · `#exp-jaris` · `#exp-mosaic` · `#ai-method` · `#builds` · `#about` · `#skills` · `#education` · `#contact`
+`#summary` · `#career-arc` · `#experience` · `#exp-anchorage` · `#exp-jaris` · `#exp-mosaic` · `#ai-method` · `#builds` · `#about` · `#skills` · `#education` · `#site-build` · `#contact`. They resolve on every role view too.
+
+## Visual system
+Delivered by the Claude Design pass: [`design/handoff/`](design/handoff/README.md). Tokens in `design/handoff/tokens/tokens.css` (teal primary; maroon secondary, fill-only in dark mode; system fonts), components in `components.md`. The prototype `.dc.html` files are visual reference only, not code to port.
+
+## Design handoff reconciliation (2026-10-05)
+Where the handoff and this file disagreed:
+- **Sign-in:** Cloudflare Access (this file) rather than the handoff's custom OAuth. Keeps the designed sign-in card.
+- **Admin UI location:** under `/admin/` using the same templates, rather than in place on `/` and `/tools/job-fit/`. Public pages stay static with zero admin code.
+- **Edit-mode drafts:** D1 (settles the handoff's open question).
+- **Card IDs:** frozen, since the handoff's IDs are position-based and edit mode reorders.
+- **`anchorage-6` / `anchorage-7`:** the shared detail text was split into two bullets using Nathan's own words, so a résumé can't repeat it.
+- **Generator:** the handoff's "never adds anything" replaces this file's earlier "rephrase where true". The summary uses approved variants only.
+- **Phone:** the handoff says no phone anywhere. It stays off the site and out of the repo, but tailored résumés include it from private storage.
+- **Voice:** the handoff README's "no hype words" is superseded by the Voice section above (confident CV copy is fine).
+- **Accepted from the handoff:** `/views/`, `/builds/`, `#site-build`, the footer Admin link, hero metrics (4×, $70MM+, 90%), the tag-based role-view rules.
 
 ## Open questions
+- **Placeholders Nathan writes:**
+  - About (two paragraphs)
+  - AI-method steps
+  - Contact "open to" line
+  - Site-build paragraph and decisions
+  - Job-fit data-handling note and write-up
+  - DPR "what it will do" list
+  - PDF résumé file
+  - Summary variants for the generator
+- **To review:** the 19 card headlines Claude condensed, and the five skills with seeded synonyms (`synonymsAreExamples`).
 - **Notification channel:** Telegram bot, email digest or ntfy. Needed by build step 8.
 - **DPR calculator:** where the existing code lives and how it's brought in.
-
-## Visual system (to come from Claude Design)
-
-Not decided yet. The hand-off brief for Claude Design:
-- **Style reference:** Nathan's prior stylized CV (use it for style only, not content).
-- **Also decide:** the navigation pattern (see the requirements under Navigation).
-- **Output wanted:** a token set (colour, type scale, spacing, radius, shadow) as CSS custom properties, with light and dark variants. Public components: header/nav, segmented control (role switcher), stat block (headline numbers), role card with expander, timeline, tool panel (input → result), callout, button, link, footer. Private components: dashboard stat tiles and simple charts, data table (applications), status badge, edit modal (with collapsed sections and 🔒 private fields), save bar and conflict message, document preview, suggestion card ("confirm this update?").
-- **Constraints:** principles 4–6 above. System fonts or at most one self-hosted font family. AA contrast in both themes. Works at 375px. No content baked into images.

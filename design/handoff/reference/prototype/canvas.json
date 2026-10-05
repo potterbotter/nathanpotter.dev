@@ -1,0 +1,291 @@
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "Builds.dc.html": {
+      "expand": "fill",
+      "h": 1700,
+      "is_interactive": true,
+      "page": "builds",
+      "title": "/builds/ — builds landing",
+      "w": 1280,
+      "x": 0,
+      "y": 0
+    },
+    "Components.dc.html": {
+      "expand": "fill",
+      "h": 3200,
+      "is_interactive": true,
+      "page": "system",
+      "title": "Tokens and components",
+      "w": 1280,
+      "x": 1360,
+      "y": 0
+    },
+    "DPR.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "page": "builds",
+      "title": "/tools/dpr/ — placeholder",
+      "w": 1280,
+      "x": 2720,
+      "y": 0
+    },
+    "JobFit.dc.html": {
+      "expand": "fill",
+      "h": 2300,
+      "is_interactive": true,
+      "page": "builds",
+      "title": "/tools/job-fit/",
+      "w": 1280,
+      "x": 1360,
+      "y": 0
+    },
+    "Main.dc.html": {
+      "expand": "fill",
+      "h": 5400,
+      "is_interactive": true,
+      "page": "cv",
+      "title": "/ — light",
+      "w": 1280,
+      "x": 0,
+      "y": 0
+    },
+    "MainDark.dc.html": {
+      "expand": "fill",
+      "h": 5400,
+      "is_interactive": true,
+      "page": "cv",
+      "title": "/ — dark, contact menu open",
+      "w": 1280,
+      "x": 1855,
+      "y": 0
+    },
+    "Mobile.dc.html": {
+      "h": 8000,
+      "is_interactive": true,
+      "page": "cv",
+      "title": "/ — light, 375px",
+      "w": 375,
+      "x": 1360,
+      "y": 0
+    },
+    "MobileDark.dc.html": {
+      "h": 8000,
+      "is_interactive": true,
+      "page": "cv",
+      "title": "/ — dark, 375px",
+      "w": 375,
+      "x": 3215,
+      "y": 0
+    },
+    "Palettes.dc.html": {
+      "expand": "fill",
+      "h": 1900,
+      "is_interactive": true,
+      "page": "system",
+      "title": "Colour palettes — secondary colour trial",
+      "w": 1280,
+      "x": 0,
+      "y": 0
+    },
+    "Role.dc.html": {
+      "expand": "fill",
+      "h": 1400,
+      "is_interactive": true,
+      "page": "views",
+      "title": "/views/ — role views landing",
+      "w": 1280,
+      "x": 0,
+      "y": 0
+    },
+    "ViewBuilder.dc.html": {
+      "expand": "fill",
+      "h": 4800,
+      "is_interactive": true,
+      "page": "views",
+      "title": "/builder/",
+      "w": 1280,
+      "x": 1360,
+      "y": 0
+    },
+    "ViewClimate.dc.html": {
+      "expand": "fill",
+      "h": 4800,
+      "is_interactive": true,
+      "page": "views",
+      "title": "/climate/",
+      "w": 1280,
+      "x": 4080,
+      "y": 0
+    },
+    "ViewFintech.dc.html": {
+      "expand": "fill",
+      "h": 4800,
+      "is_interactive": true,
+      "page": "views",
+      "title": "/fintech/",
+      "w": 1280,
+      "x": 2720,
+      "y": 0
+    },
+    "Admin.dc.html": {
+      "page": "admin",
+      "x": 0,
+      "y": 0,
+      "w": 1280,
+      "h": 900,
+      "title": "/admin/ — sign in",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "AdminDenied.dc.html": {
+      "page": "admin",
+      "x": 0,
+      "y": 1020,
+      "w": 1280,
+      "h": 900,
+      "title": "/admin/ — wrong GitHub account",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "AdminHome.dc.html": {
+      "page": "admin",
+      "x": 0,
+      "y": 2040,
+      "w": 1280,
+      "h": 900,
+      "title": "/admin/ — signed in",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "MainEdit.dc.html": {
+      "page": "admin",
+      "x": 1360,
+      "y": 0,
+      "w": 1280,
+      "h": 6000,
+      "title": "/ — edit mode",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "JobFitAdmin.dc.html": {
+      "page": "admin",
+      "x": 2720,
+      "y": 0,
+      "w": 1280,
+      "h": 4000,
+      "title": "/tools/job-fit/ — resume generator unlocked",
+      "expand": "fill",
+      "is_interactive": true
+    }
+  },
+  "createdOnFiles": {
+    "at": "2026-10-05T17:00:00Z",
+    "v": 1
+  },
+  "designSystems": [],
+  "launch": {
+    "page": "cv",
+    "view": "canvas"
+  },
+  "notes": {
+    "builds": {
+      "kind": "title1",
+      "maxW": 4000,
+      "page": "builds",
+      "text": "Builds",
+      "w": 240,
+      "x": 0,
+      "y": -300
+    },
+    "dark": {
+      "kind": "title1",
+      "maxW": 1735,
+      "page": "cv",
+      "text": "Dark",
+      "w": 240,
+      "x": 1855,
+      "y": -300
+    },
+    "home": {
+      "kind": "title1",
+      "maxW": 1735,
+      "page": "cv",
+      "text": "Light",
+      "w": 240,
+      "x": 0,
+      "y": -300
+    },
+    "system": {
+      "kind": "title1",
+      "maxW": 2640,
+      "page": "system",
+      "text": "Design system",
+      "w": 240,
+      "x": 0,
+      "y": -300
+    },
+    "views": {
+      "kind": "title1",
+      "maxW": 5360,
+      "page": "views",
+      "text": "Role views: landing, then the curated CV",
+      "w": 240,
+      "x": 0,
+      "y": -300
+    },
+    "admin": {
+      "kind": "title1",
+      "maxW": 4000,
+      "page": "admin",
+      "text": "Admin: GitHub sign-in, edit mode, resume generator",
+      "x": 0,
+      "y": -300
+    }
+  },
+  "order": [
+    "Main.dc.html",
+    "Mobile.dc.html",
+    "MainDark.dc.html",
+    "MobileDark.dc.html",
+    "Role.dc.html",
+    "ViewBuilder.dc.html",
+    "ViewFintech.dc.html",
+    "ViewClimate.dc.html",
+    "Builds.dc.html",
+    "JobFit.dc.html",
+    "DPR.dc.html",
+    "Palettes.dc.html",
+    "Components.dc.html",
+    "Admin.dc.html",
+    "AdminDenied.dc.html",
+    "AdminHome.dc.html",
+    "MainEdit.dc.html",
+    "JobFitAdmin.dc.html"
+  ],
+  "pages": [
+    {
+      "id": "cv",
+      "name": "CV homepage"
+    },
+    {
+      "id": "views",
+      "name": "Role views"
+    },
+    {
+      "id": "builds",
+      "name": "Builds"
+    },
+    {
+      "id": "system",
+      "name": "Design system"
+    },
+    {
+      "id": "admin",
+      "name": "Admin"
+    }
+  ],
+  "title": "nathanpotter.dev"
+}

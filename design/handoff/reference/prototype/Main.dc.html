@@ -1,0 +1,829 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Nathan Potter — CV</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+.np{--font:ui-sans-serif,system-ui,-apple-system,"Segoe UI","Helvetica Neue",sans-serif;--mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;--fs-1:0.8125rem;--fs-2:0.9375rem;--fs-3:1.0625rem;--fs-4:1.3125rem;--fs-5:1.75rem;--fs-6:clamp(2.25rem,6vw,3.5rem);--sp-1:4px;--sp-2:8px;--sp-3:12px;--sp-4:16px;--sp-5:24px;--sp-6:32px;--sp-7:48px;--sp-8:72px;--r-1:4px;--r-2:8px;--r-pill:999px;--bg:#F2F5F5;--surface:#FFFFFF;--surface-2:#E6ECEC;--raised:#FFFFFF;--ink:#151A1B;--ink-2:#4A5557;--line:#D2DBDB;--brand:#0F6E73;--brand-ink:#FFFFFF;--band:#0F6E73;--band-ink:#FFFFFF;--band-line:rgba(255,255,255,.35);--accent:#7A0E1B;--accent-text:#7A0E1B;--chip:#E3EEEE;--cta-bg:#FFFFFF;--cta-ink:#0F6E73;--cta-sub:#4A5557;--cta-dot:#0F6E73;--cta-dot-ink:#FFFFFF;--shadow-1:0 1px 2px rgba(10,30,32,.08),0 1px 1px rgba(10,30,32,.04);--shadow-2:0 8px 24px rgba(10,30,32,.12);color-scheme:light}
+.np[data-theme="dark"]{--bg:#0D1213;--surface:#151C1E;--surface-2:#1D2628;--raised:#212B2D;--ink:#E9EFEF;--ink-2:#A3B1B3;--line:#2F3B3D;--brand:#6CCBD0;--brand-ink:#071113;--band:#0B2F32;--band-ink:#EAF5F5;--band-line:rgba(234,245,245,.22);--accent:#B8344A;--accent-text:#E9EFEF;--chip:#1F3335;--cta-bg:#6CCBD0;--cta-ink:#071113;--cta-sub:#14373A;--cta-dot:#071113;--cta-dot-ink:#6CCBD0;--shadow-1:0 0 0 1px rgba(255,255,255,.02),0 1px 2px rgba(0,0,0,.5);--shadow-2:0 0 0 1px rgba(255,255,255,.04),0 12px 32px rgba(0,0,0,.55);color-scheme:dark}
+.np a{color:var(--brand)}.np a:hover{color:var(--accent-text)}
+.np :focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:2px}
+.np summary{list-style:none;cursor:pointer}.np summary::-webkit-details-marker{display:none}
+.np .chev{transition:transform .18s ease}.np details[open]>summary .chev{transform:rotate(180deg)}
+.np .navlink:hover{background:var(--surface-2);color:var(--ink)}
+.np .cta{transition:transform .15s ease,box-shadow .15s ease}.np .cta:hover{transform:translateY(-2px)}.np .cta:hover .cta-arrow{transform:translateX(3px)}.np .cta-arrow{transition:transform .15s ease}
+.np .card{transition:opacity .2s ease}
+.np[data-edit="on"] .editable{outline:1.5px dashed currentColor;outline-offset:6px;border-radius:2px;cursor:text}
+.np[data-edit="on"] .editable:focus{outline-style:solid;outline-color:var(--brand)}
+@media (prefers-reduced-motion:reduce){.np *{transition:none!important;animation:none!important;scroll-behavior:auto!important}.np .cta:hover{transform:none}}
+@media print{.np{--bg:#fff;--surface:#fff;--band:#fff;--band-ink:#000;--ink:#000}.np .noprint{display:none!important}.np details>*{display:block!important}.np .rail{display:none!important}.np .card{opacity:1!important}}
+</style>
+</helmet>
+<div class="np" data-theme="{{theme}}" data-edit="{{editAttr}}" style="background: var(--bg); color: var(--ink); font-family: var(--font); font-size: var(--fs-2); line-height: 1.55">
+
+<a href="#summary" style="position: absolute; left: -9999px">Skip to content</a>
+
+<sc-if value="{{edit}}" hint-placeholder-val="{{ false }}">
+<div class="noprint" role="region" aria-label="Admin" style="background: #151A1B; color: #E9EFEF; border-bottom: 3px solid var(--accent)">
+<div style="max-width: 1200px; margin: 0 auto; padding: var(--sp-2) var(--sp-5); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-3)">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-3)">
+<span style="font-family: var(--mono); font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 3px 8px; border-radius: var(--r-1); background: #E9EFEF; color: #151A1B">Edit mode</span>
+<span style="font-size: var(--fs-1)">Signed in with GitHub as <strong>@potterbotter</strong></span>
+<span aria-live="polite" style="font-family: var(--mono); font-size: var(--fs-1); color: #A3B1B3">{{draftLabel}}</span>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2)">
+<a href="JobFitAdmin.dc.html" style="display: inline-flex; align-items: center; min-height: 36px; padding: 0 12px; border-radius: var(--r-1); color: #E9EFEF; text-decoration: none; font-size: var(--fs-1); font-weight: 600">Resume generator</a>
+<a href="Main.dc.html" style="display: inline-flex; align-items: center; min-height: 36px; padding: 0 12px; border: 1px solid #4A5557; border-radius: var(--r-1); color: #E9EFEF; text-decoration: none; font-size: var(--fs-1)">Preview as visitor</a>
+<button type="button" onClick="{{publish}}" style="min-height: 36px; padding: 0 14px; border: 0; border-radius: var(--r-1); background: #6CCBD0; color: #071113; font: inherit; font-size: var(--fs-1); font-weight: 700; cursor: pointer">{{publishLabel}}</button>
+<a href="Admin.dc.html" style="display: inline-flex; align-items: center; min-height: 36px; padding: 0 8px; color: #A3B1B3; font-size: var(--fs-1)">Sign out</a>
+</div>
+</div>
+</div>
+</sc-if>
+
+<header class="noprint" style="position: relative; z-index: 20; background: var(--surface); border-bottom: 1px solid var(--line)">
+<div style="max-width: 1200px; margin: 0 auto; padding: var(--sp-3) var(--sp-5); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-4)">
+<a href="Main.dc.html" style="display: flex; flex-direction: column; text-decoration: none; color: var(--ink); min-height: 44px; justify-content: center">
+<span style="font-weight: 700; font-size: var(--fs-3); letter-spacing: -0.01em">Nathan Potter</span>
+<span style="font-family: var(--mono); font-size: var(--fs-1); color: var(--ink-2)">nathanpotter.dev{{path}}</span>
+</a>
+<div style="display: flex; align-items: center; gap: var(--sp-2)">
+<sc-if value="{{wide}}" hint-placeholder-val="{{ true }}">
+<nav aria-label="Site" style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-1)">
+<a class="navlink" href="Main.dc.html" aria-current="page" style="padding: 10px 12px; border-radius: var(--r-1); text-decoration: none; font-weight: 600; color: var(--ink); background: var(--surface-2)">CV</a>
+<a class="navlink" href="Role.dc.html" style="padding: 10px 12px; border-radius: var(--r-1); text-decoration: none; color: var(--ink-2)">Role views</a>
+<a class="navlink" href="Builds.dc.html" style="padding: 10px 12px; border-radius: var(--r-1); text-decoration: none; color: var(--ink-2)">Builds</a>
+<details open="{{contactOpen}}" style="position: relative">
+<summary class="navlink" style="display: flex; align-items: center; gap: 6px; padding: 10px 12px; border-radius: var(--r-1); color: var(--ink-2)">Contact
+<svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
+</summary>
+<div role="group" aria-label="Contact" style="position: absolute; right: 0; top: 50px; width: 340px; display: flex; flex-direction: column; gap: var(--sp-2); padding: var(--sp-4); background: var(--raised); border: 1px solid var(--line); border-radius: var(--r-2); box-shadow: var(--shadow-2)">
+<p style="margin: 0 0 var(--sp-1); font-family: var(--mono); font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-2)">Get in touch</p>
+<div style="display: flex; align-items: stretch; gap: var(--sp-2)">
+<a href="mailto:hello@nathanpotter.dev" style="flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 12px; border-radius: var(--r-1); background: var(--surface-2); color: var(--ink); text-decoration: none; font-weight: 600">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 7l9 6 9-6"></path></svg>
+hello@nathanpotter.dev</a>
+<button type="button" onClick="{{copyEmail}}" aria-label="Copy email address" style="flex: none; min-width: 64px; min-height: 44px; padding: 0 10px; border: 1px solid var(--line); border-radius: var(--r-1); background: transparent; color: var(--ink); font: inherit; font-size: var(--fs-1); font-weight: 600; cursor: pointer">{{copyLabel}}</button>
+</div>
+<a href="https://www.linkedin.com/in/nathan-j-potter" style="display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 12px; border-radius: var(--r-1); border: 1px solid var(--line); color: var(--ink); text-decoration: none">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"></path></svg>
+<span style="display: flex; flex-direction: column; line-height: 1.25"><span style="font-weight: 600">LinkedIn</span><span style="font-family: var(--mono); font-size: 0.6875rem; color: var(--ink-2)">in/nathan-j-potter</span></span>
+</a>
+<div style="height: 1px; background: var(--line); margin: var(--sp-1) 0"></div>
+<a href="JobFit.dc.html" style="display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 44px; padding: 0 12px; border-radius: var(--r-1); background: var(--brand); color: var(--brand-ink); text-decoration: none; font-weight: 700">Am I the right fit for your company?
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+</a>
+<a href="#" style="display: flex; align-items: center; min-height: 40px; padding: 0 12px; color: var(--ink-2); font-size: var(--fs-1)">Download the CV as a PDF [link]</a>
+</div>
+</details>
+</nav>
+</sc-if>
+<sc-if value="{{compact}}" hint-placeholder-val="{{ false }}">
+<details style="position: relative">
+<summary style="display: flex; align-items: center; gap: var(--sp-2); min-height: 44px; padding: 0 var(--sp-3); border: 1px solid var(--line); border-radius: var(--r-1); font-weight: 600">Menu
+<svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
+</summary>
+<nav aria-label="Site" style="position: absolute; right: 0; top: 52px; width: 280px; display: flex; flex-direction: column; background: var(--raised); border: 1px solid var(--line); border-radius: var(--r-2); box-shadow: var(--shadow-2); padding: var(--sp-2)">
+<a href="Main.dc.html" aria-current="page" style="padding: 12px; text-decoration: none; font-weight: 600; color: var(--ink)">CV</a>
+<a href="Role.dc.html" style="padding: 12px; text-decoration: none; color: var(--ink-2)">Role views</a>
+<a href="Builds.dc.html" style="padding: 12px; text-decoration: none; color: var(--ink-2)">Builds</a>
+<div style="height: 1px; background: var(--line); margin: var(--sp-1) var(--sp-2)"></div>
+<a href="mailto:hello@nathanpotter.dev" style="padding: 12px; text-decoration: none; color: var(--ink)">hello@nathanpotter.dev</a>
+<a href="https://www.linkedin.com/in/nathan-j-potter" style="padding: 12px; text-decoration: none; color: var(--ink)">LinkedIn</a>
+<a href="JobFit.dc.html" style="margin: var(--sp-1); padding: 12px; border-radius: var(--r-1); background: var(--brand); color: var(--brand-ink); text-decoration: none; font-weight: 700">Am I the right fit?</a>
+</nav>
+</details>
+</sc-if>
+<button type="button" onClick="{{toggleTheme}}" aria-label="{{themeLabel}}" title="{{themeLabel}}" style="width: 44px; height: 44px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: var(--r-1); background: var(--surface); color: var(--ink); cursor: pointer">
+<sc-if value="{{isDark}}" hint-placeholder-val="{{ false }}">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+</sc-if>
+<sc-if value="{{isLight}}" hint-placeholder-val="{{ true }}">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>
+</sc-if>
+</button>
+</div>
+</div>
+</header>
+
+<section id="summary" aria-labelledby="h-summary" style="background: var(--band); color: var(--band-ink); border-bottom: 1px solid var(--line)">
+<div style="max-width: 1200px; margin: 0 auto; padding: var(--sp-8) var(--sp-5) var(--sp-7); display: flex; flex-direction: column; gap: var(--sp-5)">
+<p style="margin: 0; font-family: var(--mono); font-size: var(--fs-1); letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.9">Senior Product Manager · San Francisco Bay Area · Open to remote</p>
+<div style="display: flex; flex-direction: column; gap: var(--sp-3)">
+<h1 id="h-summary" style="margin: 0; font-size: var(--fs-6); line-height: 1.05; letter-spacing: -0.025em; font-weight: 800">Nathan Potter</h1>
+<div style="width: 120px; height: 6px; background: var(--accent)"></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: var(--sp-3); max-width: 62ch">
+<p class="editable" contentEditable="{{edit}}" suppressContentEditableWarning="{{ true }}" style="margin: 0; font-size: var(--fs-4); line-height: 1.4; text-wrap: pretty">Senior product manager with 7+ years across clean-energy lending, embedded finance and institutional crypto banking, often stepping into whichever role the team needed most.</p>
+<p class="editable" contentEditable="{{edit}}" suppressContentEditableWarning="{{ true }}" style="margin: 0; font-size: var(--fs-3); opacity: 0.92; text-wrap: pretty">I turn messy, high-stakes workflows into products that scale.</p>
+</div>
+<ul aria-label="Key numbers" style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap: var(--sp-4); max-width: 820px">
+<li style="display: flex; flex-direction: column; gap: 2px; border-top: 1px solid var(--band-line); padding-top: var(--sp-3)"><span style="font-size: var(--fs-5); font-weight: 700">4×</span><span style="font-size: var(--fs-1); opacity: 0.9">Client onboarding throughput in a year, ~265 → 1,000+ per quarter (Anchorage Digital)</span></li>
+<li style="display: flex; flex-direction: column; gap: 2px; border-top: 1px solid var(--band-line); padding-top: var(--sp-3)"><span style="font-size: var(--fs-5); font-weight: 700">$70MM+</span><span style="font-size: var(--fs-1); opacity: 0.9">Monthly originations on the lending platform I product-owned (Mosaic)</span></li>
+<li style="display: flex; flex-direction: column; gap: 2px; border-top: 1px solid var(--band-line); padding-top: var(--sp-3)"><span style="font-size: var(--fs-5); font-weight: 700">90%</span><span style="font-size: var(--fs-1); opacity: 0.9">Cut in funding-approval turnaround for the largest partners (Mosaic)</span></li>
+</ul>
+<div class="noprint" style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-4)">
+<a class="cta" href="JobFit.dc.html" style="display: flex; align-items: center; gap: var(--sp-5); padding: var(--sp-4) var(--sp-4) var(--sp-4) var(--sp-5); border-radius: var(--r-2); background: var(--cta-bg); color: var(--cta-ink); text-decoration: none; box-shadow: 0 6px 18px rgba(0,0,0,.22); max-width: 560px">
+<span style="display: flex; flex-direction: column; gap: 2px">
+<span style="font-size: var(--fs-4); font-weight: 800; letter-spacing: -0.01em; line-height: 1.25">Am I the right fit for your company?</span>
+<span style="font-size: var(--fs-1); color: var(--cta-sub)">Paste a job description. Get a fit read that cites my CV, on its own page.</span>
+</span>
+<span class="cta-arrow" aria-hidden="true" style="flex: none; width: 48px; height: 48px; display: grid; place-items: center; border-radius: var(--r-pill); background: var(--cta-dot); color: var(--cta-dot-ink)">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+</span>
+</a>
+</div>
+</div>
+</section>
+
+<div style="max-width: 1200px; margin: 0 auto; padding: var(--sp-7) var(--sp-5); display: flex; flex-wrap: wrap; gap: var(--sp-7); align-items: flex-start">
+
+<sc-if value="{{wide}}" hint-placeholder-val="{{ true }}">
+<aside class="rail noprint" aria-label="On this page" style="flex: 1 1 200px; max-width: 220px; display: flex; flex-direction: column; gap: var(--sp-6)">
+<nav aria-label="Views of this CV" style="display: flex; flex-direction: column; gap: var(--sp-2)">
+<p style="margin: 0; font-family: var(--mono); font-size: var(--fs-1); color: var(--ink-2); text-transform: uppercase; letter-spacing: 0.06em">Curated for</p>
+<div style="display: flex; flex-direction: column; gap: var(--sp-1)">
+<sc-for list="{{views}}" as="v" hint-placeholder-count="4">
+<sc-if value="{{v.on}}" hint-placeholder-val="{{ false }}">
+<a href="{{v.href}}" aria-current="page" style="padding: 8px 12px; border-radius: var(--r-1); background: var(--brand); color: var(--brand-ink); text-decoration: none; font-weight: 600">{{v.label}}</a>
+</sc-if>
+<sc-if value="{{v.off}}" hint-placeholder-val="{{ true }}">
+<a class="navlink" href="{{v.href}}" style="padding: 8px 12px; border-radius: var(--r-1); text-decoration: none">{{v.label}}</a>
+</sc-if>
+</sc-for>
+</div>
+</nav>
+<nav aria-label="Sections" style="display: flex; flex-direction: column; gap: var(--sp-2)">
+<p style="margin: 0; font-family: var(--mono); font-size: var(--fs-1); color: var(--ink-2); text-transform: uppercase; letter-spacing: 0.06em">On this page</p>
+<ol style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; border-left: 2px solid var(--line)">
+<li><a href="#summary" style="display: block; padding: 6px 12px; text-decoration: none; color: var(--ink-2)">Summary</a></li>
+<li><a href="#career-arc" style="display: block; padding: 6px 12px; text-decoration: none; color: var(--ink-2)">Career arc</a></li>
+<li><a href="#experience" style="display: block; padding: 6px 12px; margin-left: -2px; border-left: 2px solid var(--brand); text-decoration: none; color: var(--ink); font-weight: 600">Experience</a></li>
+<li><a href="#ai-method" style="display: block; padding: 6px 12px; text-decoration: none; color: var(--ink-2)">How I work with AI</a></li>
+<li><a href="#builds" style="display: block; padding: 6px 12px; text-decoration: none; color: var(--ink-2)">Builds</a></li>
+<li><a href="#about" style="display: block; padding: 6px 12px; text-decoration: none; color: var(--ink-2)">About</a></li>
+<li><a href="#skills" style="display: block; padding: 6px 12px; text-decoration: none; color: var(--ink-2)">Skills</a></li>
+<li><a href="#education" style="display: block; padding: 6px 12px; text-decoration: none; color: var(--ink-2)">Education</a></li>
+<li><a href="#site-build" style="display: block; padding: 6px 12px; text-decoration: none; color: var(--ink-2)">How this site was built</a></li>
+<li><a href="#contact" style="display: block; padding: 6px 12px; text-decoration: none; color: var(--ink-2)">Contact</a></li>
+</ol>
+</nav>
+</aside>
+</sc-if>
+
+<main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: var(--sp-8)">
+
+<sc-if value="{{compact}}" hint-placeholder-val="{{ false }}">
+<div class="noprint" style="display: flex; flex-direction: column; gap: var(--sp-3)">
+<nav aria-label="Views of this CV" style="display: flex; gap: var(--sp-2); overflow-x: auto; padding-bottom: 2px">
+<sc-for list="{{views}}" as="v" hint-placeholder-count="4">
+<sc-if value="{{v.on}}" hint-placeholder-val="{{ false }}">
+<a href="{{v.href}}" aria-current="page" style="flex: none; display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: var(--r-pill); background: var(--brand); color: var(--brand-ink); text-decoration: none; font-weight: 600">{{v.label}}</a>
+</sc-if>
+<sc-if value="{{v.off}}" hint-placeholder-val="{{ true }}">
+<a href="{{v.href}}" style="flex: none; display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: var(--r-pill); border: 1px solid var(--line); text-decoration: none">{{v.label}}</a>
+</sc-if>
+</sc-for>
+</nav>
+<details style="background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-2)">
+<summary style="display: flex; align-items: center; justify-content: space-between; min-height: 48px; padding: 0 var(--sp-4); font-weight: 600">Jump to a section
+<svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
+</summary>
+<nav aria-label="Sections" style="display: flex; flex-direction: column; padding: 0 var(--sp-2) var(--sp-2)">
+<a href="#career-arc" style="padding: 10px 8px; text-decoration: none">Career arc</a>
+<a href="#experience" style="padding: 10px 8px; text-decoration: none">Experience</a>
+<a href="#ai-method" style="padding: 10px 8px; text-decoration: none">How I work with AI</a>
+<a href="#builds" style="padding: 10px 8px; text-decoration: none">Builds</a>
+<a href="#about" style="padding: 10px 8px; text-decoration: none">About</a>
+<a href="#skills" style="padding: 10px 8px; text-decoration: none">Skills</a>
+<a href="#education" style="padding: 10px 8px; text-decoration: none">Education</a>
+<a href="#contact" style="padding: 10px 8px; text-decoration: none">Contact</a>
+</nav>
+</details>
+</div>
+</sc-if>
+
+<sc-if value="{{curated}}" hint-placeholder-val="{{ false }}">
+<section aria-label="About this view" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-4); padding: var(--sp-5); background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--brand); border-radius: var(--r-2); box-shadow: var(--shadow-1)">
+<div style="flex: 1 1 320px; display: flex; flex-direction: column; gap: var(--sp-1)">
+<p style="margin: 0; font-family: var(--mono); font-size: var(--fs-1); text-transform: uppercase; letter-spacing: 0.06em; color: var(--brand)">Curated for {{viewLabel}} roles</p>
+<p style="margin: 0; font-size: var(--fs-3); font-weight: 600">{{viewFocus}}</p>
+<p style="margin: 0; font-size: var(--fs-1); color: var(--ink-2)">{{viewNote}}</p>
+</div>
+<a href="Main.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--sp-4); border: 1px solid var(--line); border-radius: var(--r-1); text-decoration: none; font-weight: 600">Show the full CV</a>
+</section>
+</sc-if>
+
+<section id="career-arc" aria-labelledby="h-arc" style="display: flex; flex-direction: column; gap: var(--sp-5)">
+<header style="display: flex; flex-direction: column; gap: var(--sp-2)">
+<h2 id="h-arc" style="margin: 0; font-size: var(--fs-5); letter-spacing: -0.015em; color: var(--brand)">Career arc</h2>
+<p style="margin: 0; color: var(--ink-2); max-width: 60ch">Three industries, one kind of problem: regulated, high-stakes workflows that have to scale.</p>
+</header>
+<ol style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap: var(--sp-4)">
+<li style="display: flex; flex-direction: column; gap: var(--sp-2); padding-top: var(--sp-4); border-top: 3px solid var(--line)">
+<span style="font-family: var(--mono); font-size: var(--fs-1); color: var(--ink-2)">2018 – 2023</span>
+<span style="font-weight: 700; font-size: var(--fs-3)">Clean-energy lending</span>
+<a href="#exp-mosaic" style="font-size: var(--fs-2)">Mosaic</a>
+<span style="color: var(--ink-2); font-size: var(--fs-2)">Product Analyst to Product Manager on the platform behind $70MM+ in monthly originations.</span>
+</li>
+<li style="display: flex; flex-direction: column; gap: var(--sp-2); padding-top: var(--sp-4); border-top: 3px solid var(--line)">
+<span style="font-family: var(--mono); font-size: var(--fs-1); color: var(--ink-2)">2023</span>
+<span style="font-weight: 700; font-size: var(--fs-3)">Embedded finance</span>
+<a href="#exp-jaris" style="font-size: var(--fs-2)">jaris</a>
+<span style="color: var(--ink-2); font-size: var(--fs-2)">Originations: a new payment-collection product, and model-risk procedures.</span>
+</li>
+<li style="display: flex; flex-direction: column; gap: var(--sp-2); padding-top: var(--sp-4); border-top: 3px solid var(--brand)">
+<span style="font-family: var(--mono); font-size: var(--fs-1); color: var(--ink-2)">2025 – now</span>
+<span style="font-weight: 700; font-size: var(--fs-3)">Institutional crypto banking</span>
+<a href="#exp-anchorage" style="font-size: var(--fs-2)">Anchorage Digital</a>
+<span style="color: var(--ink-2); font-size: var(--fs-2)">Client onboarding and risk at a federally chartered bank.</span>
+</li>
+</ol>
+</section>
+
+<section id="experience" aria-labelledby="h-exp" style="display: flex; flex-direction: column; gap: var(--sp-6)">
+<header style="display: flex; flex-direction: column; gap: var(--sp-3)">
+<h2 id="h-exp" style="margin: 0; font-size: var(--fs-5); letter-spacing: -0.015em; color: var(--brand)">Experience</h2>
+<p style="margin: 0; color: var(--ink-2)">One card per result. The number first, the full line under Detail.</p>
+<div class="noprint" style="display: flex; flex-direction: column; gap: var(--sp-2)">
+<div role="group" aria-label="Highlight results by theme" style="display: flex; flex-wrap: wrap; gap: var(--sp-2)">
+<sc-for list="{{tags}}" as="t" hint-placeholder-count="8">
+<sc-if value="{{t.on}}" hint-placeholder-val="{{ false }}">
+<button type="button" onClick="{{t.pick}}" aria-pressed="true" style="display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 12px; border: 1px solid var(--brand); border-radius: var(--r-pill); background: var(--brand); color: var(--brand-ink); font: inherit; font-size: var(--fs-1); font-weight: 600; cursor: pointer">{{t.label}} <span style="font-family: var(--mono); opacity: 0.85">{{t.count}}</span></button>
+</sc-if>
+<sc-if value="{{t.off}}" hint-placeholder-val="{{ true }}">
+<button type="button" onClick="{{t.pick}}" aria-pressed="false" style="display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 12px; border: 1px solid var(--line); border-radius: var(--r-pill); background: var(--surface); color: var(--ink); font: inherit; font-size: var(--fs-1); cursor: pointer">{{t.label}} <span style="font-family: var(--mono); color: var(--ink-2)">{{t.count}}</span></button>
+</sc-if>
+</sc-for>
+</div>
+<p aria-live="polite" style="margin: 0; font-family: var(--mono); font-size: var(--fs-1); color: var(--ink-2)">{{showing}}</p>
+</div>
+</header>
+
+<sc-for list="{{roles}}" as="r" hint-placeholder-count="3">
+<article id="{{r.id}}" aria-labelledby="{{r.hid}}" style="display: flex; flex-direction: column; gap: var(--sp-4)">
+<header style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--sp-2) var(--sp-5); padding-bottom: var(--sp-3); border-bottom: 2px solid var(--ink)">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<h3 id="{{r.hid}}" style="margin: 0; font-size: var(--fs-4); letter-spacing: -0.01em">{{r.company}} <span style="font-weight: 400; font-size: var(--fs-2); color: var(--ink-2)">· {{r.kind}}</span></h3>
+<span style="font-weight: 600; color: var(--accent-text)">{{r.title}}</span>
+</div>
+<span style="font-family: var(--mono); font-size: var(--fs-1); color: var(--ink-2)">{{r.dates}}</span>
+</header>
+<sc-if value="{{r.hasNote}}" hint-placeholder-val="{{ false }}">
+<p style="margin: 0; color: var(--ink-2); font-size: var(--fs-2)">{{r.note}}</p>
+</sc-if>
+<sc-if value="{{r.hasShown}}" hint-placeholder-val="{{ true }}">
+<ul style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr)); gap: var(--sp-3)">
+<sc-for list="{{r.shown}}" as="c" hint-placeholder-count="4">
+<li class="card" style="opacity: {{c.op}}; display: flex; flex-direction: column; gap: var(--sp-2); padding: var(--sp-4); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-2); box-shadow: var(--shadow-1)">
+<sc-if value="{{c.viewing}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; justify-content: space-between; align-items: flex-start; gap: var(--sp-2)">
+<span style="font-size: var(--fs-5); font-weight: 800; line-height: 1.05; letter-spacing: -0.02em; color: var(--brand)">{{c.metric}}</span>
+<span style="flex: none; font-family: var(--mono); font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.06em; padding: 3px 8px; border-radius: var(--r-pill); background: var(--chip); color: var(--ink)">{{c.tag}}</span>
+</div>
+<p style="margin: 0; font-weight: 600; line-height: 1.35; flex-grow: 1; text-wrap: pretty">{{c.headline}}</p>
+<details>
+<summary style="display: inline-flex; align-items: center; gap: 4px; min-height: 32px; font-size: var(--fs-1); font-weight: 600; color: var(--brand)">Detail
+<svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
+</summary>
+<p style="margin: var(--sp-1) 0 0; font-size: var(--fs-1); color: var(--ink-2); line-height: 1.5">{{c.detail}}</p>
+</details>
+<sc-if value="{{c.canEdit}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: var(--sp-2); margin-top: var(--sp-1); padding-top: var(--sp-2); border-top: 1px dashed var(--line)">
+<span style="display: inline-flex; align-items: center; gap: 4px; font-family: var(--mono); font-size: 0.6875rem; color: var(--ink-2)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M9 6h.01M15 6h.01M9 12h.01M15 12h.01M9 18h.01M15 18h.01"></path></svg>Drag to reorder</span>
+<button type="button" onClick="{{c.startEdit}}" style="display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 12px; border: 1px solid var(--brand); border-radius: var(--r-1); background: transparent; color: var(--brand); font: inherit; font-size: var(--fs-1); font-weight: 600; cursor: pointer"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4z"></path></svg>Edit</button>
+</div>
+</sc-if>
+</sc-if>
+<sc-if value="{{c.isEditing}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: var(--sp-2)">
+<span style="font-family: var(--mono); font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--brand)">Editing card</span>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-2)">
+<label style="display: flex; flex-direction: column; gap: 2px; font-size: var(--fs-1); font-weight: 600">Metric
+<input type="text" value="{{c.dMetric}}" onChange="{{c.setMetric}}" style="min-height: 36px; padding: 0 8px; border: 1px solid var(--line); border-radius: var(--r-1); background: var(--bg); color: var(--ink); font: inherit; font-weight: 700">
+</label>
+<label style="display: flex; flex-direction: column; gap: 2px; font-size: var(--fs-1); font-weight: 600">Theme
+<select value="{{c.dTag}}" onChange="{{c.setTag}}" style="min-height: 36px; padding: 0 6px; border: 1px solid var(--line); border-radius: var(--r-1); background: var(--bg); color: var(--ink); font: inherit">
+<sc-for list="{{tagNames}}" as="tn" hint-placeholder-count="9"><option value="{{tn}}">{{tn}}</option></sc-for>
+</select>
+</label>
+</div>
+<label style="display: flex; flex-direction: column; gap: 2px; font-size: var(--fs-1); font-weight: 600">Headline
+<input type="text" value="{{c.dHeadline}}" onChange="{{c.setHeadline}}" style="min-height: 36px; padding: 0 8px; border: 1px solid var(--line); border-radius: var(--r-1); background: var(--bg); color: var(--ink); font: inherit">
+</label>
+<label style="display: flex; flex-direction: column; gap: 2px; font-size: var(--fs-1); font-weight: 600">Detail
+<textarea rows="4" value="{{c.dDetail}}" onChange="{{c.setDetail}}" style="padding: 6px 8px; border: 1px solid var(--line); border-radius: var(--r-1); background: var(--bg); color: var(--ink); font: inherit; font-size: var(--fs-1); resize: vertical"></textarea>
+</label>
+<div style="display: flex; justify-content: flex-end; gap: var(--sp-2)">
+<button type="button" onClick="{{cancelEdit}}" style="min-height: 36px; padding: 0 12px; border: 1px solid var(--line); border-radius: var(--r-1); background: transparent; color: var(--ink); font: inherit; font-size: var(--fs-1); cursor: pointer">Cancel</button>
+<button type="button" onClick="{{saveEdit}}" style="min-height: 36px; padding: 0 12px; border: 0; border-radius: var(--r-1); background: var(--brand); color: var(--brand-ink); font: inherit; font-size: var(--fs-1); font-weight: 700; cursor: pointer">Save draft</button>
+</div>
+</div>
+</sc-if>
+</li>
+</sc-for>
+<sc-if value="{{edit}}" hint-placeholder-val="{{ false }}">
+<li style="display: flex">
+<button type="button" style="flex: 1; min-height: 160px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--sp-2); border: 2px dashed var(--line); border-radius: var(--r-2); background: transparent; color: var(--brand); font: inherit; font-weight: 600; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Add a result to {{r.company}}</button>
+</li>
+</sc-if>
+</ul>
+</sc-if>
+<sc-if value="{{r.hasMore}}" hint-placeholder-val="{{ false }}">
+<details class="more">
+<summary style="display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 var(--sp-4); border: 1px dashed var(--line); border-radius: var(--r-pill); font-size: var(--fs-1); font-weight: 600; color: var(--ink-2)">{{r.moreLabel}}
+<svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
+</summary>
+<ul style="list-style: none; margin: var(--sp-3) 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr)); gap: var(--sp-3)">
+<sc-for list="{{r.more}}" as="c" hint-placeholder-count="3">
+<li class="card" style="opacity: {{c.op}}; display: flex; flex-direction: column; gap: var(--sp-2); padding: var(--sp-4); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-2)">
+<div style="display: flex; justify-content: space-between; align-items: flex-start; gap: var(--sp-2)">
+<span style="font-size: var(--fs-5); font-weight: 800; line-height: 1.05; letter-spacing: -0.02em; color: var(--brand)">{{c.metric}}</span>
+<span style="flex: none; font-family: var(--mono); font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.06em; padding: 3px 8px; border-radius: var(--r-pill); background: var(--chip); color: var(--ink)">{{c.tag}}</span>
+</div>
+<p style="margin: 0; font-weight: 600; line-height: 1.35; flex-grow: 1; text-wrap: pretty">{{c.headline}}</p>
+<details>
+<summary style="display: inline-flex; align-items: center; gap: 4px; min-height: 32px; font-size: var(--fs-1); font-weight: 600; color: var(--brand)">Detail
+<svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
+</summary>
+<p style="margin: var(--sp-1) 0 0; font-size: var(--fs-1); color: var(--ink-2); line-height: 1.5">{{c.detail}}</p>
+</details>
+</li>
+</sc-for>
+</ul>
+</details>
+</sc-if>
+</article>
+</sc-for>
+
+<a class="cta noprint" href="JobFit.dc.html" style="display: flex; align-items: center; justify-content: space-between; gap: var(--sp-5); padding: var(--sp-5); border-radius: var(--r-2); background: var(--band); color: var(--band-ink); text-decoration: none; border: 1px solid var(--line); box-shadow: var(--shadow-2)">
+<span style="display: flex; flex-direction: column; gap: 2px">
+<span style="font-family: var(--mono); font-size: var(--fs-1); text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.9">Hiring?</span>
+<span style="font-size: var(--fs-4); font-weight: 800; letter-spacing: -0.01em">Am I the right fit for your company?</span>
+<span style="font-size: var(--fs-1); opacity: 0.92">Paste the job description and see where I fit, with the evidence.</span>
+</span>
+<span class="cta-arrow" aria-hidden="true" style="flex: none; width: 48px; height: 48px; display: grid; place-items: center; border-radius: var(--r-pill); background: var(--cta-bg); color: var(--cta-ink)">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+</span>
+</a>
+</section>
+
+<section id="ai-method" aria-labelledby="h-ai" style="display: flex; flex-direction: column; gap: var(--sp-5)">
+<header style="display: flex; flex-direction: column; gap: var(--sp-2)">
+<h2 id="h-ai" style="margin: 0; font-size: var(--fs-5); letter-spacing: -0.015em; color: var(--brand)">How I work with AI</h2>
+<p style="margin: 0; color: var(--ink-2); max-width: 60ch">I leverage AI to move quickly through research, analysis and prototyping so I can focus on deeply understanding the problem, driving enthusiastic alignment, and making the right decisions.</p>
+</header>
+<ol style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: var(--sp-4)">
+<li style="display: flex; flex-direction: column; gap: var(--sp-2); padding: var(--sp-5); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-2)">
+<span style="font-family: var(--mono); font-size: var(--fs-1); color: var(--accent-text); font-weight: 700">01</span>
+<span style="font-weight: 700">[Step]</span>
+<span style="color: var(--ink-2)">[What happens, and why]</span>
+</li>
+<li style="display: flex; flex-direction: column; gap: var(--sp-2); padding: var(--sp-5); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-2)">
+<span style="font-family: var(--mono); font-size: var(--fs-1); color: var(--accent-text); font-weight: 700">02</span>
+<span style="font-weight: 700">[Step]</span>
+<span style="color: var(--ink-2)">[What happens, and why]</span>
+</li>
+<li style="display: flex; flex-direction: column; gap: var(--sp-2); padding: var(--sp-5); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-2)">
+<span style="font-family: var(--mono); font-size: var(--fs-1); color: var(--accent-text); font-weight: 700">03</span>
+<span style="font-weight: 700">[Step]</span>
+<span style="color: var(--ink-2)">[What happens, and why]</span>
+</li>
+</ol>
+</section>
+
+<section id="builds" aria-labelledby="h-builds" style="display: flex; flex-direction: column; gap: var(--sp-5)">
+<header style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--sp-3)">
+<div style="display: flex; flex-direction: column; gap: var(--sp-2)">
+<h2 id="h-builds" style="margin: 0; font-size: var(--fs-5); letter-spacing: -0.015em; color: var(--brand)">Builds</h2>
+<p style="margin: 0; color: var(--ink-2)">Interactive things I've built on my own time. Try them.</p>
+</div>
+<a href="Builds.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; font-weight: 600">All builds</a>
+</header>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: var(--sp-4)">
+<a href="JobFit.dc.html" style="display: flex; flex-direction: column; gap: var(--sp-3); padding: var(--sp-5); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-2); text-decoration: none; color: var(--ink); box-shadow: var(--shadow-1)">
+<span style="display: flex; justify-content: space-between; align-items: center; gap: var(--sp-2)">
+<span style="font-weight: 700; font-size: var(--fs-3)">Job-fit assessment</span>
+<span style="font-family: var(--mono); font-size: var(--fs-1); padding: 2px 8px; border-radius: var(--r-pill); background: var(--chip)">Live</span>
+</span>
+<span style="color: var(--ink-2)">Paste a job description. It reads the fit against this CV and cites the evidence.</span>
+<span style="font-weight: 600; color: var(--brand)">Try it</span>
+</a>
+<a href="DPR.dc.html" style="display: flex; flex-direction: column; gap: var(--sp-3); padding: var(--sp-5); background: var(--surface); border: 1px dashed var(--line); border-radius: var(--r-2); text-decoration: none; color: var(--ink)">
+<span style="display: flex; justify-content: space-between; align-items: center; gap: var(--sp-2)">
+<span style="font-weight: 700; font-size: var(--fs-3)">DPR calculator</span>
+<span style="font-family: var(--mono); font-size: var(--fs-1); padding: 2px 8px; border-radius: var(--r-pill); border: 1px solid var(--line); color: var(--ink-2)">Not built yet</span>
+</span>
+<span style="color: var(--ink-2)">Damage-per-round maths for D&amp;D 5e.</span>
+<span style="font-weight: 600; color: var(--brand)">See the placeholder</span>
+</a>
+</div>
+</section>
+
+<section id="about" aria-labelledby="h-about" style="display: flex; flex-direction: column; gap: var(--sp-4)">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-3)">
+<h2 id="h-about" style="margin: 0; font-size: var(--fs-5); letter-spacing: -0.015em; color: var(--brand)">About</h2>
+<sc-if value="{{aboutCanEdit}}" hint-placeholder-val="{{ false }}">
+<button type="button" onClick="{{startAbout}}" style="display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 12px; border: 1px solid var(--brand); border-radius: var(--r-1); background: transparent; color: var(--brand); font: inherit; font-size: var(--fs-1); font-weight: 600; cursor: pointer"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4z"></path></svg>Edit About</button>
+</sc-if>
+</div>
+<sc-if value="{{aboutViewing}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; gap: var(--sp-3); max-width: 62ch">
+<sc-for list="{{aboutParas}}" as="ap" hint-placeholder-count="2">
+<p style="margin: 0">{{ap.text}}</p>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{aboutEditing}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: var(--sp-2); max-width: 62ch; padding: var(--sp-4); background: var(--surface); border: 1px solid var(--brand); border-radius: var(--r-2)">
+<label for="about-text" style="font-size: var(--fs-1); font-weight: 600">About text <span style="font-weight: 400; color: var(--ink-2)">· a blank line starts a new paragraph</span></label>
+<textarea id="about-text" rows="8" value="{{aboutDraft}}" onChange="{{setAboutDraft}}" style="padding: var(--sp-3); border: 1px solid var(--line); border-radius: var(--r-1); background: var(--bg); color: var(--ink); font: inherit; line-height: 1.55; resize: vertical"></textarea>
+<div style="display: flex; justify-content: flex-end; gap: var(--sp-2)">
+<button type="button" onClick="{{cancelAbout}}" style="min-height: 36px; padding: 0 12px; border: 1px solid var(--line); border-radius: var(--r-1); background: transparent; color: var(--ink); font: inherit; font-size: var(--fs-1); cursor: pointer">Cancel</button>
+<button type="button" onClick="{{saveAbout}}" style="min-height: 36px; padding: 0 12px; border: 0; border-radius: var(--r-1); background: var(--brand); color: var(--brand-ink); font: inherit; font-size: var(--fs-1); font-weight: 700; cursor: pointer">Save draft</button>
+</div>
+</div>
+</sc-if>
+</section>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: var(--sp-7)">
+<section id="skills" aria-labelledby="h-skills" style="display: flex; flex-direction: column; gap: var(--sp-4)">
+<h2 id="h-skills" style="margin: 0; font-size: var(--fs-5); letter-spacing: -0.015em; color: var(--brand)">Skills</h2>
+<sc-if value="{{edit}}" hint-placeholder-val="{{ false }}">
+<p style="margin: 0; font-size: var(--fs-1); color: var(--ink-2)">Click a skill to add synonyms and pick which wording the site shows. The resume generator can use any of them.</p>
+</sc-if>
+<sc-for list="{{skillGroups}}" as="g" hint-placeholder-count="3">
+<div style="display: flex; flex-direction: column; gap: var(--sp-2)">
+<h3 style="margin: 0; font-size: var(--fs-2); color: var(--accent-text)">{{g.name}}</h3>
+<sc-if value="{{g.viewLine}}" hint-placeholder-val="{{ false }}">
+<p style="margin: 0">{{g.line}}</p>
+</sc-if>
+<sc-if value="{{g.viewChips}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-wrap: wrap; gap: var(--sp-2)">
+<sc-for list="{{g.items}}" as="sk" hint-placeholder-count="4">
+<span style="padding: 4px 10px; border-radius: var(--r-pill); background: var(--chip); font-size: var(--fs-1)">{{sk.label}}</span>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{g.editing}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: var(--sp-3); padding: var(--sp-3); border: 1px dashed var(--brand); border-radius: var(--r-2)">
+<div style="display: flex; flex-wrap: wrap; gap: var(--sp-2)">
+<sc-for list="{{g.items}}" as="sk" hint-placeholder-count="4">
+<sc-if value="{{sk.isOpen}}" hint-placeholder-val="{{ false }}">
+<button type="button" onClick="{{sk.toggle}}" aria-expanded="true" style="display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 0 10px; border: 1px solid var(--brand); border-radius: var(--r-pill); background: var(--brand); color: var(--brand-ink); font: inherit; font-size: var(--fs-1); font-weight: 600; cursor: pointer">{{sk.label}}<sc-if value="{{sk.hasSyn}}" hint-placeholder-val="{{ false }}"><span style="font-family: var(--mono); font-size: 0.6875rem; opacity: 0.85">+{{sk.synCount}}</span></sc-if></button>
+</sc-if>
+<sc-if value="{{sk.isClosed}}" hint-placeholder-val="{{ true }}">
+<button type="button" onClick="{{sk.toggle}}" aria-expanded="false" style="display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 0 10px; border: 1px solid var(--line); border-radius: var(--r-pill); background: var(--chip); color: var(--ink); font: inherit; font-size: var(--fs-1); cursor: pointer">{{sk.label}}<sc-if value="{{sk.hasSyn}}" hint-placeholder-val="{{ false }}"><span style="font-family: var(--mono); font-size: 0.6875rem; color: var(--brand); font-weight: 700">+{{sk.synCount}}</span></sc-if></button>
+</sc-if>
+</sc-for>
+</div>
+
+<sc-if value="{{g.hasPanel}}" hint-placeholder-val="{{ false }}">
+<div role="group" aria-label="{{g.panelLabel}}" style="display: flex; flex-direction: column; gap: var(--sp-3); padding: var(--sp-4); background: var(--raised); border: 1px solid var(--line); border-radius: var(--r-2); box-shadow: var(--shadow-2)">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<span style="font-family: var(--mono); font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-2)">Wordings for this skill</span>
+<span style="font-size: var(--fs-1); color: var(--ink-2)">The one marked "On the site" is what visitors see. The resume generator picks whichever matches the posting best.</span>
+</div>
+<ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--sp-1)">
+<sc-for list="{{g.forms}}" as="f" hint-placeholder-count="3">
+<li style="display: flex; align-items: center; gap: var(--sp-2); min-height: 40px; padding: 0 var(--sp-2) 0 var(--sp-3); border: 1px solid var(--line); border-radius: var(--r-1); background: var(--bg)">
+<span style="flex: 1; min-width: 0; font-size: var(--fs-2)">{{f.text}}</span>
+<sc-if value="{{f.isShown}}" hint-placeholder-val="{{ false }}">
+<span style="font-family: var(--mono); font-size: 0.6875rem; font-weight: 700; padding: 3px 8px; border-radius: var(--r-pill); background: var(--brand); color: var(--brand-ink)">On the site</span>
+</sc-if>
+<sc-if value="{{f.notShown}}" hint-placeholder-val="{{ true }}">
+<button type="button" onClick="{{f.show}}" style="min-height: 30px; padding: 0 10px; border: 1px solid var(--line); border-radius: var(--r-pill); background: transparent; color: var(--ink-2); font: inherit; font-size: 0.6875rem; cursor: pointer">Show this on the site</button>
+</sc-if>
+<sc-if value="{{f.canRemove}}" hint-placeholder-val="{{ true }}">
+<button type="button" onClick="{{f.remove}}" aria-label="{{f.removeLabel}}" style="width: 30px; height: 30px; display: grid; place-items: center; border: 0; background: transparent; color: var(--ink-2); cursor: pointer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+</sc-if>
+</li>
+</sc-for>
+</ul>
+<div style="display: flex; gap: var(--sp-2)">
+<input type="text" aria-label="Add a synonym" placeholder="Add a synonym" value="{{synDraft}}" onChange="{{setSynDraft}}" style="flex: 1; min-width: 0; min-height: 36px; padding: 0 10px; border: 1px solid var(--line); border-radius: var(--r-1); background: var(--bg); color: var(--ink); font: inherit; font-size: var(--fs-1)">
+<button type="button" onClick="{{addSyn}}" style="min-height: 36px; padding: 0 12px; border: 1px solid var(--brand); border-radius: var(--r-1); background: transparent; color: var(--brand); font: inherit; font-size: var(--fs-1); font-weight: 600; cursor: pointer">Add synonym</button>
+</div>
+<div style="display: flex; justify-content: space-between; gap: var(--sp-2); padding-top: var(--sp-2); border-top: 1px solid var(--line)">
+<button type="button" onClick="{{removeSkill}}" style="min-height: 36px; padding: 0 10px; border: 0; background: transparent; color: var(--ink-2); font: inherit; font-size: var(--fs-1); text-decoration: underline; cursor: pointer">Remove this skill</button>
+<button type="button" onClick="{{closeSkill}}" style="min-height: 36px; padding: 0 14px; border: 0; border-radius: var(--r-1); background: var(--brand); color: var(--brand-ink); font: inherit; font-size: var(--fs-1); font-weight: 700; cursor: pointer">Done</button>
+</div>
+</div>
+</sc-if>
+
+<div style="display: flex; gap: var(--sp-2)">
+<input type="text" aria-label="{{g.addLabel}}" placeholder="Add a skill" value="{{g.newVal}}" onChange="{{g.setNew}}" style="flex: 1; min-width: 0; min-height: 36px; padding: 0 10px; border: 1px solid var(--line); border-radius: var(--r-1); background: var(--bg); color: var(--ink); font: inherit; font-size: var(--fs-1)">
+<button type="button" onClick="{{g.add}}" style="display: inline-flex; align-items: center; gap: 4px; min-height: 36px; padding: 0 12px; border: 1px solid var(--brand); border-radius: var(--r-1); background: transparent; color: var(--brand); font: inherit; font-size: var(--fs-1); font-weight: 600; cursor: pointer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Add</button>
+</div>
+</div>
+</sc-if>
+</div>
+</sc-for>
+</section>
+<section id="education" aria-labelledby="h-edu" style="display: flex; flex-direction: column; gap: var(--sp-4)">
+<h2 id="h-edu" style="margin: 0; font-size: var(--fs-5); letter-spacing: -0.015em; color: var(--brand)">Education</h2>
+<div style="display: flex; flex-direction: column; gap: 2px">
+<span style="font-weight: 700">University of Oregon</span>
+<span style="color: var(--ink-2)">BA, Political Science, Minor in Mandarin</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px">
+<span style="font-weight: 700">Certified Scrum Product Owner (CSPO)</span>
+<span style="color: var(--ink-2)">Scrum Alliance</span>
+</div>
+</section>
+</div>
+
+<section id="site-build" aria-labelledby="h-site" style="display: flex; flex-direction: column; gap: var(--sp-4); padding: var(--sp-5); background: var(--surface-2); border-radius: var(--r-2)">
+<h2 id="h-site" style="margin: 0; font-size: var(--fs-4)">How this site was built</h2>
+<p style="margin: 0; color: var(--ink-2); max-width: 62ch">[One paragraph: why the site is the evidence for the CV, and what I'd do differently.]</p>
+<details>
+<summary style="display: inline-flex; align-items: center; gap: 6px; min-height: 44px; font-weight: 600; color: var(--brand)">Stack and decisions
+<svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
+</summary>
+<ul style="margin: var(--sp-2) 0 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: var(--sp-1)">
+<li>Plain HTML and CSS on Cloudflare. Minimal JavaScript; every page reads without it.</li>
+<li>Light and dark themes; the site follows your system setting until you pick one.</li>
+<li>Tools call Workers endpoints under /api/.</li>
+<li>[Decision and trade-off]</li>
+<li>Not resolved yet: [open question]</li>
+</ul>
+</details>
+</section>
+
+</main>
+</div>
+
+<footer id="contact" aria-labelledby="h-contact" style="background: var(--band); color: var(--band-ink); border-top: 1px solid var(--line)">
+<div style="max-width: 1200px; margin: 0 auto; padding: var(--sp-7) var(--sp-5); display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--sp-7)">
+<div style="flex: 1 1 320px; display: flex; flex-direction: column; gap: var(--sp-4)">
+<h2 id="h-contact" style="margin: 0; font-size: var(--fs-5)">Contact</h2>
+<p style="margin: 0; max-width: 40ch; opacity: 0.92">[One line on what I'm open to.]</p>
+<div style="display: flex; flex-wrap: wrap; gap: var(--sp-3)">
+<a href="mailto:hello@nathanpotter.dev" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--sp-5); border-radius: var(--r-1); background: var(--band-ink); color: var(--band); font-weight: 700; text-decoration: none">hello@nathanpotter.dev</a>
+<a href="https://www.linkedin.com/in/nathan-j-potter" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--sp-5); border-radius: var(--r-1); border: 1px solid currentColor; color: var(--band-ink); text-decoration: none">LinkedIn</a>
+</div>
+</div>
+<nav class="noprint" aria-label="Site map" style="flex: 1 1 360px; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--sp-5)">
+<div style="display: flex; flex-direction: column; gap: var(--sp-2)">
+<span style="font-family: var(--mono); font-size: var(--fs-1); text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.85">CV</span>
+<a href="Main.dc.html" style="color: var(--band-ink)">Full CV</a>
+<a href="Role.dc.html" style="color: var(--band-ink)">Role views</a>
+<a href="ViewBuilder.dc.html" style="color: var(--band-ink)">Builder</a>
+<a href="ViewFintech.dc.html" style="color: var(--band-ink)">Fintech</a>
+<a href="ViewClimate.dc.html" style="color: var(--band-ink)">Climate</a>
+</div>
+<div style="display: flex; flex-direction: column; gap: var(--sp-2)">
+<span style="font-family: var(--mono); font-size: var(--fs-1); text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.85">Builds</span>
+<a href="Builds.dc.html" style="color: var(--band-ink)">All builds</a>
+<a href="JobFit.dc.html" style="color: var(--band-ink)">Job-fit</a>
+<a href="DPR.dc.html" style="color: var(--band-ink)">DPR calculator</a>
+</div>
+<div style="display: flex; flex-direction: column; gap: var(--sp-2)">
+<span style="font-family: var(--mono); font-size: var(--fs-1); text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.85">Site</span>
+<a href="Admin.dc.html" style="display: inline-flex; align-items: center; gap: 6px; color: var(--band-ink)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>Admin</a>
+</div>
+</nav>
+<p style="flex: 1 1 100%; margin: 0; font-family: var(--mono); font-size: var(--fs-1); opacity: 0.85">Last updated [date]</p>
+</div>
+</footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light"},"view":{"editor":"enum","options":["all","builder","fintech","climate"],"default":"all"},"compact":{"editor":"boolean","default":false},"contactOpen":{"editor":"boolean","default":false},"edit":{"editor":"boolean","default":false},"$preview":{"width":1280,"height":5400}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const theme = s.theme || this.props.theme || 'light';
+    const compact = !!this.props.compact;
+    const view = this.props.view || 'all';
+    const focus = s.focus || 'All';
+
+    const roles = [
+      {
+        id: 'exp-anchorage', company: 'Anchorage Digital', kind: 'federally chartered bank',
+        title: 'Senior Product Manager, Client Onboarding & Risk Platform', dates: 'Jan 2025 – present',
+        note: 'Moved from Client Insights & Automation to take over Client Onboarding & Risk when the team needed a PM to lead it.',
+        cards: [
+          { metric: '4×', tag: 'Scale', headline: 'Client onboarding throughput, ~265 → 1,000+ a quarter, in a year', detail: 'Quadrupled throughput of a complex, high-stakes client onboarding workflow (~265 → 1,000+ completed per quarter) within a year of taking over the squad.' },
+          { metric: '4.5 days', tag: 'Automation', headline: 'Average handle time, cut by automation while volume quadrupled', detail: 'Drove onboarding automation (partner verification reliance, automated document collection, reusable questionnaires), bringing average handle time down to 4.5 days while quarterly volume quadrupled.' },
+          { metric: 'Shipped', tag: '0→1', headline: 'Progressive onboarding: new product lines with no repeat review', detail: "Shipped progressive onboarding, which lets existing clients activate a new product line by reusing information they've already provided, with no repeat review." },
+          { metric: 'Underway', tag: 'Platform', headline: 'Re-architecting the core onboarding platform, live ops untouched', detail: 'Leading a re-architecture of the core onboarding platform (data-model redesign, account migration, legacy retirement) with no disruption to live operations.' },
+          { metric: '8', tag: 'Leadership', headline: 'Person squad (7 eng, 1 design), aligned with 5 compliance and ops teams', detail: 'Lead an 8-person squad (7 engineers, 1 designer), aligning priorities across compliance, sanctions, financial intelligence, due-diligence operations and periodic client review.' },
+          { metric: '62', tag: 'Leadership', headline: 'New product, design and eng hires trained on org-wide standards', detail: 'Co-developed org-wide product development standards (PRD templates, lifecycle expectations, training materials) and ran onboarding training for 62 new product, design and engineering hires.' },
+          { metric: '15–20', tag: 'AI', headline: 'Teammates querying a Claude knowledge system I built', detail: 'Built Claude-based team tools: a knowledge system that auto-files meeting notes (escalating uncertain cases for review) and makes PRDs and discovery docs queryable for 15–20 teammates, and a live, clickable roadmap with embedded prototypes, adopted by 3 product squads in place of slide decks.' },
+          { metric: '3 squads', tag: 'AI', headline: 'Swapped slide decks for my live, clickable roadmap', detail: 'Built Claude-based team tools: a knowledge system that auto-files meeting notes (escalating uncertain cases for review) and makes PRDs and discovery docs queryable for 15–20 teammates, and a live, clickable roadmap with embedded prototypes, adopted by 3 product squads in place of slide decks.' }
+        ]
+      },
+      {
+        id: 'exp-jaris', company: 'jaris', kind: 'embedded finance',
+        title: 'Senior Product Manager, Originations', dates: 'Mar 2023 – Dec 2023', note: '',
+        cards: [
+          { metric: '2×', tag: 'Partners', headline: 'Major partnerships, from a new payment-collection product', detail: 'Launched a payment-collection product with two new partners, doubling major partnerships in its B2B2B model.' },
+          { metric: '+25%', tag: 'Built it myself', headline: 'Operator efficiency from Retool tools I built and shipped', detail: 'Personally built production back-office tools in Retool, wired to live databases with read/write logic, replacing a legacy interface and raising operator efficiency 25%.' },
+          { metric: 'SR 11-7', tag: 'Risk', headline: 'Model-risk procedures that made lending models audit-ready', detail: 'Led data, underwriting and compliance teams to create SR 11-7 model-risk procedures, making lending models audit-ready.' }
+        ]
+      },
+      {
+        id: 'exp-mosaic', company: 'Mosaic', kind: 'clean-energy financing',
+        title: 'Product Analyst → Product Manager', dates: 'Oct 2018 – Mar 2023', note: '',
+        cards: [
+          { metric: '0→1', tag: '0→1', headline: 'Leasing point of sale with a top-5 US HVAC maker, 8 states at launch', detail: 'Led the 0→1 launch of a leasing point-of-sale product with a top-5 US HVAC manufacturer, live in 8 states at launch.' },
+          { metric: 'Solo', tag: 'Built it myself', headline: 'Built the origination tool as PM, designer and engineer', detail: 'Built the origination tool single-handedly as PM, designer and engineer (Glide, Zapier, Google Sheets, SignNow); it became the model for the next-gen platform.' },
+          { metric: '2 months', tag: 'Partners', headline: 'B2B2C origination partnership with a $200B-asset partner', detail: 'Delivered a B2B2C origination partnership with a $200B-asset partner in 2 months.' },
+          { metric: '$70MM+', tag: 'Scale', headline: 'Monthly originations on the platform I product-owned', detail: 'Product owner and scrum master for a 9+ person global team running the platform behind $70MM+ in monthly originations.' },
+          { metric: '+9%', tag: 'Scale', headline: 'Partner approval rates QoQ, from funnel analytics', detail: 'Formed and led a 7-person cross-functional team that used onboarding funnel analytics to lift partner approval rates 9% QoQ.' },
+          { metric: '~40%', tag: 'Partners', headline: 'Of the solar business, from a distributor I helped onboard', detail: 'Designed a cross-team cash-flow process to onboard a new distributor that grew to ~40% of the solar business.' },
+          { metric: '−90%', tag: 'Automation', headline: 'Funding-approval turnaround for the largest partners', detail: 'Cut funding-approval turnaround 90% for the largest partners by removing manual review steps.' },
+          { metric: '60%+', tag: 'Partners', headline: 'Of loan volume covered by white-glove API partner support', detail: 'Launched white-glove support for API-integrated partners (60%+ of loan volume) to retain Tier-1 partners.' }
+        ]
+      }
+    ];
+
+    const viewMeta = {
+      all: { label: 'Full CV', path: '', order: ['exp-anchorage', 'exp-jaris', 'exp-mosaic'], fits: () => true },
+      builder: { label: 'Builder', path: '/builder/', order: ['exp-anchorage', 'exp-jaris', 'exp-mosaic'],
+        focus: 'What I built with my own hands, and the AI tools I build with.',
+        fits: (c) => ['Built it myself', 'AI', '0→1', 'Platform'].indexOf(c.tag) > -1 },
+      fintech: { label: 'Fintech', path: '/fintech/', order: ['exp-anchorage', 'exp-jaris', 'exp-mosaic'],
+        focus: 'Regulated financial products: lending, embedded finance and institutional crypto banking.',
+        fits: (c) => ['Scale', 'Automation', 'Partners', 'Risk', 'Platform'].indexOf(c.tag) > -1 },
+      climate: { label: 'Climate', path: '/climate/', order: ['exp-mosaic', 'exp-anchorage', 'exp-jaris'],
+        focus: 'Four-plus years financing clean energy at Mosaic, first.',
+        fits: (c, r) => r.id === 'exp-mosaic' }
+    };
+    const vm = viewMeta[view] || viewMeta.all;
+    const edit = !!this.props.edit;
+
+    const defaultAbout = '[A short paragraph in first person: how I got into product, what I care about in the work.]\n\n[A second paragraph: outside work, briefly.]';
+    const aboutText = s.about !== undefined ? s.about : defaultAbout;
+    const aboutEditing = edit && !!s.aboutEditing;
+    const sk = (forms, shown) => ({ forms: forms, shown: shown || 0 });
+    const defaultSkills = [
+      { name: 'Core strengths', line: true, items: [sk(['First-principles critical thinking']), sk(['Curiosity and growth mindset']), sk(['Decision-making']), sk(['Problem framing', 'Problem definition']), sk(['Clear written and executive communication', 'Executive communication', 'Stakeholder communication']), sk(['Team leadership and mentorship', 'People leadership', 'Mentoring']), sk(['0→1 and scale-up delivery', 'New product development']), sk(['AI-native workflows'])] },
+      { name: 'AI', items: [sk(['Claude Code']), sk(['Claude (projects, skills, artifacts)']), sk(['ChatGPT']), sk(['Gemini'])] },
+      { name: 'Technical', items: [sk(['SQL']), sk(['Python']), sk(['JavaScript/React', 'React', 'JavaScript']), sk(['Retool']), sk(['Zapier']), sk(['Glide']), sk(['Figma']), sk(['Tableau']), sk(['Jira']), sk(['Linear']), sk(['Notion'])] }
+    ];
+    const skills = s.skills || defaultSkills;
+    const bump = (extra) => this.setState(Object.assign({ changes: (this.state.changes || 0) + 1, published: false }, extra));
+    const setSkills = (fn) => { const next = JSON.parse(JSON.stringify(this.state.skills || defaultSkills)); fn(next); return next; };
+    const newSkill = s.newSkill || {};
+    const open = s.skillOpen || null;
+    const skillGroups = skills.map((g, gi) => {
+      const openHere = edit && open && open.g === gi && g.items[open.i];
+      const cur = openHere ? g.items[open.i] : null;
+      return {
+        name: g.name,
+        viewLine: !edit && !!g.line,
+        viewChips: !edit && !g.line,
+        editing: edit,
+        line: g.items.map((x) => x.forms[x.shown]).join(' · '),
+        addLabel: 'Add a skill to ' + g.name,
+        newVal: newSkill[gi] || '',
+        setNew: (e) => this.setState({ newSkill: Object.assign({}, this.state.newSkill, { [gi]: e.target.value }) }),
+        add: () => {
+          const v = ((this.state.newSkill || {})[gi] || '').trim();
+          if (!v) return;
+          bump({ skills: setSkills((n) => n[gi].items.push({ forms: [v], shown: 0 })), newSkill: Object.assign({}, this.state.newSkill, { [gi]: '' }) });
+        },
+        hasPanel: !!cur,
+        panelLabel: cur ? 'Wordings for ' + cur.forms[cur.shown] : '',
+        forms: cur ? cur.forms.map((text, fi) => ({
+          text: text, isShown: fi === cur.shown, notShown: fi !== cur.shown,
+          canRemove: cur.forms.length > 1,
+          removeLabel: 'Remove the wording ' + text,
+          show: () => bump({ skills: setSkills((n) => { n[gi].items[open.i].shown = fi; }) }),
+          remove: () => bump({ skills: setSkills((n) => {
+            const it = n[gi].items[open.i]; it.forms.splice(fi, 1);
+            if (it.shown === fi) it.shown = 0; else if (it.shown > fi) it.shown -= 1;
+          }) })
+        })) : [],
+        items: g.items.map((x, i) => {
+          const isOpen = edit && open && open.g === gi && open.i === i;
+          return {
+            label: x.forms[x.shown], hasSyn: x.forms.length > 1, synCount: x.forms.length - 1,
+            isOpen: !!isOpen, isClosed: !isOpen,
+            toggle: () => this.setState({ skillOpen: isOpen ? null : { g: gi, i: i }, synDraft: '' })
+          };
+        })
+      };
+    });
+    const views = ['all', 'builder', 'fintech', 'climate'].map((id) => ({
+      label: viewMeta[id].label,
+      href: id === 'all' ? 'Main.dc.html' : 'View' + id.charAt(0).toUpperCase() + id.slice(1) + '.dc.html',
+      on: id === view, off: id !== view
+    }));
+
+    const ov = s.overrides || {};
+    roles.forEach((r) => { r.cards = r.cards.map((c, i) => Object.assign({ key: r.id + '-' + i }, c, ov[r.id + '-' + i] || {})); });
+    const all = [];
+    roles.forEach((r) => r.cards.forEach((c) => all.push(c)));
+    const count = (t) => t === 'All' ? all.length : all.filter((c) => c.tag === t).length;
+    const order = ['All', 'Scale', 'Automation', '0→1', 'Platform', 'Partners', 'Leadership', 'Built it myself', 'AI', 'Risk'];
+    const tags = order.map((t) => ({
+      label: t, count: count(t), on: t === focus, off: t !== focus,
+      pick: () => this.setState({ focus: (t === focus ? 'All' : t) })
+    }));
+    const draft = s.draft || {};
+    const setD = (k) => (e) => this.setState({ draft: Object.assign({}, this.state.draft, { [k]: e.target.value }) });
+    const dress = (c) => {
+      const isEditing = edit && s.editing === c.key;
+      return Object.assign({}, c, {
+        op: (focus === 'All' || c.tag === focus) ? 1 : 0.28,
+        isEditing: isEditing,
+        viewing: !isEditing,
+        canEdit: edit && !isEditing,
+        startEdit: () => this.setState({ editing: c.key, draft: { metric: c.metric, tag: c.tag, headline: c.headline, detail: c.detail } }),
+        dMetric: isEditing ? draft.metric : '', dTag: isEditing ? draft.tag : '', dHeadline: isEditing ? draft.headline : '', dDetail: isEditing ? draft.detail : '',
+        setMetric: setD('metric'), setTag: setD('tag'), setHeadline: setD('headline'), setDetail: setD('detail')
+      });
+    };
+
+    let upFront = 0;
+    const outRoles = vm.order.map((rid) => {
+      const r = roles.filter((x) => x.id === rid)[0];
+      const shown = r.cards.filter((c) => vm.fits(c, r)).map(dress);
+      const more = r.cards.filter((c) => !vm.fits(c, r)).map(dress);
+      upFront += shown.length;
+      return Object.assign({}, r, {
+        hid: 'h-' + r.id,
+        hasNote: !!r.note,
+        shown: shown, hasShown: shown.length > 0,
+        more: more, hasMore: more.length > 0,
+        moreLabel: (shown.length ? 'Show ' + more.length + ' more from ' : 'Show ' + more.length + ' results from ') + r.company
+      });
+    });
+
+    const curated = view !== 'all';
+    const lit = count(focus);
+    let showing = curated
+      ? upFront + ' of ' + all.length + ' results up front for ' + vm.label + '. The rest are one click away.'
+      : all.length + ' results across 3 roles';
+    if (focus !== 'All') showing = 'Highlighting ' + lit + ' of ' + all.length + ': ' + focus;
+
+    const copied = !!s.copied;
+    return {
+      theme: theme,
+      isDark: theme === 'dark',
+      isLight: theme !== 'dark',
+      themeLabel: theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme',
+      toggleTheme: () => this.setState({ theme: theme === 'dark' ? 'light' : 'dark' }),
+      compact: compact,
+      wide: !compact,
+      contactOpen: !!this.props.contactOpen,
+      copyLabel: copied ? 'Copied' : 'Copy',
+      copyEmail: () => {
+        try { navigator.clipboard.writeText('hello@nathanpotter.dev'); } catch (e) {}
+        this.setState({ copied: true });
+      },
+      path: vm.path,
+      views: views,
+      curated: curated,
+      viewLabel: vm.label,
+      viewFocus: vm.focus || '',
+      viewNote: 'Same CV, re-cut: the results that matter most for this kind of role come first, and everything else is folded underneath.',
+      tags: tags,
+      skillGroups: skillGroups,
+      synDraft: s.synDraft || '',
+      setSynDraft: (e) => this.setState({ synDraft: e.target.value }),
+      addSyn: () => {
+        const v = (this.state.synDraft || '').trim(); const o = this.state.skillOpen;
+        if (!v || !o) return;
+        bump({ skills: setSkills((n) => n[o.g].items[o.i].forms.push(v)), synDraft: '' });
+      },
+      removeSkill: () => { const o = this.state.skillOpen; if (!o) return; bump({ skills: setSkills((n) => n[o.g].items.splice(o.i, 1)), skillOpen: null }); },
+      closeSkill: () => this.setState({ skillOpen: null }),
+      aboutParas: aboutText.split(/\n\s*\n/).filter((x) => x.trim()).map((x) => ({ text: x.trim() })),
+      aboutViewing: !aboutEditing,
+      aboutEditing: aboutEditing,
+      aboutCanEdit: edit && !aboutEditing,
+      aboutDraft: s.aboutDraft || '',
+      setAboutDraft: (e) => this.setState({ aboutDraft: e.target.value }),
+      startAbout: () => this.setState({ aboutEditing: true, aboutDraft: aboutText }),
+      cancelAbout: () => this.setState({ aboutEditing: false }),
+      saveAbout: () => bump({ about: this.state.aboutDraft, aboutEditing: false }),
+      tagNames: order.slice(1),
+      roles: outRoles,
+      edit: edit,
+      editAttr: edit ? 'on' : 'off',
+      draftLabel: s.published ? 'Published · no unsaved changes' : ((s.changes || 0) === 0 ? 'No draft changes' : (s.changes + (s.changes === 1 ? ' draft change' : ' draft changes'))),
+      publishLabel: s.published ? 'Published' : 'Publish',
+      publish: () => this.setState({ published: true, changes: 0 }),
+      cancelEdit: () => this.setState({ editing: null, draft: null }),
+      saveEdit: () => {
+        const o = Object.assign({}, this.state.overrides);
+        o[this.state.editing] = Object.assign({}, this.state.draft);
+        this.setState({ overrides: o, editing: null, draft: null, changes: (this.state.changes || 0) + 1, published: false });
+      },
+      showing: showing
+    };
+  }
+}
+</script>
+</body>
+</html>

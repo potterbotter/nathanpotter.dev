@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Builds — Nathan Potter</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+.np{--font:ui-sans-serif,system-ui,-apple-system,"Segoe UI","Helvetica Neue",sans-serif;--mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;--fs-1:0.8125rem;--fs-2:0.9375rem;--fs-3:1.0625rem;--fs-4:1.3125rem;--fs-5:1.75rem;--fs-6:clamp(2.25rem,6vw,3.5rem);--sp-1:4px;--sp-2:8px;--sp-3:12px;--sp-4:16px;--sp-5:24px;--sp-6:32px;--sp-7:48px;--sp-8:72px;--r-1:4px;--r-2:8px;--r-pill:999px;--bg:#F2F5F5;--surface:#FFFFFF;--surface-2:#E6ECEC;--raised:#FFFFFF;--ink:#151A1B;--ink-2:#4A5557;--line:#D2DBDB;--brand:#0F6E73;--brand-ink:#FFFFFF;--band:#0F6E73;--band-ink:#FFFFFF;--band-line:rgba(255,255,255,.35);--accent:#7A0E1B;--accent-text:#7A0E1B;--chip:#E3EEEE;--cta-bg:#FFFFFF;--cta-ink:#0F6E73;--cta-sub:#4A5557;--cta-dot:#0F6E73;--cta-dot-ink:#FFFFFF;--shadow-1:0 1px 2px rgba(10,30,32,.08),0 1px 1px rgba(10,30,32,.04);--shadow-2:0 8px 24px rgba(10,30,32,.12);color-scheme:light}
+.np[data-theme="dark"]{--bg:#0D1213;--surface:#151C1E;--surface-2:#1D2628;--raised:#212B2D;--ink:#E9EFEF;--ink-2:#A3B1B3;--line:#2F3B3D;--brand:#6CCBD0;--brand-ink:#071113;--band:#0B2F32;--band-ink:#EAF5F5;--band-line:rgba(234,245,245,.22);--accent:#B8344A;--accent-text:#E9EFEF;--chip:#1F3335;--cta-bg:#6CCBD0;--cta-ink:#071113;--cta-sub:#14373A;--cta-dot:#071113;--cta-dot-ink:#6CCBD0;--shadow-1:0 0 0 1px rgba(255,255,255,.02),0 1px 2px rgba(0,0,0,.5);--shadow-2:0 0 0 1px rgba(255,255,255,.04),0 12px 32px rgba(0,0,0,.55);color-scheme:dark}
+.np a{color:var(--brand)}.np a:hover{color:var(--accent-text)}
+.np :focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:2px}
+.np summary{list-style:none;cursor:pointer}.np summary::-webkit-details-marker{display:none}
+.np .chev{transition:transform .18s ease}.np details[open]>summary .chev{transform:rotate(180deg)}
+.np .navlink:hover{background:var(--surface-2);color:var(--ink)}
+.np .pick{transition:transform .15s ease,border-color .15s ease}.np .pick:hover{transform:translateY(-3px);border-color:var(--brand)}.np .pick:hover .cta-arrow{transform:translateX(3px)}.np .cta-arrow{transition:transform .15s ease}
+@media (prefers-reduced-motion:reduce){.np *{transition:none!important}.np .pick:hover{transform:none}}
+@media print{.np .noprint{display:none!important}.np details>*{display:block!important}}
+</style>
+</helmet>
+<div class="np" data-theme="{{theme}}" style="background: var(--bg); color: var(--ink); font-family: var(--font); font-size: var(--fs-2); line-height: 1.55">
+
+<header class="noprint" style="position: relative; z-index: 20; background: var(--surface); border-bottom: 1px solid var(--line)">
+<div style="max-width: 1200px; margin: 0 auto; padding: var(--sp-3) var(--sp-5); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-4)">
+<a href="Main.dc.html" style="display: flex; flex-direction: column; text-decoration: none; color: var(--ink); min-height: 44px; justify-content: center">
+<span style="font-weight: 700; font-size: var(--fs-3); letter-spacing: -0.01em">Nathan Potter</span>
+<span style="font-family: var(--mono); font-size: var(--fs-1); color: var(--ink-2)">nathanpotter.dev/builds/</span>
+</a>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2)">
+<nav aria-label="Site" style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-1)">
+<a href="Main.dc.html" style="padding: 10px 12px; border-radius: var(--r-1); text-decoration: none; color: var(--ink-2)">CV</a>
+<a href="Role.dc.html" style="padding: 10px 12px; border-radius: var(--r-1); text-decoration: none; color: var(--ink-2)">Role views</a>
+<a href="Builds.dc.html" aria-current="page" style="padding: 10px 12px; border-radius: var(--r-1); text-decoration: none; font-weight: 600; color: var(--ink); background: var(--surface-2)">Builds</a>
+<details style="position: relative">
+<summary class="navlink" style="display: flex; align-items: center; gap: 6px; padding: 10px 12px; border-radius: var(--r-1); color: var(--ink-2)">Contact
+<svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
+</summary>
+<div role="group" aria-label="Contact" style="position: absolute; right: 0; top: 50px; width: 340px; display: flex; flex-direction: column; gap: var(--sp-2); padding: var(--sp-4); background: var(--raised); border: 1px solid var(--line); border-radius: var(--r-2); box-shadow: var(--shadow-2)">
+<p style="margin: 0 0 var(--sp-1); font-family: var(--mono); font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-2)">Get in touch</p>
+<div style="display: flex; align-items: stretch; gap: var(--sp-2)">
+<a href="mailto:hello@nathanpotter.dev" style="flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 12px; border-radius: var(--r-1); background: var(--surface-2); color: var(--ink); text-decoration: none; font-weight: 600">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 7l9 6 9-6"></path></svg>
+hello@nathanpotter.dev</a>
+<button type="button" onClick="{{copyEmail}}" aria-label="Copy email address" style="flex: none; min-width: 64px; min-height: 44px; padding: 0 10px; border: 1px solid var(--line); border-radius: var(--r-1); background: transparent; color: var(--ink); font: inherit; font-size: var(--fs-1); font-weight: 600; cursor: pointer">{{copyLabel}}</button>
+</div>
+<a href="https://www.linkedin.com/in/nathan-j-potter" style="display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 12px; border-radius: var(--r-1); border: 1px solid var(--line); color: var(--ink); text-decoration: none">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"></path></svg>
+<span style="display: flex; flex-direction: column; line-height: 1.25"><span style="font-weight: 600">LinkedIn</span><span style="font-family: var(--mono); font-size: 0.6875rem; color: var(--ink-2)">in/nathan-j-potter</span></span>
+</a>
+<div style="height: 1px; background: var(--line); margin: var(--sp-1) 0"></div>
+<a href="JobFit.dc.html" style="display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 44px; padding: 0 12px; border-radius: var(--r-1); background: var(--brand); color: var(--brand-ink); text-decoration: none; font-weight: 700">Am I the right fit for your company?
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+</a>
+<a href="#" style="display: flex; align-items: center; min-height: 40px; padding: 0 12px; color: var(--ink-2); font-size: var(--fs-1)">Download the CV as a PDF [link]</a>
+</div>
+</details>
+</nav>
+<button type="button" onClick="{{toggleTheme}}" aria-label="{{themeLabel}}" title="{{themeLabel}}" style="width: 44px; height: 44px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: var(--r-1); background: var(--surface); color: var(--ink); cursor: pointer">
+<sc-if value="{{isDark}}" hint-placeholder-val="{{ false }}">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+</sc-if>
+<sc-if value="{{isLight}}" hint-placeholder-val="{{ true }}">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>
+</sc-if>
+</button>
+</div>
+</div>
+</header>
+
+<main style="max-width: 1200px; margin: 0 auto; padding: var(--sp-7) var(--sp-5) var(--sp-8); display: flex; flex-direction: column; gap: var(--sp-8)">
+
+<div style="display: flex; flex-direction: column; gap: var(--sp-3)">
+<h1 style="margin: 0; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.05; letter-spacing: -0.02em; font-weight: 800">Builds</h1>
+<div style="width: 96px; height: 5px; background: var(--accent)"></div>
+<p style="margin: 0; max-width: 58ch; font-size: var(--fs-3); color: var(--ink-2)">Things I've built on my own time. The interactive ones come first: you can try them, and each has a write-up on the decisions behind it.</p>
+</div>
+
+<section aria-labelledby="h-try" style="display: flex; flex-direction: column; gap: var(--sp-5)">
+<h2 id="h-try" style="margin: 0; font-family: var(--mono); font-size: var(--fs-1); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-2)">Try it yourself</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); gap: var(--sp-5)">
+
+<article style="display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-2); box-shadow: var(--shadow-2); overflow: hidden">
+<div aria-hidden="true" style="display: flex; flex-direction: column; gap: 6px; padding: var(--sp-5); background: var(--surface-2); border-bottom: 1px solid var(--line); font-family: var(--mono); font-size: var(--fs-1)">
+<div style="display: grid; grid-template-columns: 1.2fr 1.4fr 0.6fr; gap: var(--sp-3); color: var(--ink-2)"><span>Posting asks for</span><span>Evidence</span><span>Read</span></div>
+<div style="display: grid; grid-template-columns: 1.2fr 1.4fr 0.6fr; gap: var(--sp-3); padding: 6px 0; border-top: 1px solid var(--line)"><span>Scale a workflow</span><span style="color: var(--brand)">#exp-anchorage</span><span style="font-weight: 700">Meets</span></div>
+<div style="display: grid; grid-template-columns: 1.2fr 1.4fr 0.6fr; gap: var(--sp-3); padding: 6px 0; border-top: 1px solid var(--line)"><span>Lending domain</span><span style="color: var(--brand)">#exp-mosaic</span><span style="font-weight: 700">Meets</span></div>
+<div style="display: grid; grid-template-columns: 1.2fr 1.4fr 0.6fr; gap: var(--sp-3); padding: 6px 0; border-top: 1px solid var(--line)"><span>[Requirement]</span><span style="color: var(--ink-2)">None found</span><span style="font-weight: 700; color: var(--accent-text)">Gap</span></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: var(--sp-3); padding: var(--sp-5); flex-grow: 1">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: var(--sp-2)">
+<h3 style="margin: 0; font-size: var(--fs-4)">Job-fit assessment</h3>
+<span style="font-family: var(--mono); font-size: var(--fs-1); padding: 2px 8px; border-radius: var(--r-pill); background: var(--chip)">Live</span>
+</div>
+<p style="margin: 0; color: var(--ink-2); flex-grow: 1">Paste a job description. It says where I fit and where I don't, and cites the line of my CV each call rests on.</p>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-4)">
+<a href="JobFit.dc.html" style="display: inline-flex; align-items: center; gap: var(--sp-2); min-height: 44px; padding: 0 var(--sp-5); border-radius: var(--r-1); background: var(--brand); color: var(--brand-ink); font-weight: 700; text-decoration: none">Try it
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+</a>
+<a href="JobFit.dc.html#write-up">Read the write-up</a>
+</div>
+</div>
+</article>
+
+<article style="display: flex; flex-direction: column; background: var(--surface); border: 1px dashed var(--line); border-radius: var(--r-2); overflow: hidden">
+<div aria-hidden="true" style="display: grid; place-items: center; min-height: 148px; padding: var(--sp-5); background: repeating-linear-gradient(135deg, var(--surface-2) 0 10px, var(--surface) 10px 20px); border-bottom: 1px dashed var(--line); font-family: var(--mono); font-size: var(--fs-1); color: var(--ink-2)">Preview when it ships</div>
+<div style="display: flex; flex-direction: column; gap: var(--sp-3); padding: var(--sp-5); flex-grow: 1">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: var(--sp-2)">
+<h3 style="margin: 0; font-size: var(--fs-4)">DPR calculator</h3>
+<span style="font-family: var(--mono); font-size: var(--fs-1); padding: 2px 8px; border-radius: var(--r-pill); border: 1px solid var(--line); color: var(--ink-2)">Not built yet</span>
+</div>
+<p style="margin: 0; color: var(--ink-2); flex-grow: 1">Damage per round for D&amp;D 5e: expected damage from an attack routine against a given armour class.</p>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-4)">
+<a href="DPR.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--sp-5); border-radius: var(--r-1); border: 1px solid var(--line); text-decoration: none; font-weight: 600">See the placeholder</a>
+</div>
+</div>
+</article>
+
+</div>
+</section>
+
+<section aria-labelledby="h-other" style="display: flex; flex-direction: column; gap: var(--sp-4)">
+<h2 id="h-other" style="margin: 0; font-family: var(--mono); font-size: var(--fs-1); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-2)">Other things I've built</h2>
+<ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; border-top: 1px solid var(--line)">
+<li style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--sp-2) var(--sp-5); padding: var(--sp-4) 0; border-bottom: 1px solid var(--line)">
+<span style="display: flex; flex-direction: column; gap: 2px">
+<span style="font-weight: 700">This site</span>
+<span style="color: var(--ink-2)">The CV, three role views and the builds above. Plain HTML and CSS on Cloudflare.</span>
+</span>
+<a href="Main.dc.html#site-build">How it was built</a>
+</li>
+<li style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--sp-2) var(--sp-5); padding: var(--sp-4) 0; border-bottom: 1px solid var(--line)">
+<span style="display: flex; flex-direction: column; gap: 2px">
+<span style="font-weight: 700">[Build]</span>
+<span style="color: var(--ink-2)">[One line: what it is, what it's made with]</span>
+</span>
+<a href="#">[Link]</a>
+</li>
+</ul>
+</section>
+
+<a href="JobFit.dc.html" style="display: flex; align-items: center; justify-content: space-between; gap: var(--sp-5); padding: var(--sp-5); border-radius: var(--r-2); background: var(--band); color: var(--band-ink); text-decoration: none; box-shadow: var(--shadow-2)">
+<span style="display: flex; flex-direction: column; gap: 2px">
+<span style="font-size: var(--fs-4); font-weight: 800; letter-spacing: -0.01em">Am I the right fit for your company?</span>
+<span style="font-size: var(--fs-1); opacity: 0.92">Paste the job description and see where I fit, with the evidence.</span>
+</span>
+<span aria-hidden="true" style="flex: none; width: 48px; height: 48px; display: grid; place-items: center; border-radius: var(--r-pill); background: var(--band-ink); color: var(--band)">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+</span>
+</a>
+</main>
+
+<footer style="border-top: 1px solid var(--line); background: var(--surface)">
+<div style="max-width: 1200px; margin: 0 auto; padding: var(--sp-5); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--sp-4)">
+<a href="Main.dc.html">Back to the CV</a>
+<div style="display: flex; flex-wrap: wrap; gap: var(--sp-4)">
+<a href="mailto:hello@nathanpotter.dev">hello@nathanpotter.dev</a>
+<a href="https://www.linkedin.com/in/nathan-j-potter">LinkedIn</a>
+<a href="Admin.dc.html" style="display: inline-flex; align-items: center; gap: 6px; color: var(--ink-2)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>Admin</a>
+</div>
+</div>
+</footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light"},"$preview":{"width":1280,"height":1700}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const theme = s.theme || this.props.theme || 'light';
+    return {
+      theme: theme,
+      isDark: theme === 'dark',
+      isLight: theme !== 'dark',
+      themeLabel: theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme',
+      toggleTheme: () => this.setState({ theme: theme === 'dark' ? 'light' : 'dark' }),
+      copyLabel: s.copied ? 'Copied' : 'Copy',
+      copyEmail: () => {
+        try { navigator.clipboard.writeText('hello@nathanpotter.dev'); } catch (e) {}
+        this.setState({ copied: true });
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

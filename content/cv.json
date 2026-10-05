@@ -1,0 +1,599 @@
+{
+  "_note": "Canonical content for nathanpotter.dev v1, extracted from the design prototype. Copy is Nathan's, from his v1 CV, except headlines marked as condensed. Bracketed text = placeholder still to be written by Nathan. Card ids are permanent: never renumber or reuse them; display order is array order.",
+  "person": {
+    "name": "Nathan Potter",
+    "title": "Senior Product Manager",
+    "location": "San Francisco Bay Area · Open to remote",
+    "email": "hello@nathanpotter.dev",
+    "linkedin": "https://www.linkedin.com/in/nathan-j-potter",
+    "github": "@potterbotter"
+  },
+  "summary": {
+    "headline": "Senior product manager with 7+ years across clean-energy lending, embedded finance and institutional crypto banking, often stepping into whichever role the team needed most.",
+    "lede": "I turn messy, high-stakes workflows into products that scale."
+  },
+  "heroMetrics": [
+    {
+      "value": "4×",
+      "label": "Client onboarding throughput in a year, ~265 → 1,000+ per quarter (Anchorage Digital)"
+    },
+    {
+      "value": "$70MM+",
+      "label": "Monthly originations on the lending platform I product-owned (Mosaic)"
+    },
+    {
+      "value": "90%",
+      "label": "Cut in funding-approval turnaround for the largest partners (Mosaic)"
+    }
+  ],
+  "careerArc": {
+    "intro": "Three industries, one kind of problem: regulated, high-stakes workflows that have to scale.",
+    "stops": [
+      {
+        "years": "2018 – 2023",
+        "industry": "Clean-energy lending",
+        "company": "Mosaic",
+        "anchor": "#exp-mosaic",
+        "line": "Product Analyst to Product Manager on the platform behind $70MM+ in monthly originations."
+      },
+      {
+        "years": "2023",
+        "industry": "Embedded finance",
+        "company": "jaris",
+        "anchor": "#exp-jaris",
+        "line": "Originations: a new payment-collection product, and model-risk procedures."
+      },
+      {
+        "years": "2025 – now",
+        "industry": "Institutional crypto banking",
+        "company": "Anchorage Digital",
+        "anchor": "#exp-anchorage",
+        "line": "Client onboarding and risk at a federally chartered bank.",
+        "current": true
+      }
+    ]
+  },
+  "experience": {
+    "intro": "One card per result. The number first, the full line under Detail.",
+    "tags": [
+      "Scale",
+      "Automation",
+      "0→1",
+      "Platform",
+      "Partners",
+      "Leadership",
+      "Built it myself",
+      "AI",
+      "Risk"
+    ],
+    "roles": [
+      {
+        "anchor": "exp-anchorage",
+        "company": "Anchorage Digital",
+        "kind": "federally chartered bank",
+        "title": "Senior Product Manager, Client Onboarding & Risk Platform",
+        "dates": "Jan 2025 – present",
+        "note": "Moved from Client Insights & Automation to take over Client Onboarding & Risk when the team needed a PM to lead it.",
+        "cards": [
+          {
+            "id": "anchorage-0",
+            "metric": "4×",
+            "tag": "Scale",
+            "headline": "Client onboarding throughput, ~265 → 1,000+ a quarter, in a year",
+            "headlineSource": "condensed from detail by Claude — Nathan to review",
+            "detail": "Quadrupled throughput of a complex, high-stakes client onboarding workflow (~265 → 1,000+ completed per quarter) within a year of taking over the squad."
+          },
+          {
+            "id": "anchorage-1",
+            "metric": "4.5 days",
+            "tag": "Automation",
+            "headline": "Average handle time, cut by automation while volume quadrupled",
+            "headlineSource": "condensed from detail by Claude — Nathan to review",
+            "detail": "Drove onboarding automation (partner verification reliance, automated document collection, reusable questionnaires), bringing average handle time down to 4.5 days while quarterly volume quadrupled."
+          },
+          {
+            "id": "anchorage-2",
+            "metric": "Shipped",
+            "tag": "0→1",
+            "headline": "Progressive onboarding: new product lines with no repeat review",
+            "headlineSource": "condensed from detail by Claude — Nathan to review",
+            "detail": "Shipped progressive onboarding, which lets existing clients activate a new product line by reusing information they've already provided, with no repeat review."
+          },
+          {
+            "id": "anchorage-3",
+            "metric": "Underway",
+            "tag": "Platform",
+            "headline": "Re-architecting the core onboarding platform, live ops untouched",
+            "headlineSource": "condensed from detail by Claude — Nathan to review",
+            "detail": "Leading a re-architecture of the core onboarding platform (data-model redesign, account migration, legacy retirement) with no disruption to live operations."
+          },
+          {
+            "id": "anchorage-4",
+            "metric": "8",
+            "tag": "Leadership",
+            "headline": "Person squad (7 eng, 1 design), aligned with 5 compliance and ops teams",
+            "headlineSource": "condensed from detail by Claude — Nathan to review",
+            "detail": "Lead an 8-person squad (7 engineers, 1 designer), aligning priorities across compliance, sanctions, financial intelligence, due-diligence operations and periodic client review."
+          },
+          {
+            "id": "anchorage-5",
+            "metric": "62",
+            "tag": "Leadership",
+            "headline": "New product, design and eng hires trained on org-wide standards",
+            "headlineSource": "condensed from detail by Claude — Nathan to review",
+            "detail": "Co-developed org-wide product development standards (PRD templates, lifecycle expectations, training materials) and ran onboarding training for 62 new product, design and engineering hires."
+          },
+          {
+            "id": "anchorage-6",
+            "metric": "15–20",
+            "tag": "AI",
+            "headline": "Teammates querying a Claude knowledge system I built",
+            "headlineSource": "condensed from detail by Claude — Nathan to review",
+            "detail": "Built Claude-based team tools: a knowledge system that auto-files meeting notes (escalating uncertain cases for review) and makes PRDs and discovery docs queryable for 15–20 teammates."
+          },
+          {
+            "id": "anchorage-7",
+            "metric": "3 squads",
+            "tag": "AI",
+            "headline": "Swapped slide decks for my live, clickable roadmap",
+            "headlineSource": "condensed from detail by Claude — Nathan to review",
+            "detail": "Built a live, clickable roadmap with embedded prototypes, adopted by 3 product squads in place of slide decks."
+          }
+        ]
+      },
+      {
+        "anchor": "exp-jaris",
+        "company": "jaris",
+        "kind": "embedded finance",
+        "title": "Senior Product Manager, Originations",
+        "dates": "Mar 2023 – Dec 2023",
+        "note": null,
+        "cards": [
+          {
+            "id": "jaris-0",
+            "metric": "2×",
+            "tag": "Partners",
+            "headline": "Major partnerships, from a new payment-collection product",
+            "headlineSource": "condensed from detail by Claude — Nathan to review",
+            "detail": "Launched a payment-collection product with two new partners, doubling major partnerships in its B2B2B model."
+          },
+          {
+            "id": "jaris-1",
+            "metric": "+25%",
+            "tag": "Built it myself",
+            "headline": "Operator efficiency from Retool tools I built and shipped",
+            "headlineSource": "condensed from detail by Claude — Nathan to review",
+            "detail": "Personally built production back-office tools in Retool, wired to live databases with read/write logic, replacing a legacy interface and raising operator efficiency 25%."
+          },
+          {
+            "id": "jaris-2",
+            "metric": "SR 11-7",
+            "tag": "Risk",
+            "headline": "Model-risk procedures that made lending models audit-ready",
+            "headlineSource": "condensed from detail by Claude — Nathan to review",
+            "detail": "Led data, underwriting and compliance teams to create SR 11-7 model-risk procedures, making lending models audit-ready."
+          }
+        ]
+      },
+      {
+        "anchor": "exp-mosaic",
+        "company": "Mosaic",
+        "kind": "clean-energy financing",
+        "title": "Product Analyst → Product Manager",
+        "dates": "Oct 2018 – Mar 2023",
+        "note": null,
+        "cards": [
+          {
+            "id": "mosaic-0",
+            "metric": "0→1",
+            "tag": "0→1",
+            "headline": "Leasing point of sale with a top-5 US HVAC maker, 8 states at launch",
+            "headlineSource": "condensed from detail by Claude — Nathan to review",
+            "detail": "Led the 0→1 launch of a leasing point-of-sale product with a top-5 US HVAC manufacturer, live in 8 states at launch."
+          },
+          {
+            "id": "mosaic-1",
+            "metric": "Solo",
+            "tag": "Built it myself",
+            "headline": "Built the origination tool as PM, designer and engineer",
+            "headlineSource": "condensed from detail by Claude — Nathan to review",
+            "detail": "Built the origination tool single-handedly as PM, designer and engineer (Glide, Zapier, Google Sheets, SignNow); it became the model for the next-gen platform."
+          },
+          {
+            "id": "mosaic-2",
+            "metric": "2 months",
+            "tag": "Partners",
+            "headline": "B2B2C origination partnership with a $200B-asset partner",
+            "headlineSource": "condensed from detail by Claude — Nathan to review",
+            "detail": "Delivered a B2B2C origination partnership with a $200B-asset partner in 2 months."
+          },
+          {
+            "id": "mosaic-3",
+            "metric": "$70MM+",
+            "tag": "Scale",
+            "headline": "Monthly originations on the platform I product-owned",
+            "headlineSource": "condensed from detail by Claude — Nathan to review",
+            "detail": "Product owner and scrum master for a 9+ person global team running the platform behind $70MM+ in monthly originations."
+          },
+          {
+            "id": "mosaic-4",
+            "metric": "+9%",
+            "tag": "Scale",
+            "headline": "Partner approval rates QoQ, from funnel analytics",
+            "headlineSource": "condensed from detail by Claude — Nathan to review",
+            "detail": "Formed and led a 7-person cross-functional team that used onboarding funnel analytics to lift partner approval rates 9% QoQ."
+          },
+          {
+            "id": "mosaic-5",
+            "metric": "~40%",
+            "tag": "Partners",
+            "headline": "Of the solar business, from a distributor I helped onboard",
+            "headlineSource": "condensed from detail by Claude — Nathan to review",
+            "detail": "Designed a cross-team cash-flow process to onboard a new distributor that grew to ~40% of the solar business."
+          },
+          {
+            "id": "mosaic-6",
+            "metric": "−90%",
+            "tag": "Automation",
+            "headline": "Funding-approval turnaround for the largest partners",
+            "headlineSource": "condensed from detail by Claude — Nathan to review",
+            "detail": "Cut funding-approval turnaround 90% for the largest partners by removing manual review steps."
+          },
+          {
+            "id": "mosaic-7",
+            "metric": "60%+",
+            "tag": "Partners",
+            "headline": "Of loan volume covered by white-glove API partner support",
+            "headlineSource": "condensed from detail by Claude — Nathan to review",
+            "detail": "Launched white-glove support for API-integrated partners (60%+ of loan volume) to retain Tier-1 partners."
+          }
+        ]
+      }
+    ]
+  },
+  "aiMethod": {
+    "intro": "I leverage AI to move quickly through research, analysis and prototyping so I can focus on deeply understanding the problem, driving enthusiastic alignment, and making the right decisions.",
+    "steps": [
+      {
+        "n": "01",
+        "title": "[Step]",
+        "body": "[What happens, and why]"
+      },
+      {
+        "n": "02",
+        "title": "[Step]",
+        "body": "[What happens, and why]"
+      },
+      {
+        "n": "03",
+        "title": "[Step]",
+        "body": "[What happens, and why]"
+      }
+    ]
+  },
+  "about": [
+    "[A short paragraph in first person: how I got into product, what I care about in the work.]",
+    "[A second paragraph: outside work, briefly.]"
+  ],
+  "skills": {
+    "_note": "Each skill has one or more wordings (forms). forms[shown] is displayed on the site; the resume generator may use any form. Synonyms marked example were seeded by Claude — Nathan to confirm.",
+    "groups": [
+      {
+        "name": "Core strengths",
+        "display": "line",
+        "items": [
+          {
+            "forms": [
+              "First-principles critical thinking"
+            ],
+            "shown": 0
+          },
+          {
+            "forms": [
+              "Curiosity and growth mindset"
+            ],
+            "shown": 0
+          },
+          {
+            "forms": [
+              "Decision-making"
+            ],
+            "shown": 0
+          },
+          {
+            "forms": [
+              "Problem framing",
+              "Problem definition"
+            ],
+            "shown": 0,
+            "synonymsAreExamples": true
+          },
+          {
+            "forms": [
+              "Clear written and executive communication",
+              "Executive communication",
+              "Stakeholder communication"
+            ],
+            "shown": 0,
+            "synonymsAreExamples": true
+          },
+          {
+            "forms": [
+              "Team leadership and mentorship",
+              "People leadership",
+              "Mentoring"
+            ],
+            "shown": 0,
+            "synonymsAreExamples": true
+          },
+          {
+            "forms": [
+              "0→1 and scale-up delivery",
+              "New product development"
+            ],
+            "shown": 0,
+            "synonymsAreExamples": true
+          },
+          {
+            "forms": [
+              "AI-native workflows"
+            ],
+            "shown": 0
+          }
+        ]
+      },
+      {
+        "name": "AI",
+        "display": "chips",
+        "items": [
+          {
+            "forms": [
+              "Claude Code"
+            ],
+            "shown": 0
+          },
+          {
+            "forms": [
+              "Claude (projects, skills, artifacts)"
+            ],
+            "shown": 0
+          },
+          {
+            "forms": [
+              "ChatGPT"
+            ],
+            "shown": 0
+          },
+          {
+            "forms": [
+              "Gemini"
+            ],
+            "shown": 0
+          }
+        ]
+      },
+      {
+        "name": "Technical",
+        "display": "chips",
+        "items": [
+          {
+            "forms": [
+              "SQL"
+            ],
+            "shown": 0
+          },
+          {
+            "forms": [
+              "Python"
+            ],
+            "shown": 0
+          },
+          {
+            "forms": [
+              "JavaScript/React",
+              "React",
+              "JavaScript"
+            ],
+            "shown": 0,
+            "synonymsAreExamples": true
+          },
+          {
+            "forms": [
+              "Retool"
+            ],
+            "shown": 0
+          },
+          {
+            "forms": [
+              "Zapier"
+            ],
+            "shown": 0
+          },
+          {
+            "forms": [
+              "Glide"
+            ],
+            "shown": 0
+          },
+          {
+            "forms": [
+              "Figma"
+            ],
+            "shown": 0
+          },
+          {
+            "forms": [
+              "Tableau"
+            ],
+            "shown": 0
+          },
+          {
+            "forms": [
+              "Jira"
+            ],
+            "shown": 0
+          },
+          {
+            "forms": [
+              "Linear"
+            ],
+            "shown": 0
+          },
+          {
+            "forms": [
+              "Notion"
+            ],
+            "shown": 0
+          }
+        ]
+      }
+    ]
+  },
+  "education": [
+    {
+      "school": "University of Oregon",
+      "detail": "BA, Political Science, Minor in Mandarin"
+    },
+    {
+      "school": "Certified Scrum Product Owner (CSPO)",
+      "detail": "Scrum Alliance"
+    }
+  ],
+  "views": {
+    "all": {
+      "label": "Full CV",
+      "path": "/",
+      "roleOrder": [
+        "exp-anchorage",
+        "exp-jaris",
+        "exp-mosaic"
+      ],
+      "focus": null
+    },
+    "builder": {
+      "label": "Builder",
+      "path": "/builder/",
+      "roleOrder": [
+        "exp-anchorage",
+        "exp-jaris",
+        "exp-mosaic"
+      ],
+      "focus": "What I built with my own hands, and the AI tools I build with.",
+      "upFrontTags": [
+        "Built it myself",
+        "AI",
+        "0→1",
+        "Platform"
+      ],
+      "landing": {
+        "for": "For teams that want a PM who ships things with their own hands.",
+        "cta": "See the builder view",
+        "upFront": [
+          {
+            "metric": "Solo",
+            "text": "Built Mosaic’s leasing origination tool as PM, designer and engineer"
+          },
+          {
+            "metric": "+25%",
+            "text": "Operator efficiency from Retool tools I built at jaris"
+          },
+          {
+            "metric": "15–20",
+            "text": "Teammates using a Claude knowledge system I built"
+          }
+        ]
+      }
+    },
+    "fintech": {
+      "label": "Fintech",
+      "path": "/fintech/",
+      "roleOrder": [
+        "exp-anchorage",
+        "exp-jaris",
+        "exp-mosaic"
+      ],
+      "focus": "Regulated financial products: lending, embedded finance and institutional crypto banking.",
+      "upFrontTags": [
+        "Scale",
+        "Automation",
+        "Partners",
+        "Risk",
+        "Platform"
+      ],
+      "landing": {
+        "for": "For lending, payments, banking and other regulated financial products.",
+        "cta": "See the fintech view",
+        "upFront": [
+          {
+            "metric": "4×",
+            "text": "Client onboarding throughput at a federally chartered bank"
+          },
+          {
+            "metric": "$70MM+",
+            "text": "Monthly originations on the platform I product-owned"
+          },
+          {
+            "metric": "SR 11-7",
+            "text": "Model-risk procedures that made lending models audit-ready"
+          }
+        ]
+      }
+    },
+    "climate": {
+      "label": "Climate",
+      "path": "/climate/",
+      "roleOrder": [
+        "exp-mosaic",
+        "exp-anchorage",
+        "exp-jaris"
+      ],
+      "focus": "Four-plus years financing clean energy at Mosaic, first.",
+      "upFrontRule": "All Mosaic cards up front; other roles folded",
+      "landing": {
+        "for": "For clean energy and climate finance, where I spent four-plus years.",
+        "cta": "See the climate view",
+        "upFront": [
+          {
+            "metric": "0→1",
+            "text": "HVAC leasing point of sale, live in 8 states at launch"
+          },
+          {
+            "metric": "~40%",
+            "text": "Of the solar business, from a distributor I helped onboard"
+          },
+          {
+            "metric": "−90%",
+            "text": "Funding-approval turnaround for the largest partners"
+          }
+        ]
+      }
+    },
+    "_bannerNote": "Same CV, re-cut: the results that matter most for this kind of role come first, and everything else is folded underneath."
+  },
+  "builds": [
+    {
+      "name": "Job-fit assessment",
+      "status": "live",
+      "route": "/tools/job-fit/",
+      "summary": "Paste a job description. It reads the fit against this CV and cites the evidence."
+    },
+    {
+      "name": "DPR calculator",
+      "status": "placeholder",
+      "route": "/tools/dpr/",
+      "summary": "Damage per round for D&D 5e: expected damage from an attack routine against a given armour class."
+    },
+    {
+      "name": "This site",
+      "status": "live",
+      "route": "/#site-build",
+      "summary": "The CV, three role views and the builds above. Plain HTML and CSS on Cloudflare."
+    }
+  ],
+  "viewsLanding": {
+    "route": "/views/",
+    "eyebrow": "Role views",
+    "title": "My experience, curated to what you're looking for.",
+    "lede": "Pick the kind of role you're hiring for. It's the same CV, with the most relevant results up front and the rest a click away."
+  }
+}

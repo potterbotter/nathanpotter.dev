@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Job-fit assessment — Nathan Potter</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+.np{--font:ui-sans-serif,system-ui,-apple-system,"Segoe UI","Helvetica Neue",sans-serif;--mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;--fs-1:0.8125rem;--fs-2:0.9375rem;--fs-3:1.0625rem;--fs-4:1.3125rem;--fs-5:1.75rem;--fs-6:clamp(2.25rem,6vw,3.5rem);--sp-1:4px;--sp-2:8px;--sp-3:12px;--sp-4:16px;--sp-5:24px;--sp-6:32px;--sp-7:48px;--sp-8:72px;--r-1:4px;--r-2:8px;--r-pill:999px;--bg:#F2F5F5;--surface:#FFFFFF;--surface-2:#E6ECEC;--raised:#FFFFFF;--ink:#151A1B;--ink-2:#4A5557;--line:#D2DBDB;--brand:#0F6E73;--brand-ink:#FFFFFF;--band:#0F6E73;--band-ink:#FFFFFF;--band-line:rgba(255,255,255,.35);--accent:#7A0E1B;--accent-text:#7A0E1B;--chip:#E3EEEE;--cta-bg:#FFFFFF;--cta-ink:#0F6E73;--cta-sub:#4A5557;--cta-dot:#0F6E73;--cta-dot-ink:#FFFFFF;--shadow-1:0 1px 2px rgba(10,30,32,.08),0 1px 1px rgba(10,30,32,.04);--shadow-2:0 8px 24px rgba(10,30,32,.12);color-scheme:light}
+.np[data-theme="dark"]{--bg:#0D1213;--surface:#151C1E;--surface-2:#1D2628;--raised:#212B2D;--ink:#E9EFEF;--ink-2:#A3B1B3;--line:#2F3B3D;--brand:#6CCBD0;--brand-ink:#071113;--band:#0B2F32;--band-ink:#EAF5F5;--band-line:rgba(234,245,245,.22);--accent:#B8344A;--accent-text:#E9EFEF;--chip:#1F3335;--cta-bg:#6CCBD0;--cta-ink:#071113;--cta-sub:#14373A;--cta-dot:#071113;--cta-dot-ink:#6CCBD0;--shadow-1:0 0 0 1px rgba(255,255,255,.02),0 1px 2px rgba(0,0,0,.5);--shadow-2:0 0 0 1px rgba(255,255,255,.04),0 12px 32px rgba(0,0,0,.55);color-scheme:dark}
+.np a{color:var(--brand)}.np a:hover{color:var(--accent-text)}
+.np :focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:2px}
+.np summary{list-style:none;cursor:pointer}.np summary::-webkit-details-marker{display:none}
+.np .chev{transition:transform .18s ease}.np details[open]>summary .chev{transform:rotate(180deg)}
+.np .navlink:hover{background:var(--surface-2);color:var(--ink)}
+.np .pick{transition:transform .15s ease,border-color .15s ease}.np .pick:hover{transform:translateY(-3px);border-color:var(--brand)}.np .pick:hover .cta-arrow{transform:translateX(3px)}.np .cta-arrow{transition:transform .15s ease}
+@media (prefers-reduced-motion:reduce){.np *{transition:none!important}.np .pick:hover{transform:none}}
+@media print{.np .noprint{display:none!important}.np details>*{display:block!important}}
+</style>
+</helmet>
+<div class="np" data-theme="{{theme}}" style="background: var(--bg); color: var(--ink); font-family: var(--font); font-size: var(--fs-2); line-height: 1.55">
+
+<sc-if value="{{admin}}" hint-placeholder-val="{{ false }}">
+<div class="noprint" role="region" aria-label="Admin" style="background: #151A1B; color: #E9EFEF; border-bottom: 3px solid var(--accent)">
+<div style="max-width: 1200px; margin: 0 auto; padding: var(--sp-2) var(--sp-5); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-3)">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-3)">
+<span style="font-family: var(--mono); font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 3px 8px; border-radius: var(--r-1); background: #E9EFEF; color: #151A1B">Admin</span>
+<span style="font-size: var(--fs-1)">Signed in with GitHub as <strong>@potterbotter</strong> · resume generator unlocked</span>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2)">
+<a href="MainEdit.dc.html" style="display: inline-flex; align-items: center; min-height: 36px; padding: 0 12px; color: #E9EFEF; text-decoration: none; font-size: var(--fs-1); font-weight: 600">Edit the CV</a>
+<a href="JobFit.dc.html" style="display: inline-flex; align-items: center; min-height: 36px; padding: 0 12px; border: 1px solid #4A5557; border-radius: var(--r-1); color: #E9EFEF; text-decoration: none; font-size: var(--fs-1)">Preview as visitor</a>
+<a href="Admin.dc.html" style="display: inline-flex; align-items: center; min-height: 36px; padding: 0 8px; color: #A3B1B3; font-size: var(--fs-1)">Sign out</a>
+</div>
+</div>
+</div>
+</sc-if>
+
+<header class="noprint" style="position: relative; z-index: 20; background: var(--surface); border-bottom: 1px solid var(--line)">
+<div style="max-width: 1200px; margin: 0 auto; padding: var(--sp-3) var(--sp-5); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-4)">
+<a href="Main.dc.html" style="display: flex; flex-direction: column; text-decoration: none; color: var(--ink); min-height: 44px; justify-content: center">
+<span style="font-weight: 700; font-size: var(--fs-3); letter-spacing: -0.01em">Nathan Potter</span>
+<span style="font-family: var(--mono); font-size: var(--fs-1); color: var(--ink-2)">nathanpotter.dev/tools/job-fit/</span>
+</a>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2)">
+<nav aria-label="Site" style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-1)">
+<a href="Main.dc.html" style="padding: 10px 12px; border-radius: var(--r-1); text-decoration: none; color: var(--ink-2)">CV</a>
+<a href="Role.dc.html" style="padding: 10px 12px; border-radius: var(--r-1); text-decoration: none; color: var(--ink-2)">Role views</a>
+<a href="Builds.dc.html" aria-current="true" style="padding: 10px 12px; border-radius: var(--r-1); text-decoration: none; font-weight: 600; color: var(--ink); background: var(--surface-2)">Builds</a>
+<details style="position: relative">
+<summary class="navlink" style="display: flex; align-items: center; gap: 6px; padding: 10px 12px; border-radius: var(--r-1); color: var(--ink-2)">Contact
+<svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
+</summary>
+<div role="group" aria-label="Contact" style="position: absolute; right: 0; top: 50px; width: 340px; display: flex; flex-direction: column; gap: var(--sp-2); padding: var(--sp-4); background: var(--raised); border: 1px solid var(--line); border-radius: var(--r-2); box-shadow: var(--shadow-2)">
+<p style="margin: 0 0 var(--sp-1); font-family: var(--mono); font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-2)">Get in touch</p>
+<div style="display: flex; align-items: stretch; gap: var(--sp-2)">
+<a href="mailto:hello@nathanpotter.dev" style="flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 12px; border-radius: var(--r-1); background: var(--surface-2); color: var(--ink); text-decoration: none; font-weight: 600">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 7l9 6 9-6"></path></svg>
+hello@nathanpotter.dev</a>
+<button type="button" onClick="{{copyEmail}}" aria-label="Copy email address" style="flex: none; min-width: 64px; min-height: 44px; padding: 0 10px; border: 1px solid var(--line); border-radius: var(--r-1); background: transparent; color: var(--ink); font: inherit; font-size: var(--fs-1); font-weight: 600; cursor: pointer">{{copyLabel}}</button>
+</div>
+<a href="https://www.linkedin.com/in/nathan-j-potter" style="display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 12px; border-radius: var(--r-1); border: 1px solid var(--line); color: var(--ink); text-decoration: none">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"></path></svg>
+<span style="display: flex; flex-direction: column; line-height: 1.25"><span style="font-weight: 600">LinkedIn</span><span style="font-family: var(--mono); font-size: 0.6875rem; color: var(--ink-2)">in/nathan-j-potter</span></span>
+</a>
+<div style="height: 1px; background: var(--line); margin: var(--sp-1) 0"></div>
+<a href="JobFit.dc.html" style="display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 44px; padding: 0 12px; border-radius: var(--r-1); background: var(--brand); color: var(--brand-ink); text-decoration: none; font-weight: 700">Am I the right fit for your company?
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+</a>
+<a href="#" style="display: flex; align-items: center; min-height: 40px; padding: 0 12px; color: var(--ink-2); font-size: var(--fs-1)">Download the CV as a PDF [link]</a>
+</div>
+</details>
+</nav>
+<button type="button" onClick="{{toggleTheme}}" aria-label="{{themeLabel}}" title="{{themeLabel}}" style="width: 44px; height: 44px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: var(--r-1); background: var(--surface); color: var(--ink); cursor: pointer">
+<sc-if value="{{isDark}}" hint-placeholder-val="{{ false }}">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+</sc-if>
+<sc-if value="{{isLight}}" hint-placeholder-val="{{ true }}">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>
+</sc-if>
+</button>
+</div>
+</div>
+</header>
+
+<main style="max-width: 1200px; margin: 0 auto; padding: var(--sp-7) var(--sp-5); display: flex; flex-direction: column; gap: var(--sp-7)">
+
+<div style="display: flex; flex-direction: column; gap: var(--sp-3)">
+<a class="noprint" href="Builds.dc.html" style="font-size: var(--fs-1)">Builds / Job-fit</a>
+<h1 style="margin: 0; font-size: clamp(2rem, 5vw, 2.75rem); line-height: 1.08; letter-spacing: -0.02em; font-weight: 800">Am I the right fit for your company?</h1>
+<div style="width: 96px; height: 5px; background: var(--accent)"></div>
+<p style="margin: 0; max-width: 60ch; font-size: var(--fs-3); color: var(--ink-2)">Paste a job description. The tool reads it against my CV and says where I fit, where I don't, and which part of the CV it's relying on.</p>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: var(--sp-6); align-items: flex-start">
+
+<form class="noprint" aria-labelledby="h-input" style="flex: 1 1 340px; display: flex; flex-direction: column; gap: var(--sp-4); padding: var(--sp-5); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-2); box-shadow: var(--shadow-1)">
+<h2 id="h-input" style="margin: 0; font-size: var(--fs-4)">The job</h2>
+<div style="display: flex; flex-direction: column; gap: var(--sp-2)">
+<label for="jd" style="font-weight: 600">Job description</label>
+<textarea id="jd" rows="12" placeholder="Paste the full posting, including requirements." style="width: 100%; box-sizing: border-box; padding: var(--sp-3); border: 1px solid var(--line); border-radius: var(--r-1); background: var(--bg); color: var(--ink); font: inherit; resize: vertical"></textarea>
+</div>
+<div style="display: flex; flex-direction: column; gap: var(--sp-2)">
+<label for="lens" style="font-weight: 600">Read it against</label>
+<select id="lens" style="min-height: 44px; padding: 0 var(--sp-3); border: 1px solid var(--line); border-radius: var(--r-1); background: var(--bg); color: var(--ink); font: inherit">
+<option>Full CV</option>
+<option>Builder view</option>
+<option>Fintech view</option>
+<option>Climate view</option>
+</select>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-3)">
+<button type="button" onClick="{{assess}}" style="min-height: 44px; padding: 0 var(--sp-5); border: 0; border-radius: var(--r-1); background: var(--brand); color: var(--brand-ink); font: inherit; font-weight: 700; cursor: pointer">Assess fit</button>
+<button type="button" onClick="{{reset}}" style="min-height: 44px; padding: 0 var(--sp-4); border: 1px solid var(--line); border-radius: var(--r-1); background: transparent; color: var(--ink); font: inherit; cursor: pointer">Clear</button>
+</div>
+<p style="margin: 0; font-size: var(--fs-1); color: var(--ink-2)">[What happens to the pasted text: storage, logging, model provider.] Needs JavaScript; without it, this form links to the write-up below.</p>
+</form>
+
+<section aria-labelledby="h-result" aria-live="polite" style="flex: 999 1 520px; min-width: 0; display: flex; flex-direction: column; gap: var(--sp-5)">
+<h2 id="h-result" style="margin: 0; font-size: var(--fs-4)">The read</h2>
+
+<sc-if value="{{empty}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; gap: var(--sp-2); padding: var(--sp-7) var(--sp-5); border: 1px dashed var(--line); border-radius: var(--r-2); color: var(--ink-2)">
+<p style="margin: 0; font-weight: 600; color: var(--ink)">Nothing assessed yet.</p>
+<p style="margin: 0">Results show here: an overall read, each requirement matched to evidence on the CV, and what the posting doesn't say.</p>
+</div>
+</sc-if>
+
+<sc-if value="{{done}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: var(--sp-5)">
+<p style="margin: 0; align-self: flex-start; font-family: var(--mono); font-size: var(--fs-1); padding: 2px 8px; border-radius: var(--r-pill); border: 1px solid var(--line); color: var(--ink-2)">Sample layout · stub output</p>
+
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--sp-3) var(--sp-5); padding: var(--sp-5); background: var(--surface); border: 1px solid var(--line); border-left-width: 1px; border-radius: var(--r-2)">
+<span style="font-size: var(--fs-5); font-weight: 800; color: var(--brand)">[Overall read]</span>
+<span style="color: var(--ink-2); flex: 1 1 280px">[One sentence: why, in plain terms, with how sure the read is.]</span>
+</div>
+
+<div style="overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r-2); background: var(--surface)">
+<table style="width: 100%; min-width: 560px; border-collapse: collapse; font-size: var(--fs-2)">
+<caption style="text-align: left; padding: var(--sp-3) var(--sp-4); font-weight: 600; caption-side: top">Requirements and evidence</caption>
+<thead>
+<tr style="background: var(--surface-2); text-align: left">
+<th scope="col" style="padding: var(--sp-3) var(--sp-4)">Posting asks for</th>
+<th scope="col" style="padding: var(--sp-3) var(--sp-4)">Evidence on the CV</th>
+<th scope="col" style="padding: var(--sp-3) var(--sp-4)">Read</th>
+</tr>
+</thead>
+<tbody>
+<tr style="border-top: 1px solid var(--line)">
+<td style="padding: var(--sp-3) var(--sp-4)">[Requirement]</td>
+<td style="padding: var(--sp-3) var(--sp-4)"><a href="Main.dc.html#exp-anchorage">#exp-anchorage</a> [quoted line]</td>
+<td style="padding: var(--sp-3) var(--sp-4); font-weight: 600">Meets</td>
+</tr>
+<tr style="border-top: 1px solid var(--line)">
+<td style="padding: var(--sp-3) var(--sp-4)">[Requirement]</td>
+<td style="padding: var(--sp-3) var(--sp-4)"><a href="Main.dc.html#exp-jaris">#exp-jaris</a> [quoted line]</td>
+<td style="padding: var(--sp-3) var(--sp-4); font-weight: 600">Partly</td>
+</tr>
+<tr style="border-top: 1px solid var(--line)">
+<td style="padding: var(--sp-3) var(--sp-4)">[Requirement]</td>
+<td style="padding: var(--sp-3) var(--sp-4); color: var(--ink-2)">No evidence found</td>
+<td style="padding: var(--sp-3) var(--sp-4); font-weight: 600; color: var(--accent-text)">Gap</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: var(--sp-2); padding: var(--sp-5); background: var(--surface-2); border-radius: var(--r-2)">
+<h3 style="margin: 0; font-size: var(--fs-3)">What the posting doesn't settle</h3>
+<ul style="margin: 0; padding-left: 1.2em">
+<li>[Open question, e.g. scope or seniority]</li>
+<li>[Open question]</li>
+</ul>
+</div>
+
+<details style="border: 1px solid var(--line); border-radius: var(--r-2); background: var(--surface)">
+<summary style="display: flex; align-items: center; justify-content: space-between; min-height: 48px; padding: 0 var(--sp-4); font-weight: 600">How this read was produced
+<svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
+</summary>
+<dl style="margin: 0; padding: 0 var(--sp-4) var(--sp-4); display: grid; grid-template-columns: max-content 1fr; gap: var(--sp-2) var(--sp-5); font-size: var(--fs-2)">
+<dt style="color: var(--ink-2)">Model</dt><dd style="margin: 0; font-family: var(--mono)">[model]</dd>
+<dt style="color: var(--ink-2)">CV version</dt><dd style="margin: 0; font-family: var(--mono)">[commit or date]</dd>
+<dt style="color: var(--ink-2)">Prompt</dt><dd style="margin: 0"><a href="#write-up">[link to the prompt]</a></dd>
+</dl>
+</details>
+
+<div class="noprint" style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-3)">
+<span style="color: var(--ink-2)">Got something wrong?</span>
+<a href="mailto:hello@nathanpotter.dev" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--sp-4); border: 1px solid var(--line); border-radius: var(--r-1); text-decoration: none">Send a correction</a>
+</div>
+</div>
+</sc-if>
+</section>
+</div>
+
+<sc-if value="{{admin}}" hint-placeholder-val="{{ false }}">
+<section id="resume-generator" class="noprint" aria-labelledby="h-gen" style="display: flex; flex-direction: column; gap: var(--sp-6); padding: var(--sp-6); background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--accent); border-radius: var(--r-2); box-shadow: var(--shadow-2)">
+<header style="display: flex; flex-direction: column; gap: var(--sp-1)">
+<span style="align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-2)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>Only visible to you</span>
+<h2 id="h-gen" style="margin: 0; font-size: var(--fs-5); letter-spacing: -0.015em">Resume generator</h2>
+<p style="margin: 0; color: var(--ink-2); max-width: 66ch">Give it a job description or a link to the posting. It builds the most tailored resume the CV can back up, and shows how well that resume matches.</p>
+</header>
+
+<div style="display: flex; flex-wrap: wrap; gap: var(--sp-6); align-items: flex-start">
+
+<div style="flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: var(--sp-3)">
+<h3 style="margin: 0; display: flex; align-items: center; gap: var(--sp-2); font-size: var(--fs-3)"><span style="width: 24px; height: 24px; display: grid; place-items: center; border-radius: var(--r-pill); background: var(--brand); color: var(--brand-ink); font-size: var(--fs-1)">1</span>The posting</h3>
+<div role="group" aria-label="Posting source" style="display: flex; flex-wrap: wrap; gap: 2px; padding: 3px; border-radius: var(--r-1); background: var(--surface-2); align-self: flex-start">
+<sc-for list="{{sources}}" as="sr" hint-placeholder-count="3">
+<sc-if value="{{sr.on}}" hint-placeholder-val="{{ false }}">
+<button type="button" aria-pressed="true" onClick="{{sr.pick}}" style="min-height: 40px; padding: 0 14px; border: 0; border-radius: 3px; background: var(--surface); color: var(--ink); font: inherit; font-size: var(--fs-1); font-weight: 700; box-shadow: var(--shadow-1); cursor: pointer">{{sr.label}}</button>
+</sc-if>
+<sc-if value="{{sr.off}}" hint-placeholder-val="{{ true }}">
+<button type="button" aria-pressed="false" onClick="{{sr.pick}}" style="min-height: 40px; padding: 0 14px; border: 0; border-radius: 3px; background: transparent; color: var(--ink-2); font: inherit; font-size: var(--fs-1); cursor: pointer">{{sr.label}}</button>
+</sc-if>
+</sc-for>
+</div>
+<sc-if value="{{srcPaste}}" hint-placeholder-val="{{ true }}">
+<label style="display: flex; flex-direction: column; gap: var(--sp-1); font-weight: 600">Job description
+<textarea rows="9" placeholder="Paste the full posting, including requirements and nice-to-haves." style="padding: var(--sp-3); border: 1px solid var(--line); border-radius: var(--r-1); background: var(--bg); color: var(--ink); font: inherit; font-weight: 400; resize: vertical"></textarea>
+</label>
+</sc-if>
+<sc-if value="{{srcLink}}" hint-placeholder-val="{{ false }}">
+<label style="display: flex; flex-direction: column; gap: var(--sp-1); font-weight: 600">Link to the posting
+<span style="display: flex; gap: var(--sp-2)">
+<input type="url" placeholder="https://jobs.example.com/…" style="flex: 1; min-width: 0; min-height: 44px; padding: 0 var(--sp-3); border: 1px solid var(--line); border-radius: var(--r-1); background: var(--bg); color: var(--ink); font: inherit; font-weight: 400">
+<button type="button" style="min-height: 44px; padding: 0 var(--sp-4); border: 1px solid var(--brand); border-radius: var(--r-1); background: transparent; color: var(--brand); font: inherit; font-weight: 700; cursor: pointer">Fetch</button>
+</span>
+</label>
+<p style="margin: 0; font-size: var(--fs-1); color: var(--ink-2)">The fetched text shows here for you to check before generating. If a job board blocks fetching, paste the text instead.</p>
+<div style="padding: var(--sp-3); border: 1px dashed var(--line); border-radius: var(--r-1); font-size: var(--fs-1); color: var(--ink-2); min-height: 120px">[Fetched posting text]</div>
+</sc-if>
+<sc-if value="{{srcAbove}}" hint-placeholder-val="{{ false }}">
+<p style="margin: 0; padding: var(--sp-4); border: 1px dashed var(--line); border-radius: var(--r-1); color: var(--ink-2)">Uses the job description you assessed above, and starts from its fit read.</p>
+</sc-if>
+</div>
+
+<form aria-label="Resume options" style="flex: 1 1 340px; display: flex; flex-direction: column; gap: var(--sp-3)">
+<h3 style="margin: 0; display: flex; align-items: center; gap: var(--sp-2); font-size: var(--fs-3)"><span style="width: 24px; height: 24px; display: grid; place-items: center; border-radius: var(--r-pill); background: var(--brand); color: var(--brand-ink); font-size: var(--fs-1)">2</span>Options</h3>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3)">
+<label style="display: flex; flex-direction: column; gap: var(--sp-1); font-weight: 600">Company
+<input type="text" placeholder="Detected from posting" style="min-height: 44px; padding: 0 var(--sp-3); border: 1px solid var(--line); border-radius: var(--r-1); background: var(--bg); color: var(--ink); font: inherit; font-weight: 400">
+</label>
+<label style="display: flex; flex-direction: column; gap: var(--sp-1); font-weight: 600">Role title
+<input type="text" placeholder="Detected from posting" style="min-height: 44px; padding: 0 var(--sp-3); border: 1px solid var(--line); border-radius: var(--r-1); background: var(--bg); color: var(--ink); font: inherit; font-weight: 400">
+</label>
+</div>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3)">
+<label style="display: flex; flex-direction: column; gap: var(--sp-1); font-weight: 600">Start from
+<select style="min-height: 44px; padding: 0 var(--sp-3); border: 1px solid var(--line); border-radius: var(--r-1); background: var(--bg); color: var(--ink); font: inherit; font-weight: 400">
+<option>Best match (auto)</option>
+<option>Builder view</option>
+<option>Fintech view</option>
+<option>Climate view</option>
+<option>Full CV</option>
+</select>
+</label>
+<label style="display: flex; flex-direction: column; gap: var(--sp-1); font-weight: 600">Length
+<select style="min-height: 44px; padding: 0 var(--sp-3); border: 1px solid var(--line); border-radius: var(--r-1); background: var(--bg); color: var(--ink); font: inherit; font-weight: 400">
+<option>One page</option>
+<option>Two pages</option>
+</select>
+</label>
+</div>
+<details>
+<summary style="display: inline-flex; align-items: center; gap: 6px; min-height: 40px; font-weight: 600; color: var(--brand)">Choose results by hand
+<svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
+</summary>
+<div style="display: flex; flex-direction: column; gap: var(--sp-2); margin-top: var(--sp-2)">
+<sc-for list="{{pickCards}}" as="p" hint-placeholder-count="6">
+<label style="display: flex; align-items: center; gap: var(--sp-3); min-height: 40px; padding: 0 var(--sp-3); border: 1px solid var(--line); border-radius: var(--r-1); background: var(--bg)">
+<input type="checkbox" defaultChecked="{{p.on}}">
+<span style="font-weight: 800; color: var(--brand); min-width: 4.5rem">{{p.metric}}</span>
+<span style="font-size: var(--fs-1)">{{p.text}}</span>
+</label>
+</sc-for>
+</div>
+</details>
+<button type="button" onClick="{{generate}}" style="align-self: flex-start; display: inline-flex; align-items: center; gap: var(--sp-2); min-height: 48px; padding: 0 var(--sp-6); border: 0; border-radius: var(--r-1); background: var(--brand); color: var(--brand-ink); font: inherit; font-weight: 700; cursor: pointer">{{genLabel}}
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+</button>
+</form>
+</div>
+
+<sc-if value="{{noGen}}" hint-placeholder-val="{{ true }}">
+<div style="display: grid; place-items: center; min-height: 200px; padding: var(--sp-6); border: 1px dashed var(--line); border-radius: var(--r-2); color: var(--ink-2); text-align: center">
+<p style="margin: 0; max-width: 46ch">The match dashboard and the tailored resume appear here.</p>
+</div>
+</sc-if>
+
+<sc-if value="{{gen}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: var(--sp-5)">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-3); padding-top: var(--sp-5); border-top: 1px solid var(--line)">
+<h3 style="margin: 0; display: flex; align-items: center; gap: var(--sp-2); font-size: var(--fs-3)"><span style="width: 24px; height: 24px; display: grid; place-items: center; border-radius: var(--r-pill); background: var(--brand); color: var(--brand-ink); font-size: var(--fs-1)">3</span>How the tailored resume matches</h3>
+<span style="font-family: var(--mono); font-size: var(--fs-1); padding: 2px 8px; border-radius: var(--r-pill); border: 1px solid var(--line); color: var(--ink-2)">Sample numbers · stub output</span>
+</div>
+
+<ul aria-label="Match metrics" style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: var(--sp-3)">
+<li style="display: flex; flex-direction: column; gap: var(--sp-2); padding: var(--sp-4); background: var(--bg); border: 1px solid var(--line); border-radius: var(--r-2)">
+<span style="font-family: var(--mono); font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-2)">Keyword match rate</span>
+<span style="font-size: 2.25rem; font-weight: 800; line-height: 1; letter-spacing: -0.02em; color: var(--brand)">72%</span>
+<span style="font-size: var(--fs-1)">18 of 25 posting keywords</span>
+<span aria-hidden="true" style="position: relative; height: 8px; border-radius: var(--r-pill); background: var(--surface-2)"><span style="position: absolute; inset: 0 28% 0 0; border-radius: var(--r-pill); background: var(--brand)"></span><span style="position: absolute; top: -4px; bottom: -4px; left: 54%; width: 2px; background: var(--ink)"></span></span>
+<span style="font-size: var(--fs-1); color: var(--ink-2)">Full CV, untailored: 54%</span>
+<span style="font-size: var(--fs-1); color: var(--ink-2)">3 matched through your synonyms</span>
+</li>
+<li style="display: flex; flex-direction: column; gap: var(--sp-2); padding: var(--sp-4); background: var(--bg); border: 1px solid var(--line); border-radius: var(--r-2)">
+<span style="font-family: var(--mono); font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-2)">Experience fit</span>
+<span style="font-size: 2.25rem; font-weight: 800; line-height: 1; letter-spacing: -0.02em; color: var(--brand)">Strong</span>
+<ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; font-size: var(--fs-1)">
+<li style="display: flex; justify-content: space-between; gap: var(--sp-2)"><span>Years in product</span><span style="font-weight: 700">7+ vs 5+ asked</span></li>
+<li style="display: flex; justify-content: space-between; gap: var(--sp-2)"><span>Domain</span><span style="font-weight: 700">Matches</span></li>
+<li style="display: flex; justify-content: space-between; gap: var(--sp-2)"><span>Level</span><span style="font-weight: 700">Matches</span></li>
+<li style="display: flex; justify-content: space-between; gap: var(--sp-2)"><span>People leadership</span><span style="font-weight: 700; color: var(--accent-text)">Partial</span></li>
+</ul>
+</li>
+<li style="display: flex; flex-direction: column; gap: var(--sp-2); padding: var(--sp-4); background: var(--bg); border: 1px solid var(--line); border-radius: var(--r-2)">
+<span style="font-family: var(--mono); font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-2)">Must-haves covered</span>
+<span style="font-size: 2.25rem; font-weight: 800; line-height: 1; letter-spacing: -0.02em; color: var(--brand)">5 of 6</span>
+<span style="font-size: var(--fs-1)">Not covered: [requirement]</span>
+<span style="font-size: var(--fs-1); color: var(--ink-2)">Nice-to-haves: 3 of 5</span>
+</li>
+<li style="display: flex; flex-direction: column; gap: var(--sp-2); padding: var(--sp-4); background: var(--bg); border: 1px solid var(--line); border-radius: var(--r-2)">
+<span style="font-family: var(--mono); font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-2)">Evidence used</span>
+<span style="font-size: 2.25rem; font-weight: 800; line-height: 1; letter-spacing: -0.02em; color: var(--brand)">9 cards</span>
+<span style="font-size: var(--fs-1)">From 3 roles · fits on one page</span>
+<span style="font-size: var(--fs-1); color: var(--ink-2)">10 cards left out as less relevant</span>
+</li>
+</ul>
+
+<div style="display: flex; flex-wrap: wrap; gap: var(--sp-5); align-items: flex-start">
+<div style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: var(--sp-4)">
+<div style="display: flex; flex-direction: column; gap: var(--sp-2)">
+<h4 style="margin: 0; font-size: var(--fs-2)">Matched keywords <span style="font-family: var(--mono); font-weight: 400; color: var(--ink-2)">18</span></h4>
+<div style="display: flex; flex-wrap: wrap; gap: var(--sp-1)">
+<sc-for list="{{kwHit}}" as="k" hint-placeholder-count="8"><span style="padding: 3px 9px; border-radius: var(--r-pill); background: var(--chip); font-size: var(--fs-1)">{{k}}</span></sc-for>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: var(--sp-2)">
+<h4 style="margin: 0; font-size: var(--fs-2)">Missing keywords <span style="font-family: var(--mono); font-weight: 400; color: var(--ink-2)">7</span></h4>
+<div style="display: flex; flex-wrap: wrap; gap: var(--sp-1)">
+<sc-for list="{{kwMiss}}" as="k" hint-placeholder-count="4"><span style="padding: 2px 8px; border-radius: var(--r-pill); border: 1px dashed var(--ink-2); font-size: var(--fs-1); color: var(--ink-2)">{{k}}</span></sc-for>
+</div>
+<p style="margin: 0; font-size: var(--fs-1); color: var(--ink-2)">These stay out unless the CV can back them. If one is true, add a result card for it in edit mode, then regenerate.</p>
+<a href="MainEdit.dc.html" style="font-size: var(--fs-1); font-weight: 600">Open edit mode</a>
+</div>
+</div>
+<div style="flex: 1 1 360px; min-width: 0; display: flex; flex-direction: column; gap: var(--sp-2)">
+<h4 style="margin: 0; font-size: var(--fs-2)">Synonyms used <span style="font-family: var(--mono); font-weight: 400; color: var(--ink-2)">{{synUsedCount}}</span></h4>
+<p style="margin: 0; font-size: var(--fs-1); color: var(--ink-2)">Only wordings you've added in edit mode. Where none fits better, the site's wording stays.</p>
+<div style="overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r-2)">
+<table style="width: 100%; min-width: 420px; border-collapse: collapse; font-size: var(--fs-1)">
+<thead><tr style="background: var(--surface-2); text-align: left"><th scope="col" style="padding: var(--sp-2) var(--sp-3)">On the site</th><th scope="col" style="padding: var(--sp-2) var(--sp-3)">In this resume</th><th scope="col" style="padding: var(--sp-2) var(--sp-3)">Why</th></tr></thead>
+<tbody>
+<sc-for list="{{synUsed}}" as="su" hint-placeholder-count="3">
+<tr style="border-top: 1px solid var(--line)"><td style="padding: var(--sp-2) var(--sp-3); color: var(--ink-2)">{{su.site}}</td><td style="padding: var(--sp-2) var(--sp-3); font-weight: 700">{{su.used}}</td><td style="padding: var(--sp-2) var(--sp-3); color: var(--ink-2)">{{su.why}}</td></tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+<a href="MainEdit.dc.html#skills" style="font-size: var(--fs-1); font-weight: 600">Manage synonyms</a>
+</div>
+</div>
+</div>
+</div>
+</sc-if>
+
+<div style="width: 100%; max-width: 760px; display: flex; flex-direction: column; gap: var(--sp-3)">
+<sc-if value="{{gen}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: var(--sp-3)">
+<div style="padding: var(--sp-6); background: #FFFFFF; color: #151A1B; border: 1px solid #D2DBDB; border-radius: var(--r-1); box-shadow: var(--shadow-2); font-size: 0.8125rem; line-height: 1.45; display: flex; flex-direction: column; gap: var(--sp-3)">
+<div style="display: flex; flex-direction: column; gap: 2px; padding-bottom: var(--sp-2); border-bottom: 3px solid #7A0E1B">
+<span style="font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; color: #0F6E73">Nathan Potter</span>
+<span style="font-weight: 600">[Role title] · tailored for [Company]</span>
+<span style="font-family: var(--mono); font-size: 0.6875rem; color: #4A5557">hello@nathanpotter.dev · linkedin.com/in/nathan-j-potter · San Francisco Bay Area</span>
+</div>
+<p style="margin: 0">Senior product manager with 7+ years across clean-energy lending, embedded finance and institutional crypto banking, often stepping into whichever role the team needed most.</p>
+<div style="display: flex; flex-direction: column; gap: var(--sp-1)">
+<span style="display: flex; justify-content: space-between; font-weight: 700"><span>Anchorage Digital · Senior Product Manager</span><span style="font-family: var(--mono); font-weight: 400; color: #4A5557">2025 – present</span></span>
+<span style="display: grid; grid-template-columns: 1fr auto; gap: var(--sp-3)"><span>• Quadrupled throughput of a complex, high-stakes client onboarding workflow (~265 → 1,000+ completed per quarter) within a year.</span><span style="font-family: var(--mono); font-size: 0.625rem; color: #0F6E73">anchorage-0</span></span>
+<span style="display: grid; grid-template-columns: 1fr auto; gap: var(--sp-3)"><span>• Drove onboarding automation, bringing average handle time down to 4.5 days while quarterly volume quadrupled.</span><span style="font-family: var(--mono); font-size: 0.625rem; color: #0F6E73">anchorage-1</span></span>
+</div>
+<div style="display: flex; flex-direction: column; gap: var(--sp-1)">
+<span style="display: flex; justify-content: space-between; font-weight: 700"><span>jaris · Senior Product Manager, Originations</span><span style="font-family: var(--mono); font-weight: 400; color: #4A5557">2023</span></span>
+<span style="display: grid; grid-template-columns: 1fr auto; gap: var(--sp-3)"><span>• Led data, underwriting and compliance teams to create SR 11-7 model-risk procedures, making lending models audit-ready.</span><span style="font-family: var(--mono); font-size: 0.625rem; color: #0F6E73">jaris-2</span></span>
+</div>
+<div style="display: flex; flex-direction: column; gap: var(--sp-1)">
+<span style="display: flex; justify-content: space-between; font-weight: 700"><span>Mosaic · Product Analyst → Product Manager</span><span style="font-family: var(--mono); font-weight: 400; color: #4A5557">2018 – 2023</span></span>
+<span style="display: grid; grid-template-columns: 1fr auto; gap: var(--sp-3)"><span>• Product owner and scrum master for a 9+ person global team running the platform behind $70MM+ in monthly originations.</span><span style="font-family: var(--mono); font-size: 0.625rem; color: #0F6E73">mosaic-3</span></span>
+<span style="display: grid; grid-template-columns: 1fr auto; gap: var(--sp-3)"><span>• Cut funding-approval turnaround 90% for the largest partners by removing manual review steps.</span><span style="font-family: var(--mono); font-size: 0.625rem; color: #0F6E73">mosaic-6</span></span>
+</div>
+<span style="font-family: var(--mono); font-size: 0.625rem; color: #4A5557">Sample layout · stub output · [Skills and education lines]</span>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: var(--sp-2)">
+<button type="button" style="min-height: 44px; padding: 0 var(--sp-4); border: 0; border-radius: var(--r-1); background: var(--brand); color: var(--brand-ink); font: inherit; font-weight: 700; cursor: pointer">Download PDF</button>
+<button type="button" style="min-height: 44px; padding: 0 var(--sp-4); border: 1px solid var(--line); border-radius: var(--r-1); background: var(--surface); color: var(--ink); font: inherit; cursor: pointer">Download .docx</button>
+<button type="button" style="min-height: 44px; padding: 0 var(--sp-4); border: 1px solid var(--line); border-radius: var(--r-1); background: var(--surface); color: var(--ink); font: inherit; cursor: pointer">Copy as text</button>
+</div>
+<p style="margin: 0; font-size: var(--fs-1); color: var(--ink-2)">Not resolved: whether the summary line may be reworded per job, or only chosen from approved variants.</p>
+</div>
+</sc-if>
+</div>
+</section>
+</sc-if>
+
+<section id="write-up" aria-labelledby="h-write" style="display: flex; flex-direction: column; gap: var(--sp-4); padding-top: var(--sp-6); border-top: 1px solid var(--line); max-width: 760px">
+<h2 id="h-write" style="margin: 0; font-size: var(--fs-5); letter-spacing: -0.015em; color: var(--brand)">Write-up</h2>
+<p style="margin: 0; color: var(--ink-2)">[One paragraph: why I built this, and what it's meant to prove.]</p>
+<details open="">
+<summary style="display: inline-flex; align-items: center; gap: 6px; min-height: 44px; font-weight: 600; color: var(--brand)">Decisions and trade-offs
+<svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
+</summary>
+<ul style="margin: var(--sp-2) 0 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: var(--sp-2)">
+<li>[Decision] — [what I gave up for it]</li>
+<li>[Decision] — [what I gave up for it]</li>
+</ul>
+</details>
+<details>
+<summary style="display: inline-flex; align-items: center; gap: 6px; min-height: 44px; font-weight: 600; color: var(--brand)">Known limits
+<svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
+</summary>
+<ul style="margin: var(--sp-2) 0 0; padding-left: 1.2em">
+<li>[Limit, stated plainly]</li>
+</ul>
+</details>
+</section>
+</main>
+
+<footer style="border-top: 1px solid var(--line); background: var(--surface)">
+<div style="max-width: 1200px; margin: 0 auto; padding: var(--sp-5); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--sp-4)">
+<a href="Main.dc.html">Back to the CV</a>
+<div style="display: flex; flex-wrap: wrap; gap: var(--sp-4)">
+<a href="mailto:hello@nathanpotter.dev">hello@nathanpotter.dev</a>
+<a href="https://www.linkedin.com/in/nathan-j-potter">LinkedIn</a>
+<a href="Admin.dc.html" style="display: inline-flex; align-items: center; gap: 6px; color: var(--ink-2)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>Admin</a>
+</div>
+</div>
+</footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light"},"showResult":{"editor":"boolean","default":true},"admin":{"editor":"boolean","default":false},"$preview":{"width":1280,"height":2300}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const theme = s.theme || this.props.theme || 'light';
+    const shown = s.shown !== undefined ? s.shown : (this.props.showResult ?? true);
+    return {
+      theme: theme,
+      isDark: theme === 'dark',
+      isLight: theme !== 'dark',
+      themeLabel: theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme',
+      toggleTheme: () => this.setState({ theme: theme === 'dark' ? 'light' : 'dark' }),
+      copyLabel: s.copied ? 'Copied' : 'Copy',
+      copyEmail: () => {
+        try { navigator.clipboard.writeText('hello@nathanpotter.dev'); } catch (e) {}
+        this.setState({ copied: true });
+      },
+      done: !!shown,
+      empty: !shown,
+      assess: () => this.setState({ shown: true }),
+      reset: () => this.setState({ shown: false }),
+      admin: !!this.props.admin,
+      gen: !!s.gen,
+      noGen: !s.gen,
+      genLabel: s.gen ? 'Regenerate' : 'Generate tailored resume',
+      srcPaste: (s.src || 'paste') === 'paste',
+      srcLink: s.src === 'link',
+      srcAbove: s.src === 'above',
+      sources: [['paste', 'Paste text'], ['link', 'Link to posting'], ['above', 'Use the posting above']].map((x) => ({ label: x[1], on: (s.src || 'paste') === x[0], off: (s.src || 'paste') !== x[0], pick: () => this.setState({ src: x[0] }) })),
+      kwHit: ['onboarding', 'sanctions', 'compliance', 'risk', 'automation', 'lending', 'payments', 'partnerships', 'API', 'roadmap', 'stakeholders', 'cross-functional', 'SQL', 'B2B', 'scale', '0→1', 'analytics', 'AI'],
+      synUsedCount: 3,
+      synUsed: [
+        { site: 'JavaScript/React', used: 'React', why: 'The posting says “React”' },
+        { site: 'Team leadership and mentorship', used: 'People leadership', why: 'Listed as a must-have' },
+        { site: '0→1 and scale-up delivery', used: 'New product development', why: 'Used 3 times in the posting' }
+      ],
+      kwMiss: ['[keyword]', '[keyword]', '[keyword]', '[keyword]', '[keyword]', '[keyword]', '[keyword]'],
+      generate: () => this.setState({ gen: true }),
+      pickCards: [
+        { metric: '4×', text: 'Client onboarding throughput (Anchorage)', on: true },
+        { metric: '4.5 days', text: 'Average handle time (Anchorage)', on: true },
+        { metric: 'SR 11-7', text: 'Model-risk procedures (jaris)', on: true },
+        { metric: '$70MM+', text: 'Monthly originations (Mosaic)', on: true },
+        { metric: '−90%', text: 'Funding-approval turnaround (Mosaic)', on: true },
+        { metric: '15–20', text: 'Claude knowledge system (Anchorage)', on: false },
+        { metric: '2×', text: 'Major partnerships (jaris)', on: false }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

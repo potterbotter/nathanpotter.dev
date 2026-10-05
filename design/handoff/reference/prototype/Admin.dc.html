@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Admin — Nathan Potter</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+.np{--font:ui-sans-serif,system-ui,-apple-system,"Segoe UI","Helvetica Neue",sans-serif;--mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;--fs-1:0.8125rem;--fs-2:0.9375rem;--fs-3:1.0625rem;--fs-4:1.3125rem;--fs-5:1.75rem;--fs-6:clamp(2.25rem,6vw,3.5rem);--sp-1:4px;--sp-2:8px;--sp-3:12px;--sp-4:16px;--sp-5:24px;--sp-6:32px;--sp-7:48px;--sp-8:72px;--r-1:4px;--r-2:8px;--r-pill:999px;--bg:#F2F5F5;--surface:#FFFFFF;--surface-2:#E6ECEC;--raised:#FFFFFF;--ink:#151A1B;--ink-2:#4A5557;--line:#D2DBDB;--brand:#0F6E73;--brand-ink:#FFFFFF;--band:#0F6E73;--band-ink:#FFFFFF;--band-line:rgba(255,255,255,.35);--accent:#7A0E1B;--accent-text:#7A0E1B;--chip:#E3EEEE;--cta-bg:#FFFFFF;--cta-ink:#0F6E73;--cta-sub:#4A5557;--cta-dot:#0F6E73;--cta-dot-ink:#FFFFFF;--shadow-1:0 1px 2px rgba(10,30,32,.08),0 1px 1px rgba(10,30,32,.04);--shadow-2:0 8px 24px rgba(10,30,32,.12);color-scheme:light}
+.np[data-theme="dark"]{--bg:#0D1213;--surface:#151C1E;--surface-2:#1D2628;--raised:#212B2D;--ink:#E9EFEF;--ink-2:#A3B1B3;--line:#2F3B3D;--brand:#6CCBD0;--brand-ink:#071113;--band:#0B2F32;--band-ink:#EAF5F5;--band-line:rgba(234,245,245,.22);--accent:#B8344A;--accent-text:#E9EFEF;--chip:#1F3335;--cta-bg:#6CCBD0;--cta-ink:#071113;--cta-sub:#14373A;--cta-dot:#071113;--cta-dot-ink:#6CCBD0;--shadow-1:0 0 0 1px rgba(255,255,255,.02),0 1px 2px rgba(0,0,0,.5);--shadow-2:0 0 0 1px rgba(255,255,255,.04),0 12px 32px rgba(0,0,0,.55);color-scheme:dark}
+.np a{color:var(--brand)}.np a:hover{color:var(--accent-text)}
+.np :focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:2px}
+.np summary{list-style:none;cursor:pointer}.np summary::-webkit-details-marker{display:none}
+.np .chev{transition:transform .18s ease}.np details[open]>summary .chev{transform:rotate(180deg)}
+.np .navlink:hover{background:var(--surface-2);color:var(--ink)}
+.np .pick{transition:transform .15s ease,border-color .15s ease}.np .pick:hover{transform:translateY(-3px);border-color:var(--brand)}.np .pick:hover .cta-arrow{transform:translateX(3px)}.np .cta-arrow{transition:transform .15s ease}
+@media (prefers-reduced-motion:reduce){.np *{transition:none!important}.np .pick:hover{transform:none}}
+</style>
+</helmet>
+<div class="np" data-theme="{{theme}}" style="background: var(--bg); color: var(--ink); font-family: var(--font); font-size: var(--fs-2); line-height: 1.55; min-height: 900px; display: flex; flex-direction: column">
+
+<header style="background: var(--surface); border-bottom: 1px solid var(--line)">
+<div style="max-width: 1200px; margin: 0 auto; padding: var(--sp-3) var(--sp-5); display: flex; align-items: center; justify-content: space-between; gap: var(--sp-4)">
+<a href="Main.dc.html" style="display: flex; flex-direction: column; text-decoration: none; color: var(--ink); min-height: 44px; justify-content: center">
+<span style="font-weight: 700; font-size: var(--fs-3); letter-spacing: -0.01em">Nathan Potter</span>
+<span style="font-family: var(--mono); font-size: var(--fs-1); color: var(--ink-2)">nathanpotter.dev/admin/</span>
+</a>
+<a href="Main.dc.html" style="display: inline-flex; align-items: center; min-height: 44px">Back to the CV</a>
+</div>
+</header>
+
+<main style="flex: 1; display: flex; justify-content: center; padding: var(--sp-8) var(--sp-5)">
+
+<sc-if value="{{isOut}}" hint-placeholder-val="{{ true }}">
+<section aria-labelledby="h-admin" style="width: 100%; max-width: 440px; display: flex; flex-direction: column; gap: var(--sp-5); padding: var(--sp-6); background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--accent); border-radius: var(--r-2); box-shadow: var(--shadow-2); align-self: flex-start">
+<span aria-hidden="true" style="width: 48px; height: 48px; display: grid; place-items: center; border-radius: var(--r-pill); background: var(--surface-2); color: var(--ink)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg></span>
+<div style="display: flex; flex-direction: column; gap: var(--sp-2)">
+<h1 id="h-admin" style="margin: 0; font-size: var(--fs-5); letter-spacing: -0.015em">Admin</h1>
+<p style="margin: 0; color: var(--ink-2)">Confirm you are, in fact, Nathan Potter.</p>
+</div>
+<button type="button" onClick="{{signIn}}" style="display: flex; align-items: center; justify-content: center; gap: var(--sp-3); min-height: 48px; padding: 0 var(--sp-5); border: 0; border-radius: var(--r-1); background: #151A1B; color: #FFFFFF; font: inherit; font-weight: 700; cursor: pointer; box-shadow: inset 0 0 0 1px rgba(255,255,255,.15)">Continue with GitHub
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+</button>
+<a href="AdminDenied.dc.html" style="align-self: flex-start; font-family: var(--mono); font-size: 0.6875rem; color: var(--ink-2)">Prototype only: see the wrong-account screen</a>
+</section>
+</sc-if>
+
+<sc-if value="{{isDenied}}" hint-placeholder-val="{{ false }}">
+<section aria-labelledby="h-denied" style="width: 100%; max-width: 440px; display: flex; flex-direction: column; gap: var(--sp-4); padding: var(--sp-6); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-2); box-shadow: var(--shadow-2); align-self: flex-start">
+<h1 id="h-denied" style="margin: 0; font-size: var(--fs-5); letter-spacing: -0.015em">You're not the right Nathan</h1>
+<p style="margin: 0; font-size: var(--fs-1); color: var(--ink-2)">Even if you're a card carrying member of the United Nathans.</p>
+<p style="margin: 0; color: var(--ink-2)">Your GitHub account info isn't stored anywhere, though, and nothing has changed about your access.</p>
+<div style="display: flex; flex-wrap: wrap; gap: var(--sp-3)">
+<a href="Main.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--sp-5); border-radius: var(--r-1); background: var(--brand); color: var(--brand-ink); font-weight: 700; text-decoration: none">Back to the CV</a>
+<a href="JobFit.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--sp-4); border: 1px solid var(--line); border-radius: var(--r-1); text-decoration: none; font-weight: 600">Am I the right fit?</a>
+</div>
+</section>
+</sc-if>
+
+<sc-if value="{{isIn}}" hint-placeholder-val="{{ false }}">
+<section aria-labelledby="h-home" style="width: 100%; max-width: 880px; display: flex; flex-direction: column; gap: var(--sp-5); align-self: flex-start">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--sp-3)">
+<div style="display: flex; flex-direction: column; gap: var(--sp-1)">
+<span style="font-family: var(--mono); font-size: var(--fs-1); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-2)">Signed in with GitHub as @potterbotter</span>
+<h1 id="h-home" style="margin: 0; font-size: var(--fs-5); letter-spacing: -0.015em">Admin</h1>
+</div>
+<a href="Admin.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--sp-4); border: 1px solid var(--line); border-radius: var(--r-1); text-decoration: none">Sign out</a>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: var(--sp-4)">
+<a href="MainEdit.dc.html" style="display: flex; flex-direction: column; gap: var(--sp-3); padding: var(--sp-5); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-2); box-shadow: var(--shadow-1); text-decoration: none; color: var(--ink)">
+<span style="font-size: var(--fs-4); font-weight: 700">Edit the CV</span>
+<span style="color: var(--ink-2)">Edit result cards and summary text in place. Changes save as a draft until you publish.</span>
+<span style="margin-top: auto; font-weight: 700; color: var(--brand)">Open edit mode</span>
+</a>
+<a href="JobFitAdmin.dc.html" style="display: flex; flex-direction: column; gap: var(--sp-3); padding: var(--sp-5); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-2); box-shadow: var(--shadow-1); text-decoration: none; color: var(--ink)">
+<span style="font-size: var(--fs-4); font-weight: 700">Resume generator</span>
+<span style="color: var(--ink-2)">Run a fit read on a posting, then build a tailored resume from the cards it cites.</span>
+<span style="margin-top: auto; font-weight: 700; color: var(--brand)">Open the job-fit tool</span>
+</a>
+</div>
+<p style="margin: 0; font-size: var(--fs-1); color: var(--ink-2)">Last published: [date] · Drafts: [count]</p>
+</section>
+</sc-if>
+
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light"},"state":{"editor":"enum","options":["signedOut","denied","signedIn"],"default":"signedOut"},"$preview":{"width":1280,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const theme = s.theme || this.props.theme || 'light';
+    const st = s.st || this.props.state || 'signedOut';
+    return {
+      theme: theme,
+      isOut: st === 'signedOut',
+      isDenied: st === 'denied',
+      isIn: st === 'signedIn',
+      signIn: () => this.setState({ st: 'signedIn' })
+    };
+  }
+}
+</script>
+</body>
+</html>
