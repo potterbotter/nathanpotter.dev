@@ -1,0 +1,10 @@
+{
+  "name": "nathanpotter-dev",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build/build.mjs",
+    "build:draft": "node build/build.mjs --show-placeholders",
+    "preview": "node build/build.mjs && node build/serve.mjs"
+  }
+}

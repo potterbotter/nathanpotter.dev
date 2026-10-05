@@ -549,6 +549,9 @@
       ],
       "focus": "Four-plus years financing clean energy at Mosaic, first.",
       "upFrontRule": "All Mosaic cards up front; other roles folded",
+      "upFrontRoles": [
+        "exp-mosaic"
+      ],
       "landing": {
         "for": "For clean energy and climate finance, where I spent four-plus years.",
         "cta": "See the climate view",
@@ -581,7 +584,7 @@
       "name": "DPR calculator",
       "status": "placeholder",
       "route": "/tools/dpr/",
-      "summary": "Damage per round for D&D 5e: expected damage from an attack routine against a given armour class."
+      "summary": "Damage per round for 5e-compatible games: expected damage from an attack routine against a given armour class."
     },
     {
       "name": "This site",
@@ -590,6 +593,19 @@
       "summary": "The CV, three role views and the builds above. Plain HTML and CSS on Cloudflare."
     }
   ],
+  "contact": {
+    "openTo": "[One line on what I'm open to.]"
+  },
+  "siteBuild": {
+    "intro": "[One paragraph: why the site is the evidence for the CV, and what I'd do differently.]",
+    "stack": [
+      "Plain HTML and CSS, generated from one structured content file and served by Cloudflare. Minimal JavaScript; every page reads without it.",
+      "Light and dark themes; the site follows your system setting until you pick one.",
+      "[Decision and trade-off]",
+      "Not resolved yet: [open question]"
+    ],
+    "repo": "https://github.com/potterbotter/nathanpotter.dev"
+  },
   "viewsLanding": {
     "route": "/views/",
     "eyebrow": "Role views",

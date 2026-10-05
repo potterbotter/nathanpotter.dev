@@ -10,6 +10,9 @@ desktop.ini
 .env
 .env.*
 
-# Wrangler / Node (if added later)
+# Build output (generated from content/cv.json on every deploy)
+dist/
+
+# Wrangler / Node
 .wrangler/
 node_modules/
