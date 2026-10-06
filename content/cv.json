@@ -13,7 +13,9 @@
     "lede": "I turn messy, high-stakes workflows into products that scale."
   },
   "facts": [
-    "The entire career is in regulated financial services: clean-energy lending, embedded finance and institutional crypto banking."
+    "The entire career is in regulated financial services: clean-energy lending, embedded finance and institutional crypto banking.",
+    "At both Mosaic and Anchorage Digital, Nathan has been responsible for OFAC monitoring of onboarded customers. He works directly with compliance and sanctions teams and has built and improved automation infrastructure and vendor integrations for OFAC screening.",
+    "At Anchorage Digital, Nathan's Client Onboarding & Risk Platform scope also covers transaction monitoring, SAR monitoring and reporting, and initial and ongoing sanctions, PEP and negative-news screening. He owns the roadmap for these areas, plans, builds and prioritizes vendor integrations, and is an admin for the internal case-management tooling."
   ],
   "heroMetrics": [
     {
@@ -77,7 +79,7 @@
         "title": "Senior Product Manager, Client Onboarding & Risk Platform",
         "dates": "Jan 2025 – present",
         "note": "Moved from Client Insights & Automation to take over Client Onboarding & Risk when the team needed a PM to lead it. Onboarding serves institutional clients worldwide across Anchorage’s US, Singapore and Cayman Islands entities.",
-        "nextCard": 8,
+        "nextCard": 9,
         "cards": [
           {
             "id": "anchorage-0",
@@ -97,10 +99,10 @@
           },
           {
             "id": "anchorage-2",
-            "metric": "290+",
+            "metric": "Same day",
             "tag": "0→1",
-            "headline": "Multi-product Customers use multiple product offerings that no longer require reanswering the same questions.",
-            "detail": "Shipped progressive onboarding, which lets existing clients activate a new product line by reusing information they've already provided, with no repeat review."
+            "headline": "New product lines approved same day, without a multi-day re-application",
+            "detail": "Shipped progressive onboarding, letting existing clients add a product line by reusing what they've already provided. A multi-day application became same-day approval with no new questions, and clients using more than one product line grew ~30% after launch."
           },
           {
             "id": "anchorage-4",
@@ -139,6 +141,13 @@
             "headline": "Re-architecting the core onboarding platform, live ops untouched",
             "headlineSource": "condensed from detail by Claude — Nathan to review",
             "detail": "Product support and championship of a re-architecture of the core onboarding platform (data-model redesign, account migration, legacy retirement) with no disruption to live operations."
+          },
+          {
+            "id": "anchorage-8",
+            "metric": "+139.9%",
+            "tag": "Scale",
+            "headline": "Kept AML case operations scaling through a 139.9% volume rise",
+            "detail": "Supported compliance operations through a 139.9% rise in comparable alert and case volume versus the same-length period before I joined. All of it ran through the case-management system I administer, while I shipped workflow optimizations and Slack automations to ensure the team could continue to scale volume."
           }
         ]
       },
@@ -627,6 +636,13 @@
             "forms": [
               "FinCEN CDD Rule",
               "Customer due diligence (CDD)"
+            ],
+            "shown": 0
+          },
+          {
+            "forms": [
+              "Sanctions screening (OFAC)",
+              "OFAC screening / Sanctions screening / Sanctions monitoring"
             ],
             "shown": 0
           },
