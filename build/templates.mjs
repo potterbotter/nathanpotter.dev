@@ -368,7 +368,7 @@ ${folded.length ? `<details class="more"><summary>${esc(moreLabel)} ${I.chev()}<
   };
 
   return `<section id="experience" class="section" aria-labelledby="h-exp">
-<header class="section-head"><h2 id="h-exp">Experience</h2><p class="section-lede"${ep(ctx, 'experience.intro')}>${esc(cv.experience.intro)}</p>
+<header class="section-head"><h2 id="h-exp">Experience</h2>${cv.experience.intro || ctx.edit ? `<p class="section-lede"${ep(ctx, 'experience.intro')}>${esc(cv.experience.intro)}</p>` : ''}
 ${filters}
 </header>
 ${join(roles, roleBlock)}
