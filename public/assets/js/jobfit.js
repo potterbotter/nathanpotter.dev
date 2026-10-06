@@ -1,6 +1,6 @@
 // Job-fit tool page: fetch-from-link, then stream the read from /api/job-fit and render it
-// compactly (a recruiter reads it in about ten seconds). ?compare=1 (Nathan only, enforced
-// server-side) runs Opus and Sonnet side by side with time and cost.
+// compactly (a recruiter reads it in about ten seconds). The admin test bench reuses this script
+// (NP_FIT.endpoint/discuss, draft and compare checkboxes); model choice is enforced server-side.
 // Everything from the server is inserted with textContent, never as HTML.
 (function () {
   'use strict';
@@ -12,7 +12,9 @@
   var out = document.querySelector('[data-fit-read]');
   var cfg = window.NP_FIT || {};
   var MIN = 200, MAX = 15000;
-  var compare = new URLSearchParams(location.search).get('compare') === '1';
+  var endpoint = cfg.endpoint || '/api/job-fit';
+  var useDraftBox = form.querySelector('[data-fit-use-draft]');
+  var compareBox = form.querySelector('[data-fit-compare]');
 
   function el(tag, cls, text) {
     var n = document.createElement(tag);
@@ -118,6 +120,12 @@
         body.appendChild(line);
         if (r.explanation) body.appendChild(el('p', 'fit-row__why', r.explanation + (r.note ? ' ' + r.note : '')));
         li.appendChild(body);
+        if (!partial && cfg.discuss) {
+          var d = el('button', 'fit-discuss', 'Discuss');
+          d.type = 'button';
+          d.addEventListener('click', function () { document.dispatchEvent(new CustomEvent('np-fit-discuss', { detail: r })); });
+          li.appendChild(d);
+        }
         ul.appendChild(li);
       });
       frag.appendChild(ul);
@@ -162,8 +170,8 @@
     }, 1000);
     var payload = { jd: jd };
     if (model) payload.model = model;
-    // Model selection goes through the Access-protected admin endpoint.
-    return fetch(model ? '/api/admin/job-fit' : '/api/job-fit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+    if (useDraftBox && useDraftBox.checked) payload.useDraft = true;
+    return fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
       .then(function (res) {
         var type = res.headers.get('Content-Type') || '';
         if (!res.ok || type.indexOf('ndjson') === -1) {
@@ -178,7 +186,11 @@
           var ev;
           try { ev = JSON.parse(line); } catch (e) { return; }
           if (ev.type === 'partial' && ev.report) { gotPartial = true; render(box, ev.report, {}, true); }
-          else if (ev.type === 'final') { render(box, ev.report, ev.meta || {}, false); result = { ok: true, meta: ev.meta || {} }; }
+          else if (ev.type === 'final') {
+            render(box, ev.report, ev.meta || {}, false);
+            result = { ok: true, meta: ev.meta || {} };
+            if (!model || model === 'opus') document.dispatchEvent(new CustomEvent('np-fit-read', { detail: { report: ev.report, jd: jd } }));
+          }
           else if (ev.type === 'error') { box.replaceChildren(el('p', 'fit-error', ev.message)); result = { ok: false }; }
         }
         function pump() {
@@ -197,13 +209,11 @@
       .finally(function () { clearInterval(tick); });
   }
 
-  // ---------- compare mode (Nathan only) ----------
+  // ---------- compare mode (test bench only; JOBFIT_COMPARE flag on the server) ----------
   var columns = null;
-  if (compare) {
-    var note = el('p', 'fit-compare-note small', 'Compare mode: each Assess runs Claude Opus 5.5 and Claude Sonnet 5.5 side by side. Only works while signed in as admin; both runs count toward the monthly budget.');
-    form.insertBefore(note, form.firstChild);
+  function buildColumns() {
     var grid = el('div', 'fit-compare');
-    columns = [['opus', 'Claude Opus 5.5'], ['sonnet', 'Claude Sonnet 5.5']].map(function (m) {
+    var cols = [['opus', 'Claude Opus 5.5'], ['sonnet', 'Claude Sonnet 5.5']].map(function (m) {
       var col = el('section', 'fit-compare__col');
       col.appendChild(el('h3', null, m[1]));
       var stats = el('p', 'muted small mono', '');
@@ -214,6 +224,7 @@
       return { key: m[0], stats: stats, box: box };
     });
     out.replaceChildren(grid);
+    return cols;
   }
 
   // ---------- submit ----------
@@ -221,6 +232,7 @@
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     if (busy) return;
+    columns = compareBox && compareBox.checked ? buildColumns() : null;
     var jd = area.value.trim();
     if (jd.length < MIN) {
       var msg = jd ? 'That looks too short to assess. Paste the full job description, including requirements.' : 'Paste a job description first.';

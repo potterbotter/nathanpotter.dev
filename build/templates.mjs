@@ -467,6 +467,65 @@ ${fitCta(ctx, 'band')}
 }
 
 // ---------- /tools/job-fit/ ----------
+// The posting form, shared by the public tool and the admin test bench.
+function fitForm(cv, { bench = false, compare = false } = {}) {
+  const jf = cv.jobFit;
+  return `<form class="fit-form" data-fit-form novalidate>
+<div class="fit-link" data-fit-link hidden>
+<label for="jd-url">Link to the posting</label>
+<div class="fit-link__row"><input id="jd-url" type="url" inputmode="url" autocomplete="off" placeholder="https://jobs.lever.co/…"><button type="button" class="btn btn--secondary" data-fit-fetch>Fetch</button></div>
+<p class="muted small" data-fit-fetch-status aria-live="polite">Works best with Greenhouse, Lever and Ashby links. For LinkedIn or Indeed, paste the text below.</p>
+<p class="fit-or" aria-hidden="true">or paste it</p>
+</div>
+<label for="jd">Job description</label>
+<textarea id="jd" name="jd" rows="${bench ? 10 : 16}" maxlength="15000" required placeholder="Paste the full posting: responsibilities, requirements, nice-to-haves."></textarea>
+<p class="fit-count muted small" data-fit-count aria-live="polite"></p>
+${bench ? `<label class="check"><input type="checkbox" data-fit-use-draft checked> Assess against my unpublished draft</label>
+${compare ? '<label class="check"><input type="checkbox" data-fit-compare> Compare Opus and Sonnet side by side</label>' : ''}` : ''}
+<div class="row-links">
+<button type="submit" class="btn btn--primary" data-fit-submit>Assess</button>
+<button type="button" class="btn btn--secondary" data-fit-clear>Clear</button>
+</div>
+${bench ? '' : `<p class="muted small">${esc(jf.dataNote)}</p>
+<noscript><p class="small">This tool needs JavaScript. You can also email the posting to <a href="mailto:${esc(cv.person.email)}">${esc(cv.person.email)}</a>.</p></noscript>`}
+</form>`;
+}
+
+const fitScripts = (cv, extra = {}) => `<script>window.NP_FIT = ${JSON.stringify({ email: cv.person.email, method: cv.jobFit.method, ...extra }).replace(/</g, '\\u003c')};</script>\n<script src="/assets/js/jobfit.js" defer></script>\n`;
+
+// Admin test bench: run reads, discuss the feedback with Claude, approve knowledge-base changes.
+export function testBenchPage(ctx, { drafts, notes, compare }) {
+  const main = `<main id="main" class="wrap bench">
+<header class="page-title" style="padding-top: var(--sp-5)">
+<h1>Job-fit test bench</h1><div class="rule"></div>
+<p class="lede">Run a read, then answer its feedback in the chat. Claude asks for specifics and proposes changes; nothing is saved until you approve it. Public changes go to your draft (<a href="/admin/edit/">${drafts} change${drafts === 1 ? '' : 's'} so far</a>); publish them from edit mode.</p>
+</header>
+<div class="bench-grid">
+<div class="bench-left">
+${fitForm(ctx.cv, { bench: true, compare })}
+<section class="fit-read" aria-labelledby="h-read"><h2 id="h-read">The read</h2>
+<div data-fit-read aria-live="polite"><p class="muted">Run a read to start. Each requirement gets a Discuss button.</p></div>
+</section>
+</div>
+<section class="bench-chat" aria-labelledby="h-chat" data-kb-chat>
+<header class="bench-chat__head"><h2 id="h-chat">Chat with Claude</h2><button type="button" class="btn-quiet" data-kb-clear>Clear chat</button></header>
+<ol class="bench-chat__log" data-kb-log aria-live="polite"><li class="muted small">Tell Claude what the read missed, or click Discuss on a row. Example: "I ran A/B tests with LaunchDarkly at Anchorage."</li></ol>
+<form class="bench-chat__form" data-kb-form>
+<label for="kb-input" class="visually-hidden">Message</label>
+<textarea id="kb-input" rows="3" placeholder="What should Claude know?"></textarea>
+<div class="row-links"><button type="submit" class="btn btn--primary" data-kb-send>Send</button><span class="muted small" data-kb-status aria-live="polite"></span></div>
+</form>
+<details class="bench-notes" data-kb-notes><summary>Private notes (<span data-kb-notes-count>${notes}</span>)</summary><ul data-kb-notes-list><li class="muted small">Loading…</li></ul></details>
+</section>
+</div>
+</main>`;
+  return layout(ctx, {
+    title: `Test bench — ${ctx.cv.person.name}`, description: 'Admin test bench.', path: '/admin/job-fit/', current: null, main, bare: true,
+    admin: adminBar(ctx, { mode: 'bench', drafts }),
+    scripts: fitScripts(ctx.cv, { endpoint: '/api/admin/job-fit', discuss: true }) + '<script src="/admin/assets/testbench.js" defer></script>\n',
+  });
+}
+
 export function jobFitPage(ctx) {
   const { cv } = ctx;
   const jf = cv.jobFit;
@@ -478,23 +537,7 @@ export function jobFitPage(ctx) {
 </header>
 <div class="page-main">
 <div class="fit-layout">
-<form class="fit-form" data-fit-form novalidate>
-<div class="fit-link" data-fit-link hidden>
-<label for="jd-url">Link to the posting</label>
-<div class="fit-link__row"><input id="jd-url" type="url" inputmode="url" autocomplete="off" placeholder="https://jobs.lever.co/…"><button type="button" class="btn btn--secondary" data-fit-fetch>Fetch</button></div>
-<p class="muted small" data-fit-fetch-status aria-live="polite">Works best with Greenhouse, Lever and Ashby links. For LinkedIn or Indeed, paste the text below.</p>
-<p class="fit-or" aria-hidden="true">or paste it</p>
-</div>
-<label for="jd">Job description</label>
-<textarea id="jd" name="jd" rows="16" maxlength="15000" required placeholder="Paste the full posting: responsibilities, requirements, nice-to-haves."></textarea>
-<p class="fit-count muted small" data-fit-count aria-live="polite"></p>
-<div class="row-links">
-<button type="submit" class="btn btn--primary" data-fit-submit>Assess</button>
-<button type="button" class="btn btn--secondary" data-fit-clear>Clear</button>
-</div>
-<p class="muted small">${esc(jf.dataNote)}</p>
-<noscript><p class="small">This tool needs JavaScript. You can also email the posting to <a href="mailto:${esc(cv.person.email)}">${esc(cv.person.email)}</a>.</p></noscript>
-</form>
+${fitForm(cv)}
 <section class="fit-read" aria-labelledby="h-read">
 <h2 id="h-read">The read</h2>
 <div data-fit-read aria-live="polite">
@@ -507,7 +550,7 @@ export function jobFitPage(ctx) {
   return layout(ctx, {
     title: `Job-fit assessment — ${cv.person.name}`, description: jf.lede, path: '/tools/job-fit/', current: 'builds', main,
     noindex: !ctx.flags.jobFitLive,
-    scripts: `<script>window.NP_FIT = ${JSON.stringify({ email: cv.person.email, method: jf.method }).replace(/</g, '\\u003c')};</script>\n<script src="/assets/js/jobfit.js" defer></script>\n`,
+    scripts: fitScripts(cv),
   });
 }
 
@@ -562,21 +605,22 @@ export function adminBar(ctx, { mode, drafts }) {
   const label = drafts ? `${drafts} draft change${drafts === 1 ? '' : 's'}` : 'Published · no unsaved changes';
   const right = mode === 'edit'
     ? `<a class="admin-link" href="/admin/">Admin home</a>
-<a class="admin-link" href="/admin/dashboard/">Dashboard</a>
+<a class="admin-link" href="/admin/job-fit/">Test bench</a>
 <a class="admin-link admin-link--outline" href="/admin/edit/?preview=1">Preview as visitor</a>
 <button type="button" class="admin-link" data-discard${drafts ? '' : ' hidden'}>Discard draft</button>
 <button type="button" class="admin-publish" data-publish${drafts ? '' : ' disabled'}>Publish</button>`
     : mode === 'preview'
       ? `<a class="admin-link admin-link--outline" href="/admin/edit/">Back to editing</a>`
-      : mode === 'dashboard'
+      : mode === 'dashboard' || mode === 'bench'
         ? `<a class="admin-link" href="/admin/">Admin home</a>
+<a class="admin-link" href="${mode === 'bench' ? '/admin/dashboard/">Dashboard' : '/admin/job-fit/">Test bench'}</a>
 <a class="admin-link" href="/admin/edit/">Edit the CV</a>`
         : `<a class="admin-link" href="/admin/dashboard/">Dashboard</a>
 <a class="admin-link" href="/admin/edit/">Edit the CV</a>`;
   return `<div class="admin-bar noprint" role="region" aria-label="Admin">
 <div class="wrap">
 <div class="admin-bar__left">
-<span class="admin-badge">${mode === 'edit' ? 'Edit mode' : mode === 'preview' ? 'Preview' : mode === 'dashboard' ? 'Dashboard' : 'Admin'}</span>
+<span class="admin-badge">${mode === 'edit' ? 'Edit mode' : mode === 'preview' ? 'Preview' : mode === 'dashboard' ? 'Dashboard' : mode === 'bench' ? 'Test bench' : 'Admin'}</span>
 <span>Signed in with GitHub as <strong>${handle}</strong></span>
 <span class="admin-drafts" aria-live="polite" data-draft-label>${esc(label)}</span>
 </div>
@@ -606,10 +650,10 @@ export function adminHomePage(ctx, { drafts, lastPublished }) {
 <span class="muted">Who visits, from where, what they read and click. Cookieless; no IP addresses stored.</span>
 <span class="tile__action">Open the dashboard</span>
 </a>
-<a class="tile" href="/tools/job-fit/?compare=1">
-<span class="tile__head"><span class="tile__name">Job-fit A/B test</span><span class="status">Testing</span></span>
-<span class="muted">Run Claude Opus 5.5 and Sonnet 5.5 side by side on the same posting, with time and cost for each.</span>
-<span class="tile__action">Compare models</span>
+<a class="tile" href="/admin/job-fit/">
+<span class="tile__head"><span class="tile__name">Job-fit test bench</span><span class="status">Ready</span></span>
+<span class="muted">Run reads on real postings, answer the feedback in a chat with Claude, and approve changes to your CV and private notes.</span>
+<span class="tile__action">Open the test bench</span>
 </a>
 <div class="tile tile--unbuilt" aria-disabled="true">
 <span class="tile__head"><span class="tile__name">Résumé generator</span><span class="status status--unbuilt">Not built yet</span></span>

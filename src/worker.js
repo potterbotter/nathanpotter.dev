@@ -12,6 +12,7 @@ import bundledCv from '../content/cv.json';
 import { verifyAccessJwt } from './access.js';
 import { collect, prune, dashboardData } from './analytics.js';
 import { handleJobFit, handleFetchPosting, monthSpend } from './jobfit-api.js';
+import { handleKbChat, handleKbApply, handleKbNotes } from './kb.js';
 
 const CV_PATH = 'content/cv.json';
 const MAX_BODY = 512 * 1024;
@@ -119,14 +120,8 @@ async function routeAdmin(request, env, url, ctx) {
       const body = await readJson(request);
       if (!body || typeof body.content !== 'object') return json({ error: 'Expected { content, baseSha }.' }, 400);
       try { validate(body.content); } catch (e) { return json({ error: e.message }, 422); }
-      const existing = await getDraft(env);
-      const baseSha = existing ? existing.base_sha : body.baseSha;
-      if (!baseSha) return json({ error: 'Missing baseSha for a new draft.' }, 400);
-      const changes = (existing ? existing.changes : 0) + 1;
-      await env.DB.prepare(
-        `INSERT INTO drafts (id, content, base_sha, changes, updated_at) VALUES ('cv', ?1, ?2, ?3, ?4)
-         ON CONFLICT(id) DO UPDATE SET content = ?1, changes = ?3, updated_at = ?4`,
-      ).bind(JSON.stringify(body.content), baseSha, changes, new Date().toISOString()).run();
+      if (!(await getDraft(env)) && !body.baseSha) return json({ error: 'Missing baseSha for a new draft.' }, 400);
+      const changes = await saveDraft(env, body.content, body.baseSha);
       return json({ ok: true, changes });
     }
     if (method === 'DELETE') {
@@ -135,8 +130,21 @@ async function routeAdmin(request, env, url, ctx) {
     }
   }
 
-  // Model comparison for Nathan: same handler as the public tool, behind Access and the token check.
-  if (path === '/api/admin/job-fit') return handleJobFit(request, env, ctx, url, bundledCv, { verifiedAdmin: true });
+  // Test bench: the job-fit read (optionally against the draft, optionally Opus vs Sonnet) and the knowledge chat.
+  if (path === '/admin/job-fit/' && method === 'GET') {
+    const draft = await getDraft(env);
+    const notes = await env.DB.prepare('SELECT COUNT(*) AS n FROM knowledge').first();
+    return html(T.testBenchPage(pageCtx(bundledCv), { drafts: draft ? draft.changes : 0, notes: notes.n, compare: env.JOBFIT_COMPARE === 'true' }));
+  }
+  if (path === '/api/admin/job-fit') {
+    return handleJobFit(request, env, ctx, url, bundledCv, { verifiedAdmin: true, loadDraftCv: async () => (await workingContent(env)).content });
+  }
+  if (path === '/api/admin/kb/chat' && method === 'POST') {
+    const cv = (await workingContent(env)).content;
+    return handleKbChat(request, env, ctx, cv);
+  }
+  if (path === '/api/admin/kb/apply' && method === 'POST') return handleKbApply(request, env, { workingContent, saveDraft });
+  if (path === '/api/admin/kb/notes') return handleKbNotes(request, env, url);
 
   if (path === '/api/admin/publish' && method === 'POST') {
     const draft = await getDraft(env);
@@ -162,6 +170,18 @@ async function routeAdmin(request, env, url, ctx) {
 
 function pageCtx(cv, extraFlags = {}) {
   return { cv, flags: { ...FLAGS, ...extraFlags }, updated: T.formatDate(new Date()) };
+}
+
+// Save the whole draft; returns the running change count. The first save records the base commit SHA.
+async function saveDraft(env, content, baseSha) {
+  const existing = await getDraft(env);
+  const base = existing ? existing.base_sha : baseSha;
+  const changes = (existing ? existing.changes : 0) + 1;
+  await env.DB.prepare(
+    `INSERT INTO drafts (id, content, base_sha, changes, updated_at) VALUES ('cv', ?1, ?2, ?3, ?4)
+     ON CONFLICT(id) DO UPDATE SET content = ?1, changes = ?3, updated_at = ?4`,
+  ).bind(JSON.stringify(content), base, changes, new Date().toISOString()).run();
+  return changes;
 }
 
 // Draft if there is one; otherwise the latest cv.json on GitHub (so the base is never stale).

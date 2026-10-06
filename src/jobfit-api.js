@@ -102,7 +102,7 @@ export async function handleFetchPosting(request, env, url) {
 }
 
 // verifiedAdmin: set by the Worker for /api/admin/job-fit, which Cloudflare Access and the Worker have already authenticated.
-export async function handleJobFit(request, env, ctx, url, cv, { verifiedAdmin = false } = {}) {
+export async function handleJobFit(request, env, ctx, url, cv, { verifiedAdmin = false, loadDraftCv = null } = {}) {
   if (request.method !== 'POST') return fail(405, 'method', 'Use POST.');
   if (request.headers.get('Origin') !== url.origin) return fail(403, 'origin', 'Cross-site request refused.');
   if (env.JOBFIT_ENABLED !== 'true') return fail(503, 'disabled', 'The job-fit tool is switched off right now.');
@@ -145,8 +145,12 @@ export async function handleJobFit(request, env, ctx, url, cv, { verifiedAdmin =
   if (body?.model !== undefined) {
     if (!admin) return fail(403, 'model', 'Model selection is not available.');
     if (!MODELS[body.model]) return fail(400, 'model', 'Unknown model.');
+    if (body.model !== 'opus' && env.JOBFIT_COMPARE !== 'true') return fail(403, 'model', 'Model comparison is switched off (JOBFIT_COMPARE).');
     modelKey = body.model;
   }
+
+  // Admin test bench can assess against the unpublished draft.
+  if (admin && body?.useDraft && loadDraftCv) cv = await loadDraftCv();
 
   // Stream newline-delimited JSON events: {type:"partial"|"final"|"error", ...}.
   const { readable, writable } = new TransformStream();
