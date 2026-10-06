@@ -162,7 +162,8 @@
     }, 1000);
     var payload = { jd: jd };
     if (model) payload.model = model;
-    return fetch('/api/job-fit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+    // Model selection goes through the Access-protected admin endpoint.
+    return fetch(model ? '/api/admin/job-fit' : '/api/job-fit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
       .then(function (res) {
         var type = res.headers.get('Content-Type') || '';
         if (!res.ok || type.indexOf('ndjson') === -1) {

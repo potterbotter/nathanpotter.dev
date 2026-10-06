@@ -40,7 +40,7 @@ export default {
     if (!auth.ok) return deny(auth, path);
 
     try {
-      return await routeAdmin(request, env, url);
+      return await routeAdmin(request, env, url, ctx);
     } catch (err) {
       console.error('admin error', err && err.stack || err);
       return path.startsWith('/api/') ? json({ error: 'Something went wrong on the server.' }, 500) : text('Something went wrong on the server.', 500);
@@ -74,7 +74,7 @@ function deny(auth, path) {
 }
 
 // ---------- routes ----------
-async function routeAdmin(request, env, url) {
+async function routeAdmin(request, env, url, ctx) {
   const { pathname: path } = url;
   const method = request.method;
 
@@ -134,6 +134,9 @@ async function routeAdmin(request, env, url) {
       return json({ ok: true, changes: 0 });
     }
   }
+
+  // Model comparison for Nathan: same handler as the public tool, behind Access and the token check.
+  if (path === '/api/admin/job-fit') return handleJobFit(request, env, ctx, url, bundledCv, { verifiedAdmin: true });
 
   if (path === '/api/admin/publish' && method === 'POST') {
     const draft = await getDraft(env);

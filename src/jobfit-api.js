@@ -101,7 +101,8 @@ export async function handleFetchPosting(request, env, url) {
   }
 }
 
-export async function handleJobFit(request, env, ctx, url, cv) {
+// verifiedAdmin: set by the Worker for /api/admin/job-fit, which Cloudflare Access and the Worker have already authenticated.
+export async function handleJobFit(request, env, ctx, url, cv, { verifiedAdmin = false } = {}) {
   if (request.method !== 'POST') return fail(405, 'method', 'Use POST.');
   if (request.headers.get('Origin') !== url.origin) return fail(403, 'origin', 'Cross-site request refused.');
   if (env.JOBFIT_ENABLED !== 'true') return fail(503, 'disabled', 'The job-fit tool is switched off right now.');
@@ -117,7 +118,7 @@ export async function handleJobFit(request, env, ctx, url, cv) {
   const now = Date.now();
   const day = dayKey(now);
   const month = monthKey(now);
-  const admin = await isAdmin(request, env);
+  const admin = verifiedAdmin || (await isAdmin(request, env));
   const devHost = url.hostname === 'localhost' || url.hostname === '127.0.0.1';
 
   if (!admin) {
