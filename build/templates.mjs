@@ -466,6 +466,45 @@ ${fitCta(ctx, 'band')}
   return layout(ctx, { title: `Builds — ${cv.person.name}`, description: 'Things Nathan Potter has built, with write-ups on the decisions behind them.', path: '/builds/', current: 'builds', main });
 }
 
+// ---------- /tools/job-fit/ ----------
+export function jobFitPage(ctx) {
+  const { cv } = ctx;
+  const jf = cv.jobFit;
+  const main = `<main id="main" class="wrap">
+<header class="page-title">
+<p class="crumbs"><a href="/builds/">Builds</a> / Job-fit</p>
+<h1>Am I the right fit for your company?</h1><div class="rule"></div>
+<p class="lede">${esc(jf.lede)}</p>
+</header>
+<div class="page-main">
+<div class="fit-layout">
+<form class="fit-form" data-fit-form novalidate>
+<label for="jd">Job description</label>
+<textarea id="jd" name="jd" rows="16" maxlength="15000" required placeholder="Paste the full posting: responsibilities, requirements, nice-to-haves."></textarea>
+<p class="fit-count muted small" data-fit-count aria-live="polite"></p>
+<div class="row-links">
+<button type="submit" class="btn btn--primary" data-fit-submit>Assess</button>
+<button type="button" class="btn btn--secondary" data-fit-clear>Clear</button>
+</div>
+<p class="muted small">${esc(jf.dataNote)}</p>
+<noscript><p class="small">This tool needs JavaScript. You can also email the posting to <a href="mailto:${esc(cv.person.email)}">${esc(cv.person.email)}</a>.</p></noscript>
+</form>
+<section class="fit-read" aria-labelledby="h-read">
+<h2 id="h-read">The read</h2>
+<div data-fit-read aria-live="polite">
+<p class="muted">The read appears here: an overall verdict, each requirement with the evidence quoted from my CV, and anything the posting leaves open.</p>
+</div>
+</section>
+</div>
+</div>
+</main>`;
+  return layout(ctx, {
+    title: `Job-fit assessment — ${cv.person.name}`, description: jf.lede, path: '/tools/job-fit/', current: 'builds', main,
+    noindex: !ctx.flags.jobFitLive,
+    scripts: `<script>window.NP_FIT = ${JSON.stringify({ email: cv.person.email, method: jf.method }).replace(/</g, '\\u003c')};</script>\n<script src="/assets/js/jobfit.js" defer></script>\n`,
+  });
+}
+
 // ---------- labelled placeholders for unbuilt tools ----------
 export function placeholderPage(ctx, kind) {
   const { cv } = ctx;
@@ -635,6 +674,20 @@ ${i % every === 0 ? `<text class="axis" x="${x + barW / 2}" y="${H - 6}" text-an
 </section>`;
 }
 
+function jobFitPanel(j) {
+  const pct = j.budget ? Math.min(100, Math.round((j.spent / j.budget) * 100)) : 0;
+  return `<h2 class="dash-section">Job-fit tool</h2>
+<div class="stats">
+<div class="stat"><span class="label">Spent this month</span><strong>$${j.spent.toFixed(2)}</strong><span class="muted small">${pct}% of the $${j.budget} budget. The tool pauses at 100%; you're emailed at 80% and 100%.</span></div>
+<div class="stat"><span class="label">Assessments this month</span><strong>${fmtNum(j.runs)}</strong><span class="muted small">including yours</span></div>
+</div>
+<section class="dash-card dash-card--wide"><header><h2>Recent assessments</h2><p class="muted small">Latest 15. The pasted postings and full reads are stored in the database.</p></header>
+${j.recent.length ? `<table class="data-table"><thead><tr><th scope="col">When</th><th scope="col">Role</th><th scope="col">Read</th><th scope="col">Status</th><th scope="col">Cost</th></tr></thead><tbody>
+${join(j.recent, (r) => `<tr><td>${esc(fmtTime(r.ts))}</td><td>${esc([r.role_title, r.company].filter(Boolean).join(' · ') || '—')}${r.admin ? ' <span class="muted">(you)</span>' : ''}</td><td>${esc(r.fit || '—')}</td><td>${esc(r.status)}</td><td>$${Number(r.cost_usd || 0).toFixed(3)}</td></tr>`)}
+</tbody></table>` : '<p class="muted small">No assessments yet.</p>'}
+</section>`;
+}
+
 const EVENT_TEXT = {
   pageview: (e) => `Viewed ${e.path}`,
   notfound: (e) => `Hit a missing page: ${e.path}`,
@@ -674,6 +727,8 @@ ${tile('Printed / saved PDF', fmtNum(t.prints))}
 </div>
 
 ${dailyChart(d.series, d.rangeKey)}
+
+${d.jobfit ? jobFitPanel(d.jobfit) : ''}
 
 <h2 class="dash-section">Where they came from</h2>
 <div class="dash-grid">

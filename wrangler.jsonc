@@ -22,14 +22,28 @@
     }
   ],
   // Not secret. ACCESS_* come from the Cloudflare Access application (Zero Trust dashboard).
-  // Secrets (set in the dashboard, never here): GITHUB_TOKEN, ADMIN_EMAIL.
+  // Secrets (set in the dashboard, never here): GITHUB_TOKEN, ADMIN_EMAIL, ANTHROPIC_API_KEY, TURNSTILE_SECRET (optional).
   "vars": {
     "GITHUB_REPO": "potterbotter/nathanpotter.dev",
     "COMMIT_NAME": "Nathan Potter",
     "COMMIT_EMAIL": "302328726+potterbotter@users.noreply.github.com",
     "ACCESS_TEAM_DOMAIN": "nathanjpotter.cloudflareaccess.com",
-    "ACCESS_AUD": "c227797505b47d742fb88d360c2d0d8dc1b5503f16f0291f9fe4890e10aced91"
+    "ACCESS_AUD": "c227797505b47d742fb88d360c2d0d8dc1b5503f16f0291f9fe4890e10aced91",
+    // Job-fit tool: kill switch, model and limits (DESIGN.md, "Job-fit tool").
+    "JOBFIT_ENABLED": "true",
+    "JOBFIT_MODEL": "claude-opus-5-5",
+    "JOBFIT_MONTHLY_BUDGET_USD": "10",
+    "JOBFIT_DAILY_CAP": "100",
+    "JOBFIT_PER_IP_DAILY": "5"
   },
+  // Burst limit for the job-fit tool: 3 requests per minute per IP (counted by Cloudflare, never stored).
+  "ratelimits": [
+    { "name": "JOBFIT_BURST", "namespace_id": "1001", "simple": { "limit": 3, "period": 60 } }
+  ],
+  // Budget alert emails, sent from alerts@nathanpotter.dev to a verified Email Routing address.
+  "send_email": [
+    { "name": "ALERTS" }
+  ],
   // Daily analytics retention cleanup (03:17 Pacific during PDT).
   "triggers": { "crons": ["17 10 * * *"] },
   "observability": { "enabled": true }

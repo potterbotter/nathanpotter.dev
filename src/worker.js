@@ -11,6 +11,7 @@ import { FLAGS } from '../build/flags.mjs';
 import bundledCv from '../content/cv.json';
 import { verifyAccessJwt } from './access.js';
 import { collect, prune, dashboardData } from './analytics.js';
+import { handleJobFit, monthSpend } from './jobfit-api.js';
 
 const CV_PATH = 'content/cv.json';
 const MAX_BODY = 512 * 1024;
@@ -21,11 +22,12 @@ export default {
     ctx.waitUntil(prune(env));
   },
 
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
     const path = url.pathname;
     const isAdmin = path === '/admin' || path.startsWith('/admin/') || path.startsWith('/api/admin/');
     if (!isAdmin) {
+      if (path === '/api/job-fit') return handleJobFit(request, env, ctx, url, bundledCv);
       if (path === '/api/collect') {
         try { return await collect(request, env, url); } catch (err) { console.error('collect error', err); return new Response(null, { status: 204 }); }
       }
@@ -86,6 +88,9 @@ async function routeAdmin(request, env, url) {
 
   if (path === '/admin/dashboard/' && method === 'GET') {
     const data = await dashboardData(env, url.searchParams.get('range') || '30d');
+    const spend = await monthSpend(env);
+    const runs = (await env.DB.prepare('SELECT ts, status, fit, role_title, company, cost_usd, admin FROM jobfit_runs ORDER BY ts DESC LIMIT 15').all()).results;
+    data.jobfit = { ...spend, recent: runs };
     return html(T.dashboardPage(pageCtx(bundledCv), data));
   }
 

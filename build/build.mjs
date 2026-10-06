@@ -33,7 +33,7 @@ const pages = {
   'climate/index.html': T.cvPage(ctx, 'climate'),
   'views/index.html': T.viewsPage(ctx),
   'builds/index.html': T.buildsPage(ctx),
-  'tools/job-fit/index.html': T.placeholderPage(ctx, 'job-fit'),
+  'tools/job-fit/index.html': T.jobFitPage(ctx),
   'tools/dpr/index.html': T.placeholderPage(ctx, 'dpr'),
   'sign-in/index.html': T.signInPage(ctx),
   '404.html': T.notFoundPage(ctx),
