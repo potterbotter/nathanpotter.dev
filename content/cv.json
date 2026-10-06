@@ -73,7 +73,7 @@
         "kind": "federally chartered bank",
         "title": "Senior Product Manager, Client Onboarding & Risk Platform",
         "dates": "Jan 2025 – present",
-        "note": "Moved from Client Insights & Automation to take over Client Onboarding & Risk when the team needed a PM to lead it.",
+        "note": "Moved from Client Insights & Automation to take over Client Onboarding & Risk when the team needed a PM to lead it. Onboarding serves institutional clients worldwide across Anchorage’s US, Singapore and Cayman Islands entities.",
         "nextCard": 8,
         "cards": [
           {
@@ -180,7 +180,7 @@
         "kind": "clean-energy financing",
         "title": "Product Analyst → Product Manager",
         "dates": "Oct 2018 – Mar 2023",
-        "note": null,
+        "note": "Owned product areas end to end from the start, with the same scope as the PM team; the Product Manager title came later.",
         "nextCard": 8,
         "cards": [
           {
@@ -499,6 +499,13 @@
               "Documentation"
             ],
             "shown": 0
+          },
+          {
+            "forms": [
+              "LaunchDarkly",
+              "Feature flag management"
+            ],
+            "shown": 0
           }
         ]
       },
@@ -562,6 +569,15 @@
           },
           {
             "forms": [
+              "A/B testing with feature flags",
+              "A/B testing",
+              "Feature flagging",
+              "Experimentation"
+            ],
+            "shown": 0
+          },
+          {
+            "forms": [
               "Process automation",
               "Operational efficiency",
               "Workflow automation"
@@ -598,7 +614,9 @@
               "Customer onboarding",
               "KYC",
               "KYB",
-              "Compliance workflows"
+              "Compliance workflows",
+              "Global client onboarding",
+              "Multi-jurisdiction onboarding"
             ],
             "shown": 0
           },
