@@ -178,7 +178,12 @@ async function githubPut(env, content, sha, message) {
   const res = await fetch(`https://api.github.com/repos/${env.GITHUB_REPO}/contents/${CV_PATH}`, {
     method: 'PUT',
     headers: { ...githubHeaders(env), 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message, content: textToBase64(JSON.stringify(content, null, 2) + '\n'), sha, branch: 'main' }),
+    // Commit as the GitHub noreply identity so the public history never shows a personal email.
+    body: JSON.stringify({
+      message, content: textToBase64(JSON.stringify(content, null, 2) + '\n'), sha, branch: 'main',
+      author: { name: env.COMMIT_NAME, email: env.COMMIT_EMAIL },
+      committer: { name: env.COMMIT_NAME, email: env.COMMIT_EMAIL },
+    }),
   });
   if (res.status === 409 || res.status === 422) throw new Error('GitHub rejected the commit (the file changed). Reload and try again.');
   if (!res.ok) throw new Error(`GitHub write failed: ${res.status}`);
