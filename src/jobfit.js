@@ -6,7 +6,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import { z } from 'zod';
 import { zodOutputFormat } from '@anthropic-ai/sdk/helpers/zod';
 
-export const PROMPT_VERSION = 'jobfit-v2';
+export const PROMPT_VERSION = 'jobfit-v3';
 
 // Per-million-token prices (USD) for cost accounting. Cache writes are 5-minute (1.25x input).
 const PRICES = {
@@ -42,10 +42,10 @@ export const FitReport = z.object({
 const SYSTEM = `You assess how well one candidate, Nathan Potter, fits a job posting. A recruiter or hiring manager pasted the posting. Your read must be honest enough that a skeptical hiring manager would trust it.
 
 Evidence
-- The CV facts below are the only evidence. Each result card has an ID; cite IDs exactly as written. You may also cite "summary", "skills" or "education".
+- The CV facts below are the only evidence. Each result card has an ID; cite IDs exactly as written. You may also cite "summary", "facts", "skills" or "education".
 - A requirement is "meets" only when a cited fact directly demonstrates it. Adjacent or partial experience is "partly". No evidence is "gap". Never stretch a fact to fit.
 - Respect ownership words. "Led" is not "built"; "product support and championship of" is not "led". Do not upgrade scope, numbers, team sizes or seniority.
-- Count years of experience by adding up the dated roles. Read each role's note: it can change how the role counts (for example, a role whose note says it had full PM scope counts as product management experience).
+- For years of experience, use the computed figures under [facts] and cite "facts". Never do your own date arithmetic.
 - Time between roles is out of scope: do not mention, count, list or speculate about it. Gaps are not job requirements.
 - Never guess what probably happened. If something is not on the CV, say it is not shown.
 - If the posting asks for something the CV is silent on, say so plainly. Silence is a gap, not a guess.
@@ -62,11 +62,39 @@ Output
 - unsettled: anything the posting leaves open that would change the read (level, domain depth, location, team size).`;
 
 // Render cv.json as compact, citable facts. Stable output (no dates/IDs that vary) keeps the prompt cache warm.
-export function cvFacts(cv) {
+// Tenure computed by code from the role dates, so the model never does date arithmetic.
+// Months are counted start → end (end exclusive), so back-to-back roles don't double count.
+const MONTHS = { jan: 0, feb: 1, mar: 2, apr: 3, may: 4, jun: 5, jul: 6, aug: 7, sep: 8, oct: 9, nov: 10, dec: 11 };
+const monthIndex = (s, now) => {
+  if (/present|now/i.test(s)) return now.getUTCFullYear() * 12 + now.getUTCMonth();
+  const m = String(s).trim().match(/^([A-Za-z]{3})[a-z]*\.?\s+(\d{4})$/);
+  if (!m || MONTHS[m[1].toLowerCase()] === undefined) throw new Error(`Unreadable role date: "${s}"`);
+  return Number(m[2]) * 12 + MONTHS[m[1].toLowerCase()];
+};
+const span = (n) => { const y = Math.floor(n / 12), m = n % 12; return [y && `${y} year${y === 1 ? '' : 's'}`, m && `${m} month${m === 1 ? '' : 's'}`].filter(Boolean).join(' ') || 'under a month'; };
+
+export function tenure(cv, now = new Date()) {
+  const roles = cv.experience.roles.map((r) => {
+    const [from, to] = r.dates.split(/\s*[–-]\s*/);
+    const months = Math.max(0, monthIndex(to, now) - monthIndex(from, now));
+    return { company: r.company, title: r.title, months, senior: /senior/i.test(r.title) };
+  });
+  const total = roles.reduce((n, r) => n + r.months, 0);
+  const senior = roles.filter((r) => r.senior).reduce((n, r) => n + r.months, 0);
+  return { roles, total, senior, totalText: span(total), seniorText: span(senior) };
+}
+
+export function cvFacts(cv, now = new Date()) {
   const isPh = (s) => /\[[^\]]*\]/.test(String(s || ''));
+  const t = tenure(cv, now);
   const lines = [];
   lines.push(`Name: ${cv.person.name}. Title: ${cv.person.title}. Location: ${cv.person.location}.`);
   lines.push(`[summary] ${cv.summary.headline} ${cv.summary.lede}`);
+  lines.push('');
+  lines.push('[facts] Computed by code from the role dates (exact; use these, never recompute or count gaps):');
+  lines.push(`- Total product management experience: ${t.totalText} (${t.roles.map((r) => `${r.company} ${span(r.months)}`).join(', ')}). Every role counts as product management.`);
+  lines.push(`- Experience at Senior Product Manager level: ${t.seniorText}.`);
+  for (const f of cv.facts || []) if (!isPh(f)) lines.push(`- ${f}`);
   lines.push('');
   lines.push('Experience (most recent first):');
   for (const r of cv.experience.roles) {
@@ -100,6 +128,7 @@ export function verifyReport(report, cv) {
     summary: { company: 'Summary', detail: `${cv.summary.headline} ${cv.summary.lede}` },
     skills: { company: 'Skills', detail: cv.skills.groups.map((g) => g.items.map((s) => s.forms[s.shown]).join(', ')).join('; ') },
     education: { company: 'Education', detail: cv.education.map((e) => `${e.school}, ${e.detail}`).join('; ') },
+    facts: { company: 'Key facts', detail: (() => { const t = tenure(cv); return [`${t.totalText} of product management experience`, `${t.seniorText} at Senior PM level`, ...(cv.facts || [])].join('. '); })() },
   };
   let dropped = 0;
   const requirements = report.requirements.slice(0, 12).map((req) => {

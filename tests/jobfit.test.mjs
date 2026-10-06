@@ -54,3 +54,24 @@ test('the output schema rejects an unknown verdict', () => {
   assert.equal(FitReport.safeParse({ ...base, fit: 'perfect', requirements: [] }).success, false);
   assert.equal(FitReport.safeParse({ ...base, requirements: [] }).success, true);
 });
+
+test('tenure is computed from role dates without double counting or counting gaps', async () => {
+  const { tenure } = await import('../src/jobfit.js');
+  const fake = { experience: { roles: [
+    { company: 'A', title: 'Senior Product Manager', dates: 'Jan 2025 – present' },
+    { company: 'B', title: 'Senior Product Manager', dates: 'Mar 2023 – Dec 2023' },
+    { company: 'C', title: 'Product Analyst → Product Manager', dates: 'Oct 2018 – Mar 2023' },
+  ] } };
+  const t = tenure(fake, new Date(Date.UTC(2026, 9, 5)));
+  assert.equal(t.total, 21 + 9 + 53);
+  assert.equal(t.totalText, '6 years 11 months');
+  assert.equal(t.seniorText, '2 years 6 months');
+  assert.throws(() => tenure({ experience: { roles: [{ company: 'X', title: 'PM', dates: 'sometime – later' }] } }));
+});
+
+test('"facts" is citable and carries the computed tenure', () => {
+  const out = verifyReport({ ...base, requirements: [
+    { requirement: '5+ years PM', kind: 'must_have', read: 'meets', explanation: '', evidence: [{ card_id: 'facts', why: 'computed' }] },
+  ] }, cv);
+  assert.match(out.requirements[0].evidence[0].quote, /years? .*product management experience/);
+});
