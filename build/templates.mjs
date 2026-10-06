@@ -159,7 +159,7 @@ function fitCta(ctx, variant) {
   if (!ctx.flags.jobFitLive) return '';
   if (variant === 'hero') {
     return `<a class="cta cta--hero noprint" href="/tools/job-fit/">
-<span class="cta-text"><span class="cta-title">Am I the right fit for your company?</span><span class="cta-sub">Paste a job description. Get a fit read that cites my CV, on its own page.</span></span>
+<span class="cta-text"><span class="cta-title">Am I the right fit for your company?</span><span class="cta-sub">Paste a job description or link. Get a fit read that distills my experience into what matters to you.</span></span>
 <span class="cta-arrow" aria-hidden="true">${I.arrow(22)}</span>
 </a>`;
   }
