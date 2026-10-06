@@ -1,5 +1,7 @@
-// Job-fit tool page: posts the job description to /api/job-fit and renders the read.
-// Everything from the server is inserted with textContent (never as HTML).
+// Job-fit tool page: fetch-from-link, then stream the read from /api/job-fit and render it
+// compactly (a recruiter reads it in about ten seconds). ?compare=1 (Nathan only, enforced
+// server-side) runs Opus and Sonnet side by side with time and cost.
+// Everything from the server is inserted with textContent, never as HTML.
 (function () {
   'use strict';
   var form = document.querySelector('[data-fit-form]');
@@ -10,6 +12,7 @@
   var out = document.querySelector('[data-fit-read]');
   var cfg = window.NP_FIT || {};
   var MIN = 200, MAX = 15000;
+  var compare = new URLSearchParams(location.search).get('compare') === '1';
 
   function el(tag, cls, text) {
     var n = document.createElement(tag);
@@ -23,12 +26,19 @@
   }
   area.addEventListener('input', updateCount);
 
-  // Fetch from a link: fills the box for review; nothing is assessed until "Assess".
+  form.querySelector('[data-fit-clear]').addEventListener('click', function () {
+    area.value = '';
+    updateCount();
+    out.replaceChildren(el('p', 'muted', 'Cleared. Paste another posting to get a new read.'));
+    area.focus();
+  });
+
+  // ---------- fetch from a link ----------
   var linkBox = form.querySelector('[data-fit-link]');
-  var urlInput = form.querySelector('#jd-url');
-  var fetchBtn = form.querySelector('[data-fit-fetch]');
-  var fetchStatus = form.querySelector('[data-fit-fetch-status]');
   if (linkBox) {
+    var urlInput = form.querySelector('#jd-url');
+    var fetchBtn = form.querySelector('[data-fit-fetch]');
+    var fetchStatus = form.querySelector('[data-fit-fetch-status]');
     linkBox.hidden = false;
     var fetching = false;
     var doFetch = function () {
@@ -56,139 +66,185 @@
     urlInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); doFetch(); } });
   }
 
-  form.querySelector('[data-fit-clear]').addEventListener('click', function () {
-    area.value = '';
-    updateCount();
-    out.replaceChildren(el('p', 'muted', 'Cleared. Paste another posting to get a new read.'));
-    area.focus();
-  });
-
+  // ---------- rendering ----------
   var READ = { meets: ['Meets', '✓'], partly: ['Partly', '◐'], gap: ['Gap', '✕'] };
   var FIT = { strong: 'Strong fit', partial: 'Partial fit', weak: 'Weak fit', not_assessed: 'Not assessed' };
-  var KIND = { must_have: 'Must-have', nice_to_have: 'Nice-to-have', unclear: 'Unclear' };
+  var MODEL_NAMES = { 'claude-opus-5-5': 'Claude Opus 5.5', 'claude-sonnet-5-5': 'Claude Sonnet 5.5' };
 
   function evidenceHref(id) {
-    return /^(summary|skills|education)$/.test(id) ? '/#' + id : '/#' + encodeURIComponent(id);
+    return /^(summary|skills|education)$/.test(id) ? '/#' + id : id === 'facts' ? '/#experience' : '/#' + encodeURIComponent(id);
   }
 
-  function render(report, meta) {
+  // Renders a full or partial report into `box`. Partial renders skip the footer.
+  function render(box, report, meta, partial) {
     var frag = document.createDocumentFragment();
-    if (report.input_assessment !== 'job_posting') {
+    if (!partial && report.input_assessment && report.input_assessment !== 'job_posting') {
       frag.appendChild(el('p', 'fit-summary', report.input_assessment === 'not_a_job_posting'
         ? "That doesn't look like a job posting, so there's nothing to assess. Paste the role description and requirements."
-        : 'There isn\'t enough in that posting to assess. Paste the full description, including requirements.'));
-      out.replaceChildren(frag);
+        : "There isn't enough in that posting to assess. Paste the full description, including requirements."));
+      box.replaceChildren(frag);
       return;
     }
-
-    var head = el('div', 'fit-head');
-    head.appendChild(el('span', 'fit-badge fit-badge--' + report.fit, FIT[report.fit] || report.fit));
-    var role = [report.role_title, report.company].filter(Boolean).join(' · ');
-    if (role) head.appendChild(el('span', 'muted', role));
-    frag.appendChild(head);
-    frag.appendChild(el('p', 'fit-summary', report.summary));
-
-    if (report.manipulation_detected) {
-      frag.appendChild(el('p', 'fit-callout', 'The posting contained instructions aimed at this tool. They were ignored; only the job content was assessed.'));
+    if (report.fit) {
+      var head = el('div', 'fit-head');
+      head.appendChild(el('span', 'fit-badge fit-badge--' + report.fit, FIT[report.fit] || report.fit));
+      var role = [report.role_title, report.company].filter(Boolean).join(' · ');
+      if (role) head.appendChild(el('span', 'muted small', role));
+      frag.appendChild(head);
     }
+    if (report.summary) frag.appendChild(el('p', 'fit-summary', report.summary));
+    if (report.manipulation_detected) frag.appendChild(el('p', 'fit-callout', 'The posting contained instructions aimed at this tool. They were ignored.'));
 
-    if (report.requirements.length) {
-      var wrap = el('div', 'fit-table-wrap');
-      var table = el('table', 'fit-table');
-      var thead = el('thead');
-      var hr = el('tr');
-      ['Posting asks for', 'Evidence on the CV', 'Read'].forEach(function (h) { var th = el('th', null, h); th.scope = 'col'; hr.appendChild(th); });
-      thead.appendChild(hr);
-      table.appendChild(thead);
-      var tbody = el('tbody');
-      report.requirements.forEach(function (r) {
-        var tr = el('tr');
-        var ask = el('td');
-        ask.appendChild(el('strong', null, r.requirement));
-        ask.appendChild(el('span', 'fit-kind', KIND[r.kind] || ''));
-        tr.appendChild(ask);
-
-        var ev = el('td');
-        if (r.evidence.length) {
-          r.evidence.forEach(function (e) {
-            var item = el('div', 'fit-ev');
-            var a = el('a', null, e.source);
-            a.href = evidenceHref(e.card_id);
-            item.appendChild(a);
-            item.appendChild(el('q', null, e.quote));
-            if (e.why) item.appendChild(el('span', 'muted small', e.why));
-            ev.appendChild(item);
-          });
-        } else {
-          ev.appendChild(el('span', 'muted', 'Nothing on the CV shows this.'));
-        }
-        if (r.explanation) ev.appendChild(el('p', 'fit-expl', r.explanation));
-        if (r.note) ev.appendChild(el('p', 'fit-expl muted small', r.note));
-        tr.appendChild(ev);
-
+    var reqs = report.requirements || [];
+    if (reqs.length) {
+      var ul = el('ul', 'fit-rows');
+      reqs.forEach(function (r) {
+        var li = el('li', 'fit-row fit-row--' + r.read);
         var read = READ[r.read] || [r.read, ''];
-        var rd = el('td');
-        rd.appendChild(el('span', 'fit-read-chip fit-read-chip--' + r.read, read[1] + ' ' + read[0]));
-        tr.appendChild(rd);
-        tbody.appendChild(tr);
+        li.appendChild(el('span', 'fit-read-chip fit-read-chip--' + r.read, read[1] + ' ' + read[0]));
+        var body = el('div', 'fit-row__body');
+        var line = el('p', 'fit-row__line');
+        line.appendChild(el('strong', null, r.requirement));
+        if (r.evidence && r.evidence.length) {
+          line.appendChild(document.createTextNode(' — '));
+          r.evidence.forEach(function (e, i) {
+            if (i) line.appendChild(document.createTextNode('; '));
+            var a = el('a', null, e.label || e.source);
+            a.href = evidenceHref(e.card_id);
+            a.title = e.source + ': ' + e.quote; // the CV's own words on hover
+            line.appendChild(a);
+          });
+        }
+        body.appendChild(line);
+        if (r.explanation) body.appendChild(el('p', 'fit-row__why', r.explanation + (r.note ? ' ' + r.note : '')));
+        li.appendChild(body);
+        ul.appendChild(li);
       });
-      table.appendChild(tbody);
-      wrap.appendChild(table);
-      frag.appendChild(wrap);
-    }
-
-    if (report.unsettled && report.unsettled.length) {
-      frag.appendChild(el('h3', null, "What the posting doesn't settle"));
-      var ul = el('ul', 'fit-list');
-      report.unsettled.forEach(function (u) { ul.appendChild(el('li', null, u)); });
       frag.appendChild(ul);
     }
-
+    if (partial) {
+      frag.appendChild(el('p', 'fit-loading', 'Writing the read…'));
+      box.replaceChildren(frag);
+      return;
+    }
+    if (report.unsettled && report.unsettled.length) {
+      var open = el('p', 'fit-open small');
+      open.appendChild(el('strong', null, 'Open questions: '));
+      open.appendChild(document.createTextNode(report.unsettled.join(' · ')));
+      frag.appendChild(open);
+    }
     var how = el('details', 'fit-how');
     how.appendChild(el('summary', null, 'How this read was produced'));
-    how.appendChild(el('p', null, cfg.method || ''));
-    var bits = ['Model: ' + (meta.model || 'unknown'), 'Prompt: ' + (meta.prompt || '')];
+    how.appendChild(el('p', 'small', cfg.method || ''));
+    var bits = [MODEL_NAMES[meta.model] || meta.model || 'unknown model', 'prompt ' + (meta.prompt || '')];
     if (report.verification && report.verification.droppedCitations) bits.push(report.verification.droppedCitations + ' unverifiable citation(s) removed');
     how.appendChild(el('p', 'muted small mono', bits.join(' · ')));
-    frag.appendChild(how);
-
     var corr = el('p', 'small');
-    corr.appendChild(document.createTextNode('Think the read is wrong? '));
     var mail = el('a', null, 'Send a correction');
     mail.href = 'mailto:' + (cfg.email || '') + '?subject=' + encodeURIComponent('Job-fit read correction' + (role ? ': ' + role : ''));
+    corr.appendChild(document.createTextNode('Think the read is wrong? '));
     corr.appendChild(mail);
-    corr.appendChild(document.createTextNode('.'));
-    frag.appendChild(corr);
-
-    out.replaceChildren(frag);
+    how.appendChild(corr);
+    frag.appendChild(how);
+    box.replaceChildren(frag);
   }
 
+  // Streams one assessment into `box`. Resolves with { ok, meta } when done.
+  function runOne(box, jd, model, onTick) {
+    var started = Date.now();
+    var status = el('p', 'fit-loading', 'Reading the posting against the CV…');
+    box.replaceChildren(status);
+    var gotPartial = false;
+    var tick = setInterval(function () {
+      var s = Math.round((Date.now() - started) / 1000);
+      if (!gotPartial) status.textContent = 'Reading the posting against the CV… ' + s + 's';
+      if (onTick) onTick(s);
+    }, 1000);
+    var payload = { jd: jd };
+    if (model) payload.model = model;
+    return fetch('/api/job-fit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+      .then(function (res) {
+        var type = res.headers.get('Content-Type') || '';
+        if (!res.ok || type.indexOf('ndjson') === -1) {
+          return res.json().catch(function () { return {}; }).then(function (d) { box.replaceChildren(el('p', 'fit-error', d.message || 'Something went wrong. Please try again.')); return { ok: false }; });
+        }
+        var reader = res.body.getReader();
+        var decoder = new TextDecoder();
+        var buf = '';
+        var result = { ok: false };
+        function handle(line) {
+          if (!line.trim()) return;
+          var ev;
+          try { ev = JSON.parse(line); } catch (e) { return; }
+          if (ev.type === 'partial' && ev.report) { gotPartial = true; render(box, ev.report, {}, true); }
+          else if (ev.type === 'final') { render(box, ev.report, ev.meta || {}, false); result = { ok: true, meta: ev.meta || {} }; }
+          else if (ev.type === 'error') { box.replaceChildren(el('p', 'fit-error', ev.message)); result = { ok: false }; }
+        }
+        function pump() {
+          return reader.read().then(function (chunk) {
+            if (chunk.done) { handle(buf); return result; }
+            buf += decoder.decode(chunk.value, { stream: true });
+            var lines = buf.split('\n');
+            buf = lines.pop();
+            lines.forEach(handle);
+            return pump();
+          });
+        }
+        return pump();
+      })
+      .catch(function () { box.replaceChildren(el('p', 'fit-error', "Couldn't reach the server. Check your connection and try again.")); return { ok: false }; })
+      .finally(function () { clearInterval(tick); });
+  }
+
+  // ---------- compare mode (Nathan only) ----------
+  var columns = null;
+  if (compare) {
+    var note = el('p', 'fit-compare-note small', 'Compare mode: each Assess runs Claude Opus 5.5 and Claude Sonnet 5.5 side by side. Only works while signed in as admin; both runs count toward the monthly budget.');
+    form.insertBefore(note, form.firstChild);
+    var grid = el('div', 'fit-compare');
+    columns = [['opus', 'Claude Opus 5.5'], ['sonnet', 'Claude Sonnet 5.5']].map(function (m) {
+      var col = el('section', 'fit-compare__col');
+      col.appendChild(el('h3', null, m[1]));
+      var stats = el('p', 'muted small mono', '');
+      var box = el('div', 'fit-compare__box');
+      col.appendChild(stats);
+      col.appendChild(box);
+      grid.appendChild(col);
+      return { key: m[0], stats: stats, box: box };
+    });
+    out.replaceChildren(grid);
+  }
+
+  // ---------- submit ----------
   var busy = false;
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     if (busy) return;
     var jd = area.value.trim();
     if (jd.length < MIN) {
-      out.replaceChildren(el('p', 'fit-error', jd ? 'That looks too short to assess. Paste the full job description, including requirements.' : 'Paste a job description first.'));
+      var msg = jd ? 'That looks too short to assess. Paste the full job description, including requirements.' : 'Paste a job description first.';
+      if (columns) columns[0].box.replaceChildren(el('p', 'fit-error', msg)); else out.replaceChildren(el('p', 'fit-error', msg));
       area.focus();
       return;
     }
     busy = true;
     submit.disabled = true;
     submit.textContent = 'Reading…';
-    var started = Date.now();
-    var status = el('p', 'fit-loading', 'Reading the posting against the CV. This usually takes 20 to 60 seconds.');
-    out.replaceChildren(status);
-    var tick = setInterval(function () { status.textContent = 'Reading the posting against the CV… ' + Math.round((Date.now() - started) / 1000) + 's'; }, 1000);
+    var done = function () { busy = false; submit.disabled = false; submit.textContent = 'Assess'; };
 
-    fetch('/api/job-fit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ jd: jd }) })
-      .then(function (res) { return res.json().catch(function () { return {}; }).then(function (data) { return { ok: res.ok, data: data }; }); })
-      .then(function (r) {
-        if (!r.ok) { out.replaceChildren(el('p', 'fit-error', r.data.message || 'Something went wrong. Please try again.')); return; }
-        render(r.data.report, r.data.meta || {});
-        out.closest('.fit-read').scrollIntoView({ behavior: 'smooth', block: 'start' });
-      })
-      .catch(function () { out.replaceChildren(el('p', 'fit-error', "Couldn't reach the server. Check your connection and try again.")); })
-      .finally(function () { clearInterval(tick); busy = false; submit.disabled = false; submit.textContent = 'Assess'; });
+    if (columns) {
+      Promise.all(columns.map(function (c) {
+        c.stats.textContent = '0s';
+        return runOne(c.box, jd, c.key, function (s) { c.stats.textContent = s + 's'; }).then(function (r) {
+          if (r.ok) {
+            var m = r.meta;
+            c.stats.textContent = (m.durationMs / 1000).toFixed(1) + 's total · first words at ' + (m.firstTextMs / 1000).toFixed(1) + 's' + (m.cost != null ? ' · $' + m.cost.toFixed(3) : '');
+          }
+        });
+      })).finally(done);
+      return;
+    }
+    out.closest('.fit-read').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    runOne(out, jd, null).finally(done);
   });
 })();

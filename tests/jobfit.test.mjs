@@ -32,9 +32,11 @@ test('summary, skills and education are citable', () => {
   assert.equal(out.requirements[0].evidence.length, 2);
 });
 
-test('at most 12 requirements are shown', () => {
+test('the read stays short: at most 6 requirements and 2 open questions', () => {
   const reqs = Array.from({ length: 20 }, (_, i) => ({ requirement: `r${i}`, kind: 'unclear', read: 'gap', explanation: '', evidence: [] }));
-  assert.equal(verifyReport({ ...base, requirements: reqs }, cv).requirements.length, 12);
+  const out = verifyReport({ ...base, requirements: reqs, unsettled: ['a', 'b', 'c'] }, cv);
+  assert.equal(out.requirements.length, 6);
+  assert.equal(out.unsettled.length, 2);
 });
 
 test('cost accounting uses per-model prices and cache rates', () => {
@@ -74,4 +76,13 @@ test('"facts" is citable and carries the computed tenure', () => {
     { requirement: '5+ years PM', kind: 'must_have', read: 'meets', explanation: '', evidence: [{ card_id: 'facts', why: 'computed' }] },
   ] }, cv);
   assert.match(out.requirements[0].evidence[0].quote, /years? .*product management experience/);
+});
+
+test('mid-stream rows without a complete read are held back', () => {
+  const out = verifyReport({ fit: 'strong', requirements: [
+    { requirement: 'Done', kind: 'must_have', evidence: [{ card_id: firstCard.id }], explanation: 'x', read: 'meets' },
+    { requirement: 'Still streaming', kind: 'must_have', evidence: [], explanation: 'half', read: 'me' },
+  ] }, cv);
+  assert.deepEqual(out.requirements.map((r) => r.requirement), ['Done']);
+  assert.equal(out.requirements[0].evidence[0].label, firstCard.headline);
 });

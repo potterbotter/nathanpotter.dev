@@ -2,7 +2,7 @@
 //   burst per IP (Cloudflare rate limiter) → 5/day per IP (hashed, never stored) → site-wide daily cap
 //   → monthly budget (switches the tool off) → Anthropic Console spend limit (hard backstop).
 // Nathan, signed in through Cloudflare Access, is exempt from the per-IP and daily limits.
-import { assess, fakeAssess, PROMPT_VERSION } from './jobfit.js';
+import { assess, fakeAssess, PROMPT_VERSION, MODELS } from './jobfit.js';
 import { verifyAccessJwt } from './access.js';
 import { dayKey } from './analytics.js';
 import { fetchPosting, FetchError } from './fetchjd.js';
@@ -23,6 +23,8 @@ async function ipKey(env, day, ip) {
 }
 
 async function isAdmin(request, env) {
+  const host = new URL(request.url).hostname;
+  if (env.DEV_BYPASS_ACCESS === 'true' && (host === 'localhost' || host === '127.0.0.1')) return true; // local development only
   const m = (request.headers.get('Cookie') || '').match(/(?:^|;\s*)CF_Authorization=([^;]+)/);
   if (!m || !env.ACCESS_TEAM_DOMAIN || !env.ACCESS_AUD || !env.ADMIN_EMAIL) return false;
   const p = await verifyAccessJwt(m[1], env.ACCESS_TEAM_DOMAIN, env.ACCESS_AUD);
@@ -137,25 +139,54 @@ export async function handleJobFit(request, env, ctx, url, cv) {
   const { spent, budget } = await monthSpend(env, month);
   if (spent + ESTIMATED_RUN_USD > budget) return fail(503, 'budget', 'The tool is paused for the rest of the month. Email hello@nathanpotter.dev and Nathan will reply directly.');
 
-  let result;
-  try {
-    result = devHost && env.DEV_FAKE_MODEL === 'true' ? fakeAssess(cv, jd) : await assess(env, cv, jd);
-  } catch (err) {
-    console.error('job-fit error', err);
-    result = { status: 'error', error: 'The assessment service failed.', cost: 0 };
+  // Model choice is admin-only (the Opus vs Sonnet comparison); visitors always get the default.
+  let modelKey = 'opus';
+  if (body?.model !== undefined) {
+    if (!admin) return fail(403, 'model', 'Model selection is not available.');
+    if (!MODELS[body.model]) return fail(400, 'model', 'Unknown model.');
+    modelKey = body.model;
   }
 
-  const r = result.report || {};
-  const u = result.usage || {};
-  await env.DB.prepare(`INSERT INTO jobfit_runs (ts, day, month, ipkey, admin, status, model, input_tokens, output_tokens, cache_read, cache_write, cost_usd, duration_ms, fit, role_title, company, jd_chars, jd_text, result_json, error)
-    VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19, ?20)`).bind(
-    now, day, month, key, admin ? 1 : 0, result.status, result.model || null, u.input_tokens ?? null, u.output_tokens ?? null,
-    u.cache_read_input_tokens ?? null, u.cache_creation_input_tokens ?? null, result.cost || 0, result.durationMs ?? null,
-    r.fit || null, r.role_title || null, r.company || null, jd.length, jd, result.report ? JSON.stringify(result.report) : null, result.error || null,
-  ).run();
-  ctx.waitUntil(budgetAlerts(env, ctx));
+  // Stream newline-delimited JSON events: {type:"partial"|"final"|"error", ...}.
+  const { readable, writable } = new TransformStream();
+  const writer = writable.getWriter();
+  const enc = new TextEncoder();
+  const send = (event) => writer.write(enc.encode(JSON.stringify(event) + '\n')).catch(() => {});
 
-  if (result.status === 'refused') return fail(422, 'refused', "This posting couldn't be assessed. Try pasting only the role description and requirements.");
-  if (result.status !== 'ok') return fail(502, 'failed', `${result.error || 'Something went wrong.'} You haven't been charged an attempt for errors on our side.`);
-  return json({ report: result.report, meta: { model: result.model, prompt: PROMPT_VERSION, cvUpdated: env.CV_VERSION || null } });
+  ctx.waitUntil((async () => {
+    let result;
+    try {
+      await send({ type: 'started', model: MODELS[modelKey] });
+      const run = devHost && env.DEV_FAKE_MODEL === 'true' ? fakeAssess : assess;
+      result = await run(env, cv, jd, { model: modelKey, onPartial: (report) => send({ type: 'partial', report }) });
+    } catch (err) {
+      console.error('job-fit error', err);
+      result = { status: 'error', error: 'The assessment service failed.', cost: 0 };
+    }
+    try {
+      const r = result.report || {};
+      const u = result.usage || {};
+      await env.DB.prepare(`INSERT INTO jobfit_runs (ts, day, month, ipkey, admin, status, model, input_tokens, output_tokens, cache_read, cache_write, cost_usd, duration_ms, fit, role_title, company, jd_chars, jd_text, result_json, error)
+        VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19, ?20)`).bind(
+        now, day, month, key, admin ? 1 : 0, result.status, result.model || null, u.input_tokens ?? null, u.output_tokens ?? null,
+        u.cache_read_input_tokens ?? null, u.cache_creation_input_tokens ?? null, result.cost || 0, result.durationMs ?? null,
+        r.fit || null, r.role_title || null, r.company || null, jd.length, jd, result.report ? JSON.stringify(result.report) : null, result.error || null,
+      ).run();
+      await budgetAlerts(env, ctx);
+    } catch (err) {
+      console.error('job-fit logging error', err);
+    }
+    if (result.status === 'ok') {
+      const meta = { model: result.model, prompt: PROMPT_VERSION, durationMs: result.durationMs, firstTextMs: result.firstTextMs };
+      if (admin) meta.cost = result.cost;
+      await send({ type: 'final', report: result.report, meta });
+    } else if (result.status === 'refused') {
+      await send({ type: 'error', message: "This posting couldn't be assessed. Try pasting only the role description and requirements." });
+    } else {
+      await send({ type: 'error', message: `${result.error || 'Something went wrong.'} That attempt didn't count toward your daily limit.` });
+    }
+    await writer.close().catch(() => {});
+  })());
+
+  return new Response(readable, { headers: { 'Content-Type': 'application/x-ndjson; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' } });
 }

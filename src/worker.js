@@ -90,7 +90,7 @@ async function routeAdmin(request, env, url) {
   if (path === '/admin/dashboard/' && method === 'GET') {
     const data = await dashboardData(env, url.searchParams.get('range') || '30d');
     const spend = await monthSpend(env);
-    const runs = (await env.DB.prepare('SELECT ts, status, fit, role_title, company, cost_usd, admin FROM jobfit_runs ORDER BY ts DESC LIMIT 15').all()).results;
+    const runs = (await env.DB.prepare('SELECT ts, status, model, fit, role_title, company, cost_usd, duration_ms, admin FROM jobfit_runs ORDER BY ts DESC LIMIT 15').all()).results;
     data.jobfit = { ...spend, recent: runs };
     return html(T.dashboardPage(pageCtx(bundledCv), data));
   }

@@ -606,6 +606,11 @@ export function adminHomePage(ctx, { drafts, lastPublished }) {
 <span class="muted">Who visits, from where, what they read and click. Cookieless; no IP addresses stored.</span>
 <span class="tile__action">Open the dashboard</span>
 </a>
+<a class="tile" href="/tools/job-fit/?compare=1">
+<span class="tile__head"><span class="tile__name">Job-fit A/B test</span><span class="status">Testing</span></span>
+<span class="muted">Run Claude Opus 5.5 and Sonnet 5.5 side by side on the same posting, with time and cost for each.</span>
+<span class="tile__action">Compare models</span>
+</a>
 <div class="tile tile--unbuilt" aria-disabled="true">
 <span class="tile__head"><span class="tile__name">Résumé generator</span><span class="status status--unbuilt">Not built yet</span></span>
 <span class="muted">Tailored, ATS-safe résumés from the same facts. Comes with the job-fit engine.</span>
@@ -688,8 +693,8 @@ function jobFitPanel(j) {
 <div class="stat"><span class="label">Assessments this month</span><strong>${fmtNum(j.runs)}</strong><span class="muted small">including yours</span></div>
 </div>
 <section class="dash-card dash-card--wide"><header><h2>Recent assessments</h2><p class="muted small">Latest 15. The pasted postings and full reads are stored in the database.</p></header>
-${j.recent.length ? `<table class="data-table"><thead><tr><th scope="col">When</th><th scope="col">Role</th><th scope="col">Read</th><th scope="col">Status</th><th scope="col">Cost</th></tr></thead><tbody>
-${join(j.recent, (r) => `<tr><td>${esc(fmtTime(r.ts))}</td><td>${esc([r.role_title, r.company].filter(Boolean).join(' · ') || '—')}${r.admin ? ' <span class="muted">(you)</span>' : ''}</td><td>${esc(r.fit || '—')}</td><td>${esc(r.status)}</td><td>$${Number(r.cost_usd || 0).toFixed(3)}</td></tr>`)}
+${j.recent.length ? `<table class="data-table"><thead><tr><th scope="col">When</th><th scope="col">Role</th><th scope="col">Model</th><th scope="col">Read</th><th scope="col">Status</th><th scope="col">Time</th><th scope="col">Cost</th></tr></thead><tbody>
+${join(j.recent, (r) => `<tr><td>${esc(fmtTime(r.ts))}</td><td>${esc([r.role_title, r.company].filter(Boolean).join(' · ') || '—')}${r.admin ? ' <span class="muted">(you)</span>' : ''}</td><td>${esc(String(r.model || '—').replace('claude-', ''))}</td><td>${esc(r.fit || '—')}</td><td>${esc(r.status)}</td><td>${r.duration_ms ? (r.duration_ms / 1000).toFixed(0) + 's' : '—'}</td><td>${Number(r.cost_usd || 0).toFixed(3)}</td></tr>`)}
 </tbody></table>` : '<p class="muted small">No assessments yet.</p>'}
 </section>`;
 }
