@@ -150,19 +150,32 @@ export async function readMail(env, mail, apps, { useClaude = true } = {}) {
 
 // ---------- the email() handler ----------
 export async function handleEmail(message, env, ctx) {
-  // 1. Keep a copy to read, then 2. forward. Delivery never waits on reading.
-  let raw = null;
-  try { raw = await new Response(message.raw).arrayBuffer(); } catch (err) { console.error('mail read error', err); }
+  // 1. Forward. Nothing touches the message before this, so delivery never depends on reading.
+  const source = env.EMAIL_FORWARD_TO ? 'EMAIL_FORWARD_TO' : env.ALERT_EMAIL ? 'ALERT_EMAIL' : env.ADMIN_EMAIL ? 'ADMIN_EMAIL' : 'none';
   const to = env.EMAIL_FORWARD_TO || env.ALERT_EMAIL || env.ADMIN_EMAIL;
   try {
     if (!to) throw new Error('No forwarding address configured');
     await message.forward(to);
   } catch (err) {
     console.error('mail forward failed', err);
+    await note(env, 'mail_forward_error', `${source} → @${domainOf(to) || '?'}: ${err?.message || err}`);
     message.setReject('Temporary problem delivering to this address. Please try again later.');
     return;
   }
-  if (raw) ctx.waitUntil(processMail(env, raw).catch((err) => console.error('mail process error', err)));
+  // 2. Then read it, in the background.
+  ctx.waitUntil((async () => {
+    let raw;
+    try { raw = await new Response(message.raw).arrayBuffer(); } catch (err) { await note(env, 'mail_read_error', String(err?.message || err)); return; }
+    await processMail(env, raw).catch((err) => note(env, 'mail_process_error', String(err?.stack || err).slice(0, 500)));
+  })());
+}
+
+// Last mail error by kind, kept in meta for diagnosis (the Worker's logs need dashboard access to read).
+async function note(env, key, value) {
+  console.error(key, value);
+  try {
+    await env.DB.prepare('INSERT INTO meta (key, value) VALUES (?1, ?2) ON CONFLICT(key) DO UPDATE SET value = ?2').bind(key, `${new Date().toISOString()} ${value}`.slice(0, 1000)).run();
+  } catch {}
 }
 
 export async function processMail(env, raw) {
