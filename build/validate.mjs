@@ -9,6 +9,7 @@ export function validate(cv) {
   const tags = new Set(cv.experience.tags);
   for (const role of cv.experience.roles) {
     must(Number.isInteger(role.nextCard), `Role ${role.anchor} needs a numeric nextCard`);
+    must(/^[A-Z][a-z]{2} \d{4} [–-] ([A-Z][a-z]{2} \d{4}|present)$/.test(role.dates), `Role ${role.anchor} dates must look like "Jan 2025 – present" (the job-fit tool computes tenure from them)`);
     const prefix = role.anchor.replace(/^exp-/, '') + '-';
     for (const card of role.cards) {
       must(typeof card.id === 'string' && card.id.startsWith(prefix), `Card id "${card.id}" doesn't belong to ${role.anchor}`);
