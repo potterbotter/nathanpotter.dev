@@ -197,6 +197,35 @@
     update();
   }
 
+  // Switching CV views keeps the reader's place. Views differ in height (different cards are folded), so the
+  // position is saved relative to the section or role being read, then restored on the next view.
+  var viewSwitches = document.querySelectorAll('nav[aria-label="Views of this CV"] a, .view-banner a[href="/"]');
+  if (viewSwitches.length) {
+    var KEY = 'np-view-scroll';
+    var anchorsAbove = function (y) {
+      var pick = null;
+      document.querySelectorAll('#main section[id], #main article[id]').forEach(function (el) {
+        if (el.getBoundingClientRect().top + y <= y + 1) pick = el;
+      });
+      return pick;
+    };
+    viewSwitches.forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        if (e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return; // new tab or window: start at the top
+        var y = window.scrollY, el = anchorsAbove(y);
+        var saved = { to: a.pathname, at: Date.now(), y: y, id: el ? el.id : '', offset: el ? y - (el.getBoundingClientRect().top + y) : y };
+        try { sessionStorage.setItem(KEY, JSON.stringify(saved)); } catch (err) {}
+      });
+    });
+    var saved = null;
+    try { saved = JSON.parse(sessionStorage.getItem(KEY) || 'null'); sessionStorage.removeItem(KEY); } catch (err) {}
+    if (saved && saved.to === location.pathname && Date.now() - saved.at < 15000 && !location.hash && saved.y > 0) {
+      var target = saved.id && document.getElementById(saved.id);
+      var top = target ? target.getBoundingClientRect().top + window.scrollY + Math.min(saved.offset, Math.max(0, target.offsetHeight - 40)) : saved.y;
+      window.scrollTo({ top: top, behavior: 'instant' });
+    }
+  }
+
   // Print: open every disclosure so collapsed content prints.
   window.addEventListener('beforeprint', function () {
     root.setAttribute('data-printing', '1'); // so analytics doesn't count these as expands
