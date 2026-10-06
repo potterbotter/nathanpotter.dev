@@ -27,7 +27,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .brand-link:hover { color: var(--ink); }
 .brand-link strong { font-size: var(--fs-3); letter-spacing: -.01em; }
 .brand-link span { font-family: var(--mono); font-size: var(--fs-1); color: var(--ink-2); overflow-wrap: anywhere; }
-.header-actions { display: flex; align-items: center; gap: var(--sp-2); }
+.header-actions { display: flex; align-items: center; gap: var(--sp-2); margin-left: auto; }
 .nav-wide { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-1); }
 .navlink { display: inline-flex; align-items: center; gap: 6px; min-height: var(--tap); padding: 0 12px; border-radius: var(--r-1); color: var(--ink-2); text-decoration: none; }
 .navlink:hover { background: var(--surface-2); color: var(--ink); }
@@ -106,7 +106,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
 
 /* ---------- CV layout ---------- */
 .cv-body { display: flex; flex-wrap: wrap; align-items: flex-start; gap: var(--sp-7); padding-block: var(--sp-7); }
-.rail { flex: 1 1 200px; max-width: var(--rail-w); display: flex; flex-direction: column; gap: var(--sp-6); }
+/* Sticky rail: stays in view while the CV scrolls; scrolls itself if the window is short. */
+.rail { flex: 1 1 200px; max-width: var(--rail-w); display: flex; flex-direction: column; gap: var(--sp-6); position: sticky; top: var(--sp-5); max-height: calc(100vh - 2 * var(--sp-5)); overflow-y: auto; }
 .rail nav { display: flex; flex-direction: column; gap: var(--sp-2); }
 .rail .views { display: flex; flex-direction: column; gap: var(--sp-1); }
 .rail .views a { padding: 8px 12px; border-radius: var(--r-1); color: var(--ink); text-decoration: none; }

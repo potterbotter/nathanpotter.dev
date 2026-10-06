@@ -85,7 +85,6 @@ function header(ctx, path, current) {
   const pdfRow = ctx.flags.pdfLive ? `<a class="menu-row menu-row--small" href="/nathan-potter-resume.pdf">Download the CV as a PDF</a>` : '';
   return `<header class="site-header noprint">
 <div class="wrap">
-<a class="brand-link" href="/"><strong>${esc(person.name)}</strong><span>nathanpotter.dev${esc(path)}</span></a>
 <div class="header-actions">
 <nav class="nav-wide" aria-label="Site">
 ${navLinks}

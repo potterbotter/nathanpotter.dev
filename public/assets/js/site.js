@@ -77,6 +77,23 @@
     });
   }
 
+  // Sticky "On this page" rail: highlight the section being read.
+  var railLinks = document.querySelectorAll('.rail ol a[href^="#"]');
+  if (railLinks.length && 'IntersectionObserver' in window) {
+    var byId = {};
+    railLinks.forEach(function (a) { byId[a.getAttribute('href').slice(1)] = a; });
+    var visibleIds = new Set();
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) visibleIds.add(e.target.id); else visibleIds.delete(e.target.id); });
+      var current = null;
+      railLinks.forEach(function (a) { var id = a.getAttribute('href').slice(1); if (!current && visibleIds.has(id)) current = id; });
+      if (!current) return;
+      railLinks.forEach(function (a) { a.removeAttribute('aria-current'); });
+      byId[current].setAttribute('aria-current', 'true');
+    }, { rootMargin: '-20% 0px -60% 0px' });
+    Object.keys(byId).forEach(function (id) { var s = document.getElementById(id); if (s) observer.observe(s); });
+  }
+
   // Print: open every disclosure so collapsed content prints.
   window.addEventListener('beforeprint', function () {
     document.querySelectorAll('details').forEach(function (d) { d.open = true; });

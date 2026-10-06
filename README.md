@@ -116,4 +116,5 @@ DNS and email are on Cloudflare too:
 | 2026-10-05 | Access token verification extracted and unit-tested (forged, tampered, expired, wrong-audience, unsigned) | It's the lock that matters if an Access rule is ever misconfigured, and the code is public. |
 | 2026-10-05 | Footer email button fixed (white on white) | Caught in an edit-mode screenshot. The footer link colour overrode the button's colour. |
 | 2026-10-05 | Tab icon "Ruled N" (from a Claude Design pass): teal N over the maroon title rule | Echoes the rule under every page heading. Built from shapes, not a font, so it renders the same everywhere. The SVG follows the system's light/dark setting. Sources and spec in `design/icon/`. |
+| 2026-10-05 | Name/URL removed from the header; CV rail made sticky, with the current section highlighted | Nathan's call after seeing it live. The hero already carries the name, and a sticky contents list helps on a long CV. Overrides the handoff's "not sticky". |
 | 2026-10-05 | Built with Claude Code (AI-assisted) | Scaffolding, README and deploy steps were produced in a Claude Code session, with dashboard steps done by hand. |
