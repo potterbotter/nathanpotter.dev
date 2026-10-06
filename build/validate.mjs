@@ -37,5 +37,27 @@ export function validate(cv) {
     }
   }
   must(Array.isArray(cv.about), 'About must be a list of paragraphs');
+
+  // Résumé building blocks: every variant has a unique id and non-empty text.
+  if (cv.resume) {
+    must(Array.isArray(cv.resume.titles) && cv.resume.titles.length && cv.resume.titles.every((t) => typeof t === 'string' && t.trim()), 'Résumé needs at least one title');
+    const sids = new Set();
+    for (const s of cv.resume.summaries || []) {
+      must(s.id && !sids.has(s.id), `Duplicate or missing summary id: ${s.id}`);
+      sids.add(s.id);
+      must(typeof s.text === 'string' && s.text.trim(), `Summary ${s.id} is empty`);
+    }
+    must(sids.size > 0, 'Résumé needs at least one summary');
+  }
+  for (const role of cv.experience.roles) {
+    for (const card of role.cards) {
+      const vids = new Set();
+      for (const v of card.variants || []) {
+        must(v.id && !vids.has(v.id), `Card ${card.id} has a duplicate or missing variant id`);
+        vids.add(v.id);
+        must(typeof v.text === 'string' && v.text.trim(), `Card ${card.id} variant ${v.id} is empty`);
+      }
+    }
+  }
   return true;
 }

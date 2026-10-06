@@ -507,7 +507,27 @@ ${fitForm(ctx.cv, { bench: true, compare })}
 <div data-fit-read aria-live="polite"><p class="muted">Run a read to start. Each requirement gets a Discuss button.</p></div>
 </section>
 </div>
-<section class="bench-chat" aria-labelledby="h-chat" data-kb-chat>
+<div class="bench-right">
+<div class="bench-tabs" role="tablist" aria-label="Test bench panels">
+<button type="button" role="tab" id="tab-chat" aria-controls="panel-chat" aria-selected="true" data-tab="chat">Chat</button>
+<button type="button" role="tab" id="tab-resume" aria-controls="panel-resume" aria-selected="false" data-tab="resume">Résumé</button>
+</div>
+<section class="bench-resume" id="panel-resume" role="tabpanel" aria-labelledby="tab-resume" data-resume hidden>
+<div class="resume-controls">
+<div class="resume-controls__row">
+<label>Company<input type="text" data-r-company placeholder="From the read"></label>
+<label>Role<input type="text" data-r-role placeholder="From the read"></label>
+<label>Length<select data-r-length><option value="one">One page</option><option value="two">Two pages</option></select></label>
+</div>
+<div class="row-links"><button type="button" class="btn btn--primary" data-r-generate>Generate tailored résumé</button><span class="muted small" data-r-status aria-live="polite">Uses the posting in the box on the left. About 5¢ per run.</span></div>
+<details class="resume-contact"><summary>Contact details on résumés</summary>
+<p class="muted small">Email: <span data-r-email>jobs@nathanpotter.dev</span>. Your phone is stored privately and only appears on résumés you generate here.</p>
+<div class="inline-add"><input type="tel" data-r-phone placeholder="Phone number" aria-label="Phone number"><button type="button" class="edit-btn" data-r-phone-save>Save</button></div>
+</details>
+</div>
+<div data-r-output></div>
+</section>
+<section class="bench-chat" id="panel-chat" role="tabpanel" aria-labelledby="tab-chat" data-kb-chat>
 <header class="bench-chat__head"><h2 id="h-chat">Chat with Claude</h2><button type="button" class="btn-quiet" data-kb-clear>Clear chat</button></header>
 <ol class="bench-chat__log" data-kb-log aria-live="polite"><li class="muted small">Tell Claude what the read missed, or click Discuss on a row. Example: "I ran A/B tests with LaunchDarkly at Anchorage."</li></ol>
 <form class="bench-chat__form" data-kb-form>
@@ -518,11 +538,12 @@ ${fitForm(ctx.cv, { bench: true, compare })}
 <details class="bench-notes" data-kb-notes><summary>Private notes (<span data-kb-notes-count>${notes}</span>)</summary><ul data-kb-notes-list><li class="muted small">Loading…</li></ul></details>
 </section>
 </div>
+</div>
 </main>`;
   return layout(ctx, {
     title: `Test bench — ${ctx.cv.person.name}`, description: 'Admin test bench.', path: '/admin/job-fit/', current: null, main, bare: true,
     admin: adminBar(ctx, { mode: 'bench', drafts }),
-    scripts: fitScripts(ctx.cv, { endpoint: '/api/admin/job-fit', discuss: true }) + '<script src="/admin/assets/testbench.js" defer></script>\n',
+    scripts: fitScripts(ctx.cv, { endpoint: '/api/admin/job-fit', discuss: true }) + '<script src="/admin/assets/testbench.js" defer></script>\n<script src="/admin/assets/resume.js" defer></script>\n',
   });
 }
 
@@ -660,10 +681,11 @@ export function adminHomePage(ctx, { drafts, lastPublished }) {
 <span class="muted">Run reads on real postings, answer the feedback in a chat with Claude, and approve changes to your CV and private notes.</span>
 <span class="tile__action">Open the test bench</span>
 </a>
-<div class="tile tile--unbuilt" aria-disabled="true">
-<span class="tile__head"><span class="tile__name">Résumé generator</span><span class="status status--unbuilt">Not built yet</span></span>
-<span class="muted">Tailored, ATS-safe résumés from the same facts. Comes with the job-fit engine.</span>
-</div>
+<a class="tile" href="/admin/job-fit/#resume">
+<span class="tile__head"><span class="tile__name">Résumé generator</span><span class="status">Ready</span></span>
+<span class="muted">Tailored, ATS-safe résumés assembled only from your approved blocks. Lives in the test bench's Résumé tab.</span>
+<span class="tile__action">Open the Résumé tab</span>
+</a>
 </div>
 <p class="mono muted">Last published: ${esc(lastPublished || '—')} · Drafts: ${drafts}</p>
 </main>`;

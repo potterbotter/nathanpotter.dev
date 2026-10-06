@@ -14,14 +14,15 @@ const MAX_MESSAGES = 40;
 const MAX_CHARS = 80_000;
 
 const Proposal = z.object({
-  kind: z.enum(['add_card', 'edit_card', 'add_fact', 'add_skill_wording', 'add_private_note']),
+  kind: z.enum(['add_card', 'edit_card', 'add_fact', 'add_skill_wording', 'add_summary_variant', 'add_bullet_variant', 'add_private_note']),
   role_anchor: z.string().describe('add_card only: exp-anchorage, exp-jaris or exp-mosaic. Otherwise empty.'),
-  card_id: z.string().describe('edit_card only: the existing card ID. Otherwise empty.'),
+  card_id: z.string().describe('edit_card or add_bullet_variant: the existing card ID. Otherwise empty.'),
+  label: z.string().describe('add_summary_variant: a short name such as "Fintech and risk". Otherwise empty.'),
   metric: z.string().describe('Cards: short metric, at most 10 characters (e.g. "4×", "+25%", "62"). Otherwise empty.'),
   tag: z.string().describe('Cards: one of the experience tags. Otherwise empty.'),
   headline: z.string().describe('Cards: at most 12 words, self-contained. Otherwise empty.'),
   detail: z.string().describe('Cards: the full CV bullet. Otherwise empty.'),
-  text: z.string().describe('add_fact or add_private_note: the fact or note. Otherwise empty.'),
+  text: z.string().describe('add_fact, add_private_note, add_summary_variant or add_bullet_variant: the text. Otherwise empty.'),
   skill: z.string().describe('add_skill_wording: the skill as shown on the site, or a new skill name. Otherwise empty.'),
   wording: z.string().describe('add_skill_wording: the wording to add. Otherwise empty.'),
   why: z.string().describe('One sentence: what this changes for recruiters or the tools.'),
@@ -49,6 +50,7 @@ Where new information goes (default: facts)
 - edit_card to correct or strengthen an existing card when Nathan's answer is about that card.
 - add_skill_wording for a true synonym or a new skill.
 - add_private_note for anything useful but not for the public: the story behind a number, caveats, sensitive details, interview context.
+- Résumé blocks (used only by the résumé generator, which assembles résumés from approved blocks and never writes text itself): add_summary_variant for a 2–3 sentence summary angled at a kind of role, and add_bullet_variant for an alternative phrasing of an existing card's bullet, such as a shorter version or one using a posting's vocabulary. Variants must state the same facts as the card; never stronger.
 
 Voice for public text
 - Résumé register: confident, plain, specific. Facts flat; numbers over adjectives; no exclamation points; no hype words.
@@ -191,6 +193,32 @@ export function applyProposal(content, p) {
       const group = cv.skills.groups.find((g) => g.name === 'Product practice') || cv.skills.groups[cv.skills.groups.length - 1];
       group.items.push({ forms: [...new Set([skill, wording])], shown: 0 });
       return { cv, summary: `Added the skill "${skill}" to ${group.name}` };
+    }
+    case 'add_summary_variant': {
+      const t = clean(p.text);
+      if (!t) throw new Error('The summary is empty.');
+      const label = clean(p.label) || 'Variant';
+      let id = label.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'variant';
+      const ids = new Set(cv.resume.summaries.map((x) => x.id));
+      const baseId = id;
+      for (let n = 2; ids.has(id); n++) id = `${baseId}-${n}`;
+      cv.resume.summaries.push({ id, label, text: t });
+      return { cv, summary: `Added summary variant "${label}"` };
+    }
+    case 'add_bullet_variant': {
+      const t = clean(p.text);
+      if (!t) throw new Error('The bullet is empty.');
+      for (const r of cv.experience.roles) {
+        const c = r.cards.find((x) => x.id === p.card_id);
+        if (!c) continue;
+        c.variants = c.variants || [];
+        if (c.variants.some((v) => v.text === t) || c.detail === t) return { cv, summary: `That phrasing already exists on ${c.id}` };
+        let n = c.variants.length + 1;
+        while (c.variants.some((v) => v.id === `v${n}`)) n++;
+        c.variants.push({ id: `v${n}`, text: t });
+        return { cv, summary: `Added bullet variant v${n} to ${c.id}` };
+      }
+      throw new Error(`Unknown card: ${p.card_id}`);
     }
     default:
       throw new Error(`Not a public change: ${p.kind}`);

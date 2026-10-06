@@ -6,7 +6,7 @@ import { applyProposal, ChatTurn } from '../src/kb.js';
 import { validate } from '../build/validate.mjs';
 
 const cv = JSON.parse(readFileSync(new URL('../content/cv.json', import.meta.url), 'utf8'));
-const blank = { role_anchor: '', card_id: '', metric: '', tag: '', headline: '', detail: '', text: '', skill: '', wording: '', why: '' };
+const blank = { role_anchor: '', card_id: '', label: '', metric: '', tag: '', headline: '', detail: '', text: '', skill: '', wording: '', why: '' };
 
 test('add_card gets the next permanent ID and the result validates', () => {
   const role = cv.experience.roles.find((r) => r.anchor === 'exp-anchorage');
@@ -50,4 +50,24 @@ test('facts are deduplicated; private notes are refused here (they never touch t
 test('the chat output schema requires a reply and proposals', () => {
   assert.equal(ChatTurn.safeParse({ reply: 'hi', proposals: [] }).success, true);
   assert.equal(ChatTurn.safeParse({ reply: 'hi' }).success, false);
+});
+
+test('summary and bullet variants are added with unique IDs and validate', () => {
+  const s1 = applyProposal(cv, { ...blank, kind: 'add_summary_variant', label: 'Fintech and risk', text: 'Senior PM for regulated onboarding and risk platforms.' }).cv;
+  const s2 = applyProposal(s1, { ...blank, kind: 'add_summary_variant', label: 'Fintech and risk', text: 'Another angle.' }).cv;
+  const ids = s2.resume.summaries.map((s) => s.id);
+  assert.equal(new Set(ids).size, ids.length);
+  assert.ok(ids.includes('fintech-and-risk') && ids.includes('fintech-and-risk-2'));
+  const card = cv.experience.roles[0].cards[0];
+  const b1 = applyProposal(s2, { ...blank, kind: 'add_bullet_variant', card_id: card.id, text: 'Shorter version.' }).cv;
+  const b2 = applyProposal(b1, { ...blank, kind: 'add_bullet_variant', card_id: card.id, text: 'Posting-vocabulary version.' }).cv;
+  assert.deepEqual(b2.experience.roles[0].cards[0].variants.map((v) => v.id), ['v1', 'v2']);
+  assert.match(applyProposal(b2, { ...blank, kind: 'add_bullet_variant', card_id: card.id, text: 'Shorter version.' }).summary, /already exists/);
+  validate(b2);
+});
+
+test('a third summary with the same label gets -3, not -2-3', () => {
+  let x = cv;
+  for (const t of ['a', 'b', 'c']) x = applyProposal(x, { ...blank, kind: 'add_summary_variant', label: 'Builder', text: t }).cv;
+  assert.deepEqual(x.resume.summaries.filter((s) => s.label === 'Builder').map((s) => s.id), ['builder', 'builder-2', 'builder-3']);
 });

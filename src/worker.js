@@ -13,6 +13,7 @@ import { verifyAccessJwt } from './access.js';
 import { collect, prune, dashboardData } from './analytics.js';
 import { handleJobFit, handleFetchPosting, monthSpend } from './jobfit-api.js';
 import { handleKbChat, handleKbApply, handleKbNotes } from './kb.js';
+import { handleResumePlan, handleResumeAssemble, handleResumeSettings } from './resume-api.js';
 
 const CV_PATH = 'content/cv.json';
 const MAX_BODY = 512 * 1024;
@@ -145,6 +146,11 @@ async function routeAdmin(request, env, url, ctx) {
   }
   if (path === '/api/admin/kb/apply' && method === 'POST') return handleKbApply(request, env, { workingContent, saveDraft });
   if (path === '/api/admin/kb/notes') return handleKbNotes(request, env, url);
+
+  // Résumé generator: plans use the draft so newly approved blocks can be tried before publishing.
+  if (path === '/api/admin/resume/plan' && method === 'POST') return handleResumePlan(request, env, url, (await workingContent(env)).content);
+  if (path === '/api/admin/resume/assemble' && method === 'POST') return handleResumeAssemble(request, env, (await workingContent(env)).content);
+  if (path === '/api/admin/resume/settings') return handleResumeSettings(request, env);
 
   if (path === '/api/admin/publish' && method === 'POST') {
     const draft = await getDraft(env);

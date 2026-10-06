@@ -148,3 +148,44 @@
 .kb-note { padding: var(--sp-2) var(--sp-3); border: 1px solid var(--line); border-radius: var(--r-1); font-size: var(--fs-1); }
 .kb-note .muted { display: flex; justify-content: space-between; align-items: center; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Test bench tabs and résumé generator */
+.bench-right { position: sticky; top: var(--sp-4); display: flex; flex-direction: column; gap: var(--sp-2); min-width: 0; }
+.bench-right .bench-chat { position: static; }
+.bench-tabs { display: flex; gap: var(--sp-1); }
+.bench-tabs button { min-height: 40px; padding: 0 var(--sp-4); border: 1px solid var(--line); border-radius: var(--r-1) var(--r-1) 0 0; background: var(--surface-2); color: var(--ink-2); font-weight: 600; cursor: pointer; }
+.bench-tabs button[aria-selected="true"] { background: var(--surface); color: var(--ink); border-bottom-color: var(--surface); }
+.bench-resume { display: flex; flex-direction: column; gap: var(--sp-3); max-height: calc(100vh - 2 * var(--sp-4) - 48px); overflow-y: auto; padding: var(--sp-4); background: var(--surface); border: 1px solid var(--line); border-radius: 0 var(--r-2) var(--r-2) var(--r-2); }
+.resume-controls { display: flex; flex-direction: column; gap: var(--sp-3); }
+.resume-controls__row { display: grid; grid-template-columns: 1fr 1fr auto; gap: var(--sp-2); }
+.resume-controls label { display: flex; flex-direction: column; gap: 2px; font-size: var(--fs-1); font-weight: 600; }
+.resume-controls input, .resume-controls select { min-height: 36px; padding: 0 8px; border: 1px solid var(--line); border-radius: var(--r-1); background: var(--bg); color: var(--ink); font-weight: 400; }
+.resume-contact summary { font-size: var(--fs-1); font-weight: 600; color: var(--brand); cursor: pointer; }
+.r-stats { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+.r-stats strong { font-size: 1.6rem; }
+.r-bar { position: relative; height: 8px; margin: 4px 0; background: var(--surface-2); border-radius: 4px; }
+.r-bar__fill { position: absolute; inset: 0 auto 0 0; background: var(--brand); border-radius: 4px; }
+.r-bar__tick { position: absolute; top: -3px; width: 2px; height: 14px; background: var(--ink); }
+.r-keywords { display: flex; flex-wrap: wrap; gap: var(--sp-2); align-items: center; }
+.r-keywords p { flex-basis: 100%; }
+.r-chip { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: var(--r-pill); background: var(--chip); font-size: var(--fs-1); }
+.r-chip--missing { border: 1px dashed var(--accent-text); background: transparent; color: var(--ink); cursor: pointer; }
+.r-chip .btn-x { width: 20px; height: 20px; font-size: .95rem; }
+.r-syn summary { font-size: var(--fs-1); font-weight: 600; color: var(--brand); cursor: pointer; }
+.r-actions { align-items: center; }
+/* Paper preview: stays light like a printed page */
+.r-paper { padding: 28px 32px; background: #fff; color: #111; border: 1px solid var(--line); border-radius: var(--r-1); box-shadow: var(--shadow-1); font: 13px/1.4 "Helvetica Neue", Arial, sans-serif; }
+.r-paper h3.r-name { margin: 0; font-size: 22px; color: #0F6E73; }
+.r-paper h4 { margin: 12px 0 4px; padding-bottom: 2px; border-bottom: 1px solid #999; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: #111; }
+.r-paper p { margin: 0 0 4px; }
+.r-contact { font-size: 11.5px; color: #333; }
+.r-role { margin-top: 8px !important; }
+.r-bullets { list-style: disc; padding-left: 18px; margin: 0 0 4px; }
+.r-bullets li { margin-bottom: 4px; }
+.r-src { display: inline-flex; align-items: center; gap: 4px; margin-left: 6px; font-family: var(--mono); font-size: 10px; color: #6b6b66; }
+.r-pick { margin: 2px 0 4px; max-width: 100%; min-height: 28px; padding: 0 6px; border: 1px dashed #0F6E73; border-radius: 4px; background: #f4f9f9; color: #111; font-size: 12px; }
+.r-pick--small { min-height: 22px; font-size: 10px; max-width: 220px; }
+.r-pick--add { display: block; margin-bottom: 8px; }
+.r-paper .btn-x { width: 20px; height: 20px; color: #6b6b66; }
+.r-skills { display: flex; flex-wrap: wrap; gap: 6px; }
+.r-paper .r-chip { background: #eef4f4; color: #111; }

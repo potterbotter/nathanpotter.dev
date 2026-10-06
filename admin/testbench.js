@@ -57,12 +57,14 @@
   var history = []; // [{role, content}] sent to the server
   var context = { jd: '', read: null };
 
-  var KIND = { add_card: 'New CV card', edit_card: 'Edit a CV card', add_fact: 'New context fact', add_skill_wording: 'Skill wording', add_private_note: 'Private note' };
+  var KIND = { add_card: 'New CV card', edit_card: 'Edit a CV card', add_fact: 'New context fact', add_skill_wording: 'Skill wording', add_summary_variant: 'Résumé summary variant', add_bullet_variant: 'Résumé bullet variant', add_private_note: 'Private note' };
   var FIELDS = {
     add_card: [['role_anchor', 'Role'], ['metric', 'Metric'], ['tag', 'Theme'], ['headline', 'Headline'], ['detail', 'Detail', true]],
     edit_card: [['card_id', 'Card'], ['metric', 'Metric'], ['tag', 'Theme'], ['headline', 'Headline'], ['detail', 'Detail', true]],
     add_fact: [['text', 'Fact', true]],
     add_skill_wording: [['skill', 'Skill'], ['wording', 'Wording']],
+    add_summary_variant: [['label', 'Label'], ['text', 'Summary', true]],
+    add_bullet_variant: [['card_id', 'Card'], ['text', 'Bullet', true]],
     add_private_note: [['text', 'Note', true]],
   };
 
@@ -87,6 +89,14 @@
     input.setSelectionRange(input.value.length, input.value.length);
   });
 
+  // The résumé tab sends missing keywords here.
+  document.addEventListener('np-chat-prefill', function (e) {
+    var tab = document.querySelector('[data-tab="chat"]');
+    if (tab) tab.click();
+    input.value = e.detail.text;
+    input.focus();
+  });
+
   root.querySelector('[data-kb-clear]').addEventListener('click', function () {
     history = [];
     log.replaceChildren(el('li', 'muted small', 'Chat cleared. The current read stays loaded.'));
@@ -100,6 +110,8 @@
       add_private_note: '🔒 Private · saved now, never public',
       add_fact: 'Context for the tool · not shown on the CV · draft',
       add_skill_wording: 'Skill matching · draft',
+      add_summary_variant: 'Résumé block · not shown on the CV · draft',
+      add_bullet_variant: 'Résumé block · not shown on the CV · draft',
       add_card: 'Shown on your CV · draft',
       edit_card: 'Shown on your CV · draft',
     };

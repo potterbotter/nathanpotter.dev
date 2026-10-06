@@ -17,6 +17,19 @@
     "At both Mosaic and Anchorage Digital, Nathan has been responsible for OFAC monitoring of onboarded customers. He works directly with compliance and sanctions teams and has built and improved automation infrastructure and vendor integrations for OFAC screening.",
     "At Anchorage Digital, Nathan's Client Onboarding & Risk Platform scope also covers transaction monitoring, SAR monitoring and reporting, and initial and ongoing sanctions, PEP and negative-news screening. He owns the roadmap for these areas, plans, builds and prioritizes vendor integrations, and is an admin for the internal case-management tooling."
   ],
+  "resume": {
+    "_note": "Résumé building blocks. The generator only selects and orders approved blocks: a title, a summary variant, card bullets (or approved bullet variants on each card), skill wordings. It never writes new text.",
+    "titles": [
+      "Senior Product Manager"
+    ],
+    "summaries": [
+      {
+        "id": "general",
+        "label": "General",
+        "text": "Senior product manager with 7+ years across clean-energy lending, embedded finance and institutional crypto banking, often stepping into whichever role the team needed most. I turn messy, high-stakes workflows into products that scale."
+      }
+    ]
+  },
   "heroMetrics": [
     {
       "value": "4×",
