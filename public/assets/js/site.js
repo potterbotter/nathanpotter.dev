@@ -94,74 +94,106 @@
     Object.keys(byId).forEach(function (id) { var s = document.getElementById(id); if (s) observer.observe(s); });
   }
 
-  // Role-view carousel (/views/): one card in focus, neighbours scaled back. Swipe, arrows, keys or name pills.
+  // Role-view carousel (/views/): one card in focus, neighbours scaled back, looping in both directions.
+  // Swipe, arrows, keys or name pills. A copy of the cards sits on each side of the real ones; when scrolling
+  // settles on a copy, the track jumps to the matching real card. The copies are identical, so the jump is invisible.
   var carousel = document.querySelector('.carousel');
   if (carousel) {
     var track = carousel.querySelector('.carousel__track');
-    var slides = Array.prototype.slice.call(track.children);
+    var real = Array.prototype.slice.call(track.children);
+    var n = real.length;
     var pills = carousel.querySelectorAll('[data-go]');
     var prevBtn = carousel.querySelector('.carousel__btn--prev');
     var nextBtn = carousel.querySelector('.carousel__btn--next');
     var statusEl = carousel.querySelector('[data-carousel-status]');
     var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    var current = -1;
-    var frame = 0;
+    var copy = function (s) {
+      var c = s.cloneNode(true);
+      c.setAttribute('aria-hidden', 'true');
+      c.querySelectorAll('a, button').forEach(function (a) { a.setAttribute('tabindex', '-1'); });
+      return c;
+    };
+    real.slice().reverse().forEach(function (s) { track.insertBefore(copy(s), track.firstChild); });
+    real.forEach(function (s) { track.appendChild(copy(s)); });
+    var slides = Array.prototype.slice.call(track.children); // copies, real (n … 2n-1), copies
+    var current = -1, shown = -1, frame = 0, settleTimer = 0, refocus = false;
 
     carousel.classList.add('carousel--on');
     carousel.querySelector('.carousel__nav').hidden = false;
     prevBtn.hidden = false;
     nextBtn.hidden = false;
 
-    var goTo = function (i) {
-      i = Math.max(0, Math.min(slides.length - 1, i));
-      var s = slides[i];
-      track.scrollTo({ left: s.offsetLeft - (track.clientWidth - s.offsetWidth) / 2, behavior: reduceMotion.matches ? 'auto' : 'smooth' });
+    var leftFor = function (k) { var s = slides[k]; return s.offsetLeft - (track.clientWidth - s.offsetWidth) / 2; };
+    var goTo = function (k, instant) {
+      k = Math.max(0, Math.min(slides.length - 1, k));
+      track.scrollTo({ left: leftFor(k), behavior: instant || reduceMotion.matches ? 'instant' : 'smooth' });
     };
-    var setCurrent = function (i) {
-      if (i === current) return;
-      current = i;
-      slides.forEach(function (s, j) { s.classList.toggle('is-current', j === i); });
+    var setCurrent = function (k) {
+      if (k === current) return;
+      current = k;
+      slides.forEach(function (s, j) { s.classList.toggle('is-current', j === k); });
+      var i = k % n;
+      if (i === shown) return;
+      shown = i;
       pills.forEach(function (p, j) { if (j === i) p.setAttribute('aria-current', 'true'); else p.removeAttribute('aria-current'); });
-      prevBtn.disabled = i === 0;
-      nextBtn.disabled = i === slides.length - 1;
-      statusEl.textContent = slides[i].getAttribute('aria-label');
+      statusEl.textContent = real[i].getAttribute('aria-label');
     };
     // Scale and fade each card by its distance from the centre, so the effect follows the finger while swiping.
     var update = function () {
       frame = 0;
       var mid = track.scrollLeft + track.clientWidth / 2;
       var best = 0, bestP = 2;
-      slides.forEach(function (s, i) {
+      slides.forEach(function (s, k) {
         var p = Math.min(Math.abs(s.offsetLeft + s.offsetWidth / 2 - mid) / s.offsetWidth, 1);
         s.style.setProperty('--p', p.toFixed(3));
-        if (p < bestP) { bestP = p; best = i; }
+        if (p < bestP) { bestP = p; best = k; }
       });
       setCurrent(best);
     };
-    var schedule = function () { if (!frame) frame = requestAnimationFrame(update); };
+    // Once scrolling stops, move from a copy back to the real card, then restore keyboard focus if it was moving.
+    var settle = function () {
+      clearTimeout(settleTimer);
+      update();
+      if (current < n || current >= 2 * n) {
+        track.scrollTo({ left: track.scrollLeft + leftFor(n + (current % n)) - leftFor(current), behavior: 'instant' });
+        update();
+      }
+      if (refocus) { refocus = false; slides[current].querySelector('a').focus({ preventScroll: true }); }
+    };
 
-    track.addEventListener('scroll', schedule, { passive: true });
-    window.addEventListener('resize', schedule);
+    track.addEventListener('scroll', function () {
+      if (!frame) frame = requestAnimationFrame(update);
+      clearTimeout(settleTimer);
+      settleTimer = setTimeout(settle, 150);
+    }, { passive: true });
+    track.addEventListener('scrollend', settle);
+    window.addEventListener('resize', function () { goTo(current, true); update(); });
     prevBtn.addEventListener('click', function () { goTo(current - 1); });
     nextBtn.addEventListener('click', function () { goTo(current + 1); });
-    pills.forEach(function (p) { p.addEventListener('click', function () { goTo(Number(p.getAttribute('data-go'))); }); });
-    // A side card's first click brings it into focus; clicking the focused card opens the view.
-    slides.forEach(function (s, i) {
-      s.querySelector('a').addEventListener('click', function (e) { if (i !== current) { e.preventDefault(); goTo(i); } });
+    // A pill goes the short way round to its card.
+    pills.forEach(function (p) {
+      p.addEventListener('click', function () {
+        var i = Number(p.getAttribute('data-go'));
+        var best = [i, i + n, i + 2 * n].sort(function (a, b) { return Math.abs(a - current) - Math.abs(b - current); })[0];
+        goTo(best);
+      });
     });
-    // Keyboard: tabbing to a card centres it; left and right arrows move between cards.
+    // A side card's first click brings it into focus; clicking the focused card opens the view.
+    slides.forEach(function (s, k) {
+      s.querySelector('a').addEventListener('click', function (e) { if (k !== current) { e.preventDefault(); goTo(k); } });
+    });
+    // Keyboard: tabbing to a card centres it; left and right arrows move round the loop.
     track.addEventListener('focusin', function (e) {
-      var i = slides.indexOf(e.target.closest('.carousel__slide'));
-      if (i >= 0 && i !== current && e.target.matches(':focus-visible')) goTo(i);
+      var k = slides.indexOf(e.target.closest('.carousel__slide'));
+      if (k >= 0 && k !== current && e.target.matches(':focus-visible')) goTo(k);
     });
     carousel.addEventListener('keydown', function (e) {
       if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
       e.preventDefault();
-      var i = current + (e.key === 'ArrowRight' ? 1 : -1);
-      goTo(i);
-      var link = slides[Math.max(0, Math.min(slides.length - 1, i))].querySelector('a');
-      if (track.contains(document.activeElement)) link.focus({ preventScroll: true });
+      refocus = track.contains(document.activeElement);
+      goTo(current + (e.key === 'ArrowRight' ? 1 : -1));
     });
+    goTo(n, true);
     update();
   }
 
