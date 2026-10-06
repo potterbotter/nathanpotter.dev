@@ -25,8 +25,8 @@
   // Secrets (set in the dashboard, never here): GITHUB_TOKEN, ADMIN_EMAIL.
   "vars": {
     "GITHUB_REPO": "potterbotter/nathanpotter.dev",
-    "ACCESS_TEAM_DOMAIN": "",
-    "ACCESS_AUD": ""
+    "ACCESS_TEAM_DOMAIN": "nathanjpotter.cloudflareaccess.com",
+    "ACCESS_AUD": "c227797505b47d742fb88d360c2d0d8dc1b5503f16f0291f9fe4890e10aced91"
   },
   "observability": { "enabled": true }
 }
