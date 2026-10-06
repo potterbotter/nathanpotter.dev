@@ -420,6 +420,7 @@ function personJsonLd(cv) {
 export function viewsPage(ctx) {
   const { cv } = ctx;
   const L = cv.viewsLanding;
+  const keys = curatedViews(cv);
   const card = (k) => {
     const v = cv.views[k];
     return `<a class="tile view-card" href="${v.path}">
@@ -437,7 +438,15 @@ export function viewsPage(ctx) {
 <p class="hero-lede measure">${esc(L.lede)}</p>
 </div></section>
 <div class="wrap page-main" style="padding-top: var(--sp-7)">
-<div class="tiles tiles--views">${join(curatedViews(cv), card)}</div>
+<section class="carousel" aria-roledescription="carousel" aria-label="Role views">
+<div class="carousel__nav noprint" hidden>${join(keys, (k, i) => `<button type="button" class="chip-btn" data-go="${i}">${esc(cv.views[k].label)}</button>`)}</div>
+<div class="carousel__stage">
+<button type="button" class="carousel__btn carousel__btn--prev noprint" aria-label="Previous view" hidden>${I.arrow(20)}</button>
+<ul class="tiles tiles--views carousel__track">${join(keys, (k, i) => `<li class="carousel__slide" aria-roledescription="slide" aria-label="${esc(cv.views[k].label)}, ${i + 1} of ${keys.length}">${card(k)}</li>`)}</ul>
+<button type="button" class="carousel__btn carousel__btn--next noprint" aria-label="Next view" hidden>${I.arrow(20)}</button>
+</div>
+<p class="sr-only" aria-live="polite" data-carousel-status></p>
+</section>
 <div class="tiles">
 <a class="dashed-card" href="/"><strong>Not sure?</strong><span class="tile__action">Read the full CV</span></a>
 ${ctx.flags.jobFitLive ? `<a class="cta cta--band" href="/tools/job-fit/"><span class="cta-text"><span class="eyebrow">Hiring for one specific role?</span><span class="cta-title">Am I the right fit for your company?</span></span><span class="cta-arrow" aria-hidden="true">${I.arrow(22)}</span></a>` : ''}

@@ -1,6 +1,6 @@
 // Progressive enhancements only; every page works without this file.
 // Budget (design/handoff/README.md): theme toggle, filter chips, copy email,
-// closing menus, opening details before print.
+// closing menus, opening details before print, the role-view carousel.
 (function () {
   var root = document.documentElement;
 
@@ -92,6 +92,77 @@
       byId[current].setAttribute('aria-current', 'true');
     }, { rootMargin: '-20% 0px -60% 0px' });
     Object.keys(byId).forEach(function (id) { var s = document.getElementById(id); if (s) observer.observe(s); });
+  }
+
+  // Role-view carousel (/views/): one card in focus, neighbours scaled back. Swipe, arrows, keys or name pills.
+  var carousel = document.querySelector('.carousel');
+  if (carousel) {
+    var track = carousel.querySelector('.carousel__track');
+    var slides = Array.prototype.slice.call(track.children);
+    var pills = carousel.querySelectorAll('[data-go]');
+    var prevBtn = carousel.querySelector('.carousel__btn--prev');
+    var nextBtn = carousel.querySelector('.carousel__btn--next');
+    var statusEl = carousel.querySelector('[data-carousel-status]');
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    var current = -1;
+    var frame = 0;
+
+    carousel.classList.add('carousel--on');
+    carousel.querySelector('.carousel__nav').hidden = false;
+    prevBtn.hidden = false;
+    nextBtn.hidden = false;
+
+    var goTo = function (i) {
+      i = Math.max(0, Math.min(slides.length - 1, i));
+      var s = slides[i];
+      track.scrollTo({ left: s.offsetLeft - (track.clientWidth - s.offsetWidth) / 2, behavior: reduceMotion.matches ? 'auto' : 'smooth' });
+    };
+    var setCurrent = function (i) {
+      if (i === current) return;
+      current = i;
+      slides.forEach(function (s, j) { s.classList.toggle('is-current', j === i); });
+      pills.forEach(function (p, j) { if (j === i) p.setAttribute('aria-current', 'true'); else p.removeAttribute('aria-current'); });
+      prevBtn.disabled = i === 0;
+      nextBtn.disabled = i === slides.length - 1;
+      statusEl.textContent = slides[i].getAttribute('aria-label');
+    };
+    // Scale and fade each card by its distance from the centre, so the effect follows the finger while swiping.
+    var update = function () {
+      frame = 0;
+      var mid = track.scrollLeft + track.clientWidth / 2;
+      var best = 0, bestP = 2;
+      slides.forEach(function (s, i) {
+        var p = Math.min(Math.abs(s.offsetLeft + s.offsetWidth / 2 - mid) / s.offsetWidth, 1);
+        s.style.setProperty('--p', p.toFixed(3));
+        if (p < bestP) { bestP = p; best = i; }
+      });
+      setCurrent(best);
+    };
+    var schedule = function () { if (!frame) frame = requestAnimationFrame(update); };
+
+    track.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    prevBtn.addEventListener('click', function () { goTo(current - 1); });
+    nextBtn.addEventListener('click', function () { goTo(current + 1); });
+    pills.forEach(function (p) { p.addEventListener('click', function () { goTo(Number(p.getAttribute('data-go'))); }); });
+    // A side card's first click brings it into focus; clicking the focused card opens the view.
+    slides.forEach(function (s, i) {
+      s.querySelector('a').addEventListener('click', function (e) { if (i !== current) { e.preventDefault(); goTo(i); } });
+    });
+    // Keyboard: tabbing to a card centres it; left and right arrows move between cards.
+    track.addEventListener('focusin', function (e) {
+      var i = slides.indexOf(e.target.closest('.carousel__slide'));
+      if (i >= 0 && i !== current && e.target.matches(':focus-visible')) goTo(i);
+    });
+    carousel.addEventListener('keydown', function (e) {
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+      e.preventDefault();
+      var i = current + (e.key === 'ArrowRight' ? 1 : -1);
+      goTo(i);
+      var link = slides[Math.max(0, Math.min(slides.length - 1, i))].querySelector('a');
+      if (track.contains(document.activeElement)) link.focus({ preventScroll: true });
+    });
+    update();
   }
 
   // Print: open every disclosure so collapsed content prints.
