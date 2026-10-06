@@ -13,7 +13,7 @@ import { verifyAccessJwt } from './access.js';
 import { collect, prune, dashboardData } from './analytics.js';
 import { handleJobFit, handleFetchPosting, monthSpend } from './jobfit-api.js';
 import { handleKbChat, handleKbApply, handleKbNotes } from './kb.js';
-import { handleResumePlan, handleResumeAssemble, handleResumeSettings } from './resume-api.js';
+import { handleResumePlan, handleResumeAssemble, handleResumeDocx, handleResumeSettings } from './resume-api.js';
 import { handleReviewNext, handleReviewGenerate, handleReviewDecide } from './review.js';
 
 const CV_PATH = 'content/cv.json';
@@ -151,6 +151,7 @@ async function routeAdmin(request, env, url, ctx) {
   // Résumé generator: plans use the draft so newly approved blocks can be tried before publishing.
   if (path === '/api/admin/resume/plan' && method === 'POST') return handleResumePlan(request, env, url, (await workingContent(env)).content);
   if (path === '/api/admin/resume/assemble' && method === 'POST') return handleResumeAssemble(request, env, (await workingContent(env)).content);
+  if (path === '/api/admin/resume/docx' && method === 'POST') return handleResumeDocx(request, env, (await workingContent(env)).content);
   if (path === '/api/admin/resume/settings') return handleResumeSettings(request, env);
 
   // Review queue: Claude proposes résumé blocks in batches; Nathan decides one at a time. Approvals go to the draft.

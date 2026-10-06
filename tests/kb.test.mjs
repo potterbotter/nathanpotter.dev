@@ -5,7 +5,9 @@ import { readFileSync } from 'node:fs';
 import { applyProposal, ChatTurn } from '../src/kb.js';
 import { validate } from '../build/validate.mjs';
 
-const cv = JSON.parse(readFileSync(new URL('../content/cv.json', import.meta.url), 'utf8'));
+// Start from the CV with résumé blocks cleared, so tests don't depend on which blocks are published.
+const resetBlocks = (c) => { c.resume.titles = c.resume.titles.slice(0, 1); c.resume.summaries = c.resume.summaries.slice(0, 1); for (const r of c.experience.roles) for (const k of r.cards) delete k.variants; return c; };
+const cv = resetBlocks(JSON.parse(readFileSync(new URL('../content/cv.json', import.meta.url), 'utf8')));
 const blank = { role_anchor: '', card_id: '', label: '', metric: '', tag: '', headline: '', detail: '', text: '', skill: '', wording: '', why: '' };
 
 test('add_card gets the next permanent ID and the result validates', () => {

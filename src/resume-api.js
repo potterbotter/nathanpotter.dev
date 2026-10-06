@@ -1,9 +1,11 @@
 // Admin endpoints for the résumé generator (behind Cloudflare Access and the Worker's token check).
 //   POST /api/admin/resume/plan      Claude chooses blocks for a posting, code assembles and scores
 //   POST /api/admin/resume/assemble  re-assemble after manual block changes (no AI call)
+//   POST /api/admin/resume/docx      the Word file (built from the plan, marks the run exported)
 //   GET/PUT /api/admin/resume/settings  private contact details (phone)
 import { planResume, fakePlan, assemble, baselineDoc, score, toText, refCode, RESUME_PROMPT_VERSION } from './resume.js';
 import { monthSpend } from './jobfit-api.js';
+import { buildDocx } from './docx.js';
 import { dayKey } from './analytics.js';
 
 const json = (d, s = 200) => new Response(JSON.stringify(d), { status: s, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } });
@@ -68,6 +70,32 @@ export async function handleResumeAssemble(request, env, cv) {
       .bind(JSON.stringify(out.plan), out.text, out.score.rate, length, body.exported ? 1 : 0, body.id).run();
   }
   return json({ id: body.id, ref, ...out });
+}
+
+// POST /api/admin/resume/docx  body: same as assemble → the Word file. Built from the plan on the server, so
+// it can only contain approved blocks, and marks the run as exported.
+export async function handleResumeDocx(request, env, cv) {
+  let body;
+  try { body = JSON.parse(await request.text()); } catch { return json({ error: 'Bad request.' }, 400); }
+  if (!body?.plan || !Array.isArray(body.keywords)) return json({ error: 'Missing plan or keywords.' }, 400);
+  const length = body.length === 'two' ? 'two' : 'one';
+  const ref = String(body.ref || refCode('role')).slice(0, 40);
+  const out = result(cv, body.plan, body.keywords, { length, contactInfo: await contact(env, cv, ref) });
+  let company = String(body.company || '').trim();
+  if (Number.isInteger(body.id)) {
+    const row = await env.DB.prepare('SELECT company FROM resumes WHERE id = ?1').bind(body.id).first();
+    if (row?.company) company = row.company;
+    await env.DB.prepare('UPDATE resumes SET plan_json = ?1, resume_text = ?2, rate = ?3, length = ?4, exported = 1 WHERE id = ?5')
+      .bind(JSON.stringify(out.plan), out.text, out.score.rate, length, body.id).run();
+  }
+  const slug = (s) => s.normalize('NFKD').replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-');
+  const filename = [slug(out.doc.name), 'Resume', slug(company)].filter(Boolean).join('-') + '.docx';
+  const bytes = buildDocx(out.doc, { title: `${out.doc.name} - Resume${company ? ` - ${company}` : ''}` });
+  return new Response(bytes, { headers: {
+    'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'Content-Disposition': `attachment; filename="${filename}"`,
+    'Cache-Control': 'no-store',
+  } });
 }
 
 export async function handleResumeSettings(request, env) {

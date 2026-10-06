@@ -124,13 +124,33 @@
 
     var actions = el('div', 'row-links r-actions');
     var pdf = el('button', 'btn btn--primary', 'Download PDF');
+    var docx = el('button', 'btn btn--secondary', 'Download .docx');
     var copy = el('button', 'btn btn--secondary', 'Copy as text');
-    pdf.type = copy.type = 'button';
+    pdf.type = docx.type = copy.type = 'button';
     pdf.addEventListener('click', function () { reassemble(true).then(function () { printResume(); }); });
+    // The server builds the Word file from the plan; the browser just saves it.
+    docx.addEventListener('click', function () {
+      docx.disabled = true;
+      fetch('/api/admin/resume/docx', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: state.id, ref: state.ref, plan: state.plan, keywords: state.keywords, length: lengthIn.value, company: companyIn.value }) })
+        .then(function (r) {
+          if (!r.ok) return r.json().catch(function () { return {}; }).then(function (d) { throw new Error(d.error || 'The Word file could not be built.'); });
+          var name = (/filename="([^"]+)"/.exec(r.headers.get('Content-Disposition') || '') || [])[1] || 'Resume.docx';
+          return r.blob().then(function (blob) {
+            var a = document.createElement('a');
+            a.href = URL.createObjectURL(blob); a.download = name;
+            document.body.appendChild(a); a.click(); a.remove();
+            setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+            status.textContent = 'Saved ' + name + '.';
+          });
+        })
+        .catch(function (e) { status.textContent = e.message; })
+        .finally(function () { docx.disabled = false; });
+    });
     copy.addEventListener('click', function () {
       reassemble(true).then(function () { navigator.clipboard.writeText(state.text).then(function () { copy.textContent = 'Copied'; setTimeout(function () { copy.textContent = 'Copy as text'; }, 2000); }); });
     });
-    actions.appendChild(pdf); actions.appendChild(copy);
+    actions.appendChild(pdf); actions.appendChild(docx); actions.appendChild(copy);
     actions.appendChild(el('span', 'muted small', 'Site link on this résumé: ' + (state.doc.contact.site || '')));
     frag.appendChild(actions);
     frag.appendChild(paper());
@@ -221,10 +241,10 @@
   function printResume() {
     var d = state.doc, c = d.contact || {};
     var html = '<!doctype html><html lang="en"><head><meta charset="utf-8"><title>' + esc(d.name + ' - Resume' + (companyIn.value ? ' - ' + companyIn.value : '')) + '</title><style>' +
-      '@page{size:letter;margin:0.55in 0.6in}body{font:10.5pt/1.35 "Helvetica Neue",Arial,sans-serif;color:#111;margin:0}' +
+      '@page{size:letter;margin:0.55in 0.6in}body{font:10.5pt/1.22 Arial,"Helvetica Neue",sans-serif;color:#111;margin:0}' +
       'h1{font-size:20pt;margin:0;color:#0F6E73}.title{font-size:11.5pt;margin:2px 0 4px;font-weight:600}.rule{height:3px;width:72px;background:#7A0E1B;margin:4px 0 6px}' +
-      '.contact{font-size:9.5pt;color:#333;margin:0 0 8px}h2{font-size:10.5pt;letter-spacing:.06em;text-transform:uppercase;border-bottom:1px solid #999;margin:10px 0 4px;padding-bottom:2px}' +
-      'p{margin:0 0 4px}.role{margin:6px 0 2px}.role b{font-weight:700}ul{margin:0 0 4px;padding-left:16px}li{margin:0 0 2px}</style></head><body>' +
+      '.contact{font-size:9.5pt;color:#333;margin:0 0 8px}h2{font-size:10.5pt;letter-spacing:.06em;text-transform:uppercase;border-bottom:1px solid #999;margin:9px 0 4px;padding-bottom:2px}' +
+      'p{margin:0 0 3px}.role{margin:5px 0 2px}.role b{font-weight:700}ul{margin:0 0 3px;padding-left:16px}li{margin:0 0 1px}</style></head><body>' +
       '<h1>' + esc(d.name) + '</h1><p class="title">' + esc(d.title) + '</p><div class="rule"></div>' +
       '<p class="contact">' + [c.email, c.phone, c.location, c.linkedin, c.site].filter(Boolean).map(esc).join(' | ') + '</p>' +
       '<h2>Summary</h2><p>' + esc(d.summary.text) + '</p><h2>Experience</h2>' +
