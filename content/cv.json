@@ -276,7 +276,7 @@
     "[A second paragraph: outside work, briefly.]"
   ],
   "skills": {
-    "_note": "Each skill has one or more wordings (forms). forms[shown] is displayed on the site; the resume generator may use any form. Synonyms marked example were seeded by Claude — Nathan to confirm.",
+    "_note": "Each skill has one or more wordings (forms). forms[shown] is displayed on the site; the résumé generator and job-fit matching may use any form. All wordings were approved by Nathan on 2026-10-05.",
     "groups": [
       {
         "name": "Core strengths",
@@ -284,59 +284,77 @@
         "items": [
           {
             "forms": [
-              "First-principles critical thinking"
+              "First-principles critical thinking",
+              "Critical thinking",
+              "Analytical thinking",
+              "Structured problem solving"
             ],
             "shown": 0
           },
           {
             "forms": [
-              "Curiosity and growth mindset"
+              "Curiosity and growth mindset",
+              "Continuous learning",
+              "Learning agility"
             ],
             "shown": 0
           },
           {
             "forms": [
-              "Decision-making"
+              "Decision-making",
+              "Data-informed decision-making",
+              "Trade-off analysis"
             ],
             "shown": 0
           },
           {
             "forms": [
               "Problem framing",
-              "Problem definition"
+              "Problem definition",
+              "Problem solving"
             ],
-            "shown": 0,
-            "synonymsAreExamples": true
+            "shown": 0
           },
           {
             "forms": [
               "Clear written and executive communication",
               "Executive communication",
-              "Stakeholder communication"
+              "Stakeholder communication",
+              "Written communication",
+              "Cross-functional communication"
             ],
-            "shown": 0,
-            "synonymsAreExamples": true
+            "shown": 0
           },
           {
             "forms": [
               "Team leadership and mentorship",
-              "People leadership",
-              "Mentoring"
+              "Team leadership",
+              "Mentorship",
+              "Coaching",
+              "Cross-functional team leadership"
             ],
-            "shown": 0,
-            "synonymsAreExamples": true
+            "shown": 0
           },
           {
             "forms": [
               "0→1 and scale-up delivery",
-              "New product development"
+              "New product development",
+              "Zero-to-one product development",
+              "Product launch",
+              "Go-to-market (GTM)",
+              "Scaling products"
             ],
-            "shown": 0,
-            "synonymsAreExamples": true
+            "shown": 0
           },
           {
             "forms": [
-              "AI-native workflows"
+              "AI-native workflows",
+              "AI-assisted product development",
+              "Generative AI",
+              "LLM tools",
+              "AI workflow automation",
+              "Prompt engineering",
+              "Agentic workflows"
             ],
             "shown": 0
           }
@@ -348,25 +366,32 @@
         "items": [
           {
             "forms": [
-              "Claude Code"
+              "Claude Code",
+              "Anthropic Claude Code",
+              "AI coding assistants"
             ],
             "shown": 0
           },
           {
             "forms": [
-              "Claude (projects, skills, artifacts)"
+              "Claude (projects, skills, artifacts)",
+              "Anthropic Claude",
+              "Claude AI",
+              "Large language models (LLMs)"
             ],
             "shown": 0
           },
           {
             "forms": [
-              "ChatGPT"
+              "ChatGPT",
+              "OpenAI ChatGPT"
             ],
             "shown": 0
           },
           {
             "forms": [
-              "Gemini"
+              "Gemini",
+              "Google Gemini"
             ],
             "shown": 0
           }
@@ -378,70 +403,264 @@
         "items": [
           {
             "forms": [
-              "SQL"
+              "SQL",
+              "SQL querying",
+              "Data analysis (SQL)",
+              "MySQL",
+              "PostgreSQL",
+              "BigQuery"
             ],
             "shown": 0
           },
           {
             "forms": [
-              "Python"
+              "Python",
+              "Python scripting"
             ],
             "shown": 0
           },
           {
             "forms": [
               "JavaScript/React",
-              "React",
-              "JavaScript"
-            ],
-            "shown": 0,
-            "synonymsAreExamples": true
-          },
-          {
-            "forms": [
-              "Retool"
+              "JavaScript",
+              "HTML/CSS"
             ],
             "shown": 0
           },
           {
             "forms": [
-              "Zapier"
+              "Retool",
+              "Low-code internal tools",
+              "Internal tooling"
             ],
             "shown": 0
           },
           {
             "forms": [
-              "Glide"
+              "Zapier",
+              "Workflow automation",
+              "No-code automation",
+              "System integrations"
             ],
             "shown": 0
           },
           {
             "forms": [
-              "Figma"
+              "Glide",
+              "No-code app development"
             ],
             "shown": 0
           },
           {
             "forms": [
-              "Tableau"
+              "Figma",
+              "Wireframing",
+              "Prototyping",
+              "Product design"
             ],
             "shown": 0
           },
           {
             "forms": [
-              "Jira"
+              "Tableau",
+              "Data visualization",
+              "Dashboards",
+              "Business intelligence (BI)"
             ],
             "shown": 0
           },
           {
             "forms": [
-              "Linear"
+              "Jira",
+              "Atlassian Jira",
+              "Jira administration",
+              "Agile project tracking"
             ],
             "shown": 0
           },
           {
             "forms": [
-              "Notion"
+              "Confluence",
+              "Atlassian Confluence"
+            ],
+            "shown": 0
+          },
+          {
+            "forms": [
+              "Linear",
+              "Issue tracking"
+            ],
+            "shown": 0
+          },
+          {
+            "forms": [
+              "Notion",
+              "Knowledge management",
+              "Documentation"
+            ],
+            "shown": 0
+          }
+        ]
+      },
+      {
+        "name": "Product practice",
+        "display": "chips",
+        "items": [
+          {
+            "forms": [
+              "Product strategy and roadmapping",
+              "Roadmapping",
+              "Product roadmap",
+              "Product strategy"
+            ],
+            "shown": 0
+          },
+          {
+            "forms": [
+              "Prioritization",
+              "Backlog prioritization",
+              "Prioritization frameworks"
+            ],
+            "shown": 0
+          },
+          {
+            "forms": [
+              "Stakeholder management",
+              "Stakeholder alignment",
+              "Cross-functional collaboration"
+            ],
+            "shown": 0
+          },
+          {
+            "forms": [
+              "Product discovery",
+              "User research",
+              "Customer research",
+              "Usability testing",
+              "Prototyping",
+              "Design thinking"
+            ],
+            "shown": 0
+          },
+          {
+            "forms": [
+              "Agile / Scrum",
+              "Scrum",
+              "Agile delivery",
+              "Product owner"
+            ],
+            "shown": 0
+          },
+          {
+            "forms": [
+              "Data analysis",
+              "Funnel analytics",
+              "Product analytics",
+              "Metrics and KPIs"
+            ],
+            "shown": 0
+          },
+          {
+            "forms": [
+              "Process automation",
+              "Operational efficiency",
+              "Workflow automation"
+            ],
+            "shown": 0
+          },
+          {
+            "forms": [
+              "Platform modernization",
+              "Platform migration",
+              "Legacy system retirement",
+              "Data model redesign"
+            ],
+            "shown": 0
+          },
+          {
+            "forms": [
+              "Partnerships",
+              "Partner integrations",
+              "B2B2C partnerships",
+              "API partners"
+            ],
+            "shown": 0
+          }
+        ]
+      },
+      {
+        "name": "Domain and regulatory",
+        "display": "chips",
+        "items": [
+          {
+            "forms": [
+              "Client onboarding and KYC/KYB",
+              "Customer onboarding",
+              "KYC",
+              "KYB",
+              "Compliance workflows"
+            ],
+            "shown": 0
+          },
+          {
+            "forms": [
+              "FinCEN CDD Rule",
+              "Customer due diligence (CDD)"
+            ],
+            "shown": 0
+          },
+          {
+            "forms": [
+              "W-8/W-9 tax documentation",
+              "W-8/W-9 collection"
+            ],
+            "shown": 0
+          },
+          {
+            "forms": [
+              "FATCA",
+              "Foreign Account Tax Compliance Act (FATCA)"
+            ],
+            "shown": 0
+          },
+          {
+            "forms": [
+              "CRS",
+              "Common Reporting Standard (CRS)"
+            ],
+            "shown": 0
+          },
+          {
+            "forms": [
+              "Truth in Lending (TILA)",
+              "TILA",
+              "Truth in Lending Act"
+            ],
+            "shown": 0
+          },
+          {
+            "forms": [
+              "Financial privacy regulations",
+              "Data privacy compliance",
+              "Privacy regulations"
+            ],
+            "shown": 0
+          },
+          {
+            "forms": [
+              "Regulatory compliance",
+              "Risk and compliance",
+              "Model risk management",
+              "SR 11-7"
+            ],
+            "shown": 0
+          },
+          {
+            "forms": [
+              "Lending and originations",
+              "Loan origination",
+              "Consumer lending",
+              "Point-of-sale financing"
             ],
             "shown": 0
           }
