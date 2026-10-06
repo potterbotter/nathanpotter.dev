@@ -30,5 +30,7 @@
     "ACCESS_TEAM_DOMAIN": "nathanjpotter.cloudflareaccess.com",
     "ACCESS_AUD": "c227797505b47d742fb88d360c2d0d8dc1b5503f16f0291f9fe4890e10aced91"
   },
+  // Daily analytics retention cleanup (03:17 Pacific during PDT).
+  "triggers": { "crons": ["17 10 * * *"] },
   "observability": { "enabled": true }
 }

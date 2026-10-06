@@ -33,11 +33,11 @@ const I = {
 const linkedinHandle = (url) => url.replace(/^https?:\/\/(www\.)?linkedin\.com\//, '').replace(/\/$/, '');
 
 // ---------- layout ----------
-function layout(ctx, { title, description, path, current, main, footer = 'slim', jsonld = '', noindex = false, admin = '', bare = false }) {
+function layout(ctx, { title, description, path, current, main, footer = 'slim', jsonld = '', noindex = false, admin = '', bare = false, pageType = '', scripts = '' }) {
   const url = SITE + path;
   if (admin) noindex = true;
   return `<!doctype html>
-<html lang="en">
+<html lang="en"${pageType ? ` data-page="${esc(pageType)}"` : ''}>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -58,7 +58,7 @@ ${noindex ? '<meta name="robots" content="noindex">\n' : ''}<link rel="canonical
 <link rel="stylesheet" href="/assets/css/tokens.css">
 <link rel="stylesheet" href="/assets/css/site.css">
 <script src="/assets/js/site.js" defer></script>
-${admin ? '<link rel="stylesheet" href="/admin/assets/admin.css">\n' : ''}${ctx.edit ? '<script src="/admin/assets/admin.js" defer></script>\n' : ''}${jsonld}</head>
+${admin ? '<link rel="stylesheet" href="/admin/assets/admin.css">\n' : ''}${scripts}${ctx.edit ? '<script src="/admin/assets/admin.js" defer></script>\n' : ''}${jsonld}</head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 ${admin}
@@ -517,16 +517,21 @@ export function adminBar(ctx, { mode, drafts }) {
   const label = drafts ? `${drafts} draft change${drafts === 1 ? '' : 's'}` : 'Published · no unsaved changes';
   const right = mode === 'edit'
     ? `<a class="admin-link" href="/admin/">Admin home</a>
+<a class="admin-link" href="/admin/dashboard/">Dashboard</a>
 <a class="admin-link admin-link--outline" href="/admin/edit/?preview=1">Preview as visitor</a>
 <button type="button" class="admin-link" data-discard${drafts ? '' : ' hidden'}>Discard draft</button>
 <button type="button" class="admin-publish" data-publish${drafts ? '' : ' disabled'}>Publish</button>`
     : mode === 'preview'
       ? `<a class="admin-link admin-link--outline" href="/admin/edit/">Back to editing</a>`
-      : `<a class="admin-link" href="/admin/edit/">Edit the CV</a>`;
+      : mode === 'dashboard'
+        ? `<a class="admin-link" href="/admin/">Admin home</a>
+<a class="admin-link" href="/admin/edit/">Edit the CV</a>`
+        : `<a class="admin-link" href="/admin/dashboard/">Dashboard</a>
+<a class="admin-link" href="/admin/edit/">Edit the CV</a>`;
   return `<div class="admin-bar noprint" role="region" aria-label="Admin">
 <div class="wrap">
 <div class="admin-bar__left">
-<span class="admin-badge">${mode === 'edit' ? 'Edit mode' : mode === 'preview' ? 'Preview' : 'Admin'}</span>
+<span class="admin-badge">${mode === 'edit' ? 'Edit mode' : mode === 'preview' ? 'Preview' : mode === 'dashboard' ? 'Dashboard' : 'Admin'}</span>
 <span>Signed in with GitHub as <strong>${handle}</strong></span>
 <span class="admin-drafts" aria-live="polite" data-draft-label>${esc(label)}</span>
 </div>
@@ -551,6 +556,11 @@ export function adminHomePage(ctx, { drafts, lastPublished }) {
 <span class="muted">Edit results, About, skills and wordings in place. Changes save as drafts until you publish.</span>
 <span class="tile__action">Open edit mode</span>
 </a>
+<a class="tile" href="/admin/dashboard/">
+<span class="tile__head"><span class="tile__name">Dashboard</span><span class="status">Ready</span></span>
+<span class="muted">Who visits, from where, what they read and click. Cookieless; no IP addresses stored.</span>
+<span class="tile__action">Open the dashboard</span>
+</a>
 <div class="tile tile--unbuilt" aria-disabled="true">
 <span class="tile__head"><span class="tile__name">Résumé generator</span><span class="status status--unbuilt">Not built yet</span></span>
 <span class="muted">Tailored, ATS-safe résumés from the same facts. Comes with the job-fit engine.</span>
@@ -561,10 +571,173 @@ export function adminHomePage(ctx, { drafts, lastPublished }) {
   return layout(ctx, { title: `Admin — ${ctx.cv.person.name}`, description: 'Admin.', path: '/admin/', current: null, main, admin: adminBar(ctx, { mode: 'home', drafts }), bare: true });
 }
 
+// ---------- analytics dashboard (admin) ----------
+const fmtNum = (n) => Number(n || 0).toLocaleString('en-US');
+const fmtDur = (s) => { s = Math.round(s || 0); return s >= 60 ? `${Math.floor(s / 60)}m ${String(s % 60).padStart(2, '0')}s` : `${s}s`; };
+const fmtTime = (ms) => new Date(ms).toLocaleString('en-US', { timeZone: 'America/Los_Angeles', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+let regionNames;
+const countryName = (code) => {
+  if (!code || code === '(none)') return code;
+  try { regionNames ||= new Intl.DisplayNames(['en'], { type: 'region' }); return regionNames.of(code) || code; } catch { return code; }
+};
+
+function barList(title, rows, { label = (r) => r.k, note = '', empty = 'Nothing yet.', measure = (r) => r.n, valueText = (r) => fmtNum(r.n), sub = (r) => `${fmtNum(r.v)} visitor${r.v === 1 ? '' : 's'}` } = {}) {
+  const max = Math.max(1, ...rows.map(measure));
+  return `<section class="dash-card">
+<header><h2>${esc(title)}</h2>${note ? `<p class="muted small">${esc(note)}</p>` : ''}</header>
+${rows.length ? `<table class="bar-list"><tbody>
+${join(rows, (r) => `<tr><th scope="row"><span class="bar" style="width:${Math.max(2, Math.round((measure(r) / max) * 100))}%"></span><span class="bar-label">${esc(label(r))}</span></th><td><strong>${esc(valueText(r))}</strong>${sub ? `<span>${esc(sub(r))}</span>` : ''}</td></tr>`)}
+</tbody></table>` : `<p class="muted small">${esc(empty)}</p>`}
+</section>`;
+}
+
+function dailyChart(series, rangeKey) {
+  // Fill gaps so every day in the range has a bar.
+  const byDay = Object.fromEntries(series.map((r) => [r.d, r]));
+  const days = [];
+  const span = { '24h': 2, '7d': 7, '30d': 30, '90d': 90 }[rangeKey];
+  if (span) {
+    for (let i = span - 1; i >= 0; i--) {
+      days.push(new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Los_Angeles', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(Date.now() - i * 86400000)));
+    }
+  } else days.push(...series.map((r) => r.d));
+  const data = days.map((d) => ({ d, views: byDay[d]?.views || 0, visitors: byDay[d]?.visitors || 0 }));
+  const max = Math.max(1, ...data.map((r) => r.views));
+  const W = 720, H = 180, top = 12, bottom = 24, left = 32;
+  const plotW = W - left, plotH = H - top - bottom;
+  const step = plotW / Math.max(1, data.length);
+  const barW = Math.max(2, Math.min(28, step - 4)); // thin marks, centred in their slot
+  const y = (v) => top + plotH - (v / max) * plotH;
+  const gridVals = [0, Math.ceil(max / 2), max];
+  const label = (d) => new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
+  const every = Math.ceil(data.length / 6);
+  return `<section class="dash-card dash-card--wide">
+<header><h2>Page views per day</h2><p class="muted small">Pacific time. Hover or focus a bar for the day's numbers.</p></header>
+<div class="chart" data-chart>
+<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Page views per day">
+${join(gridVals, (v) => `<line class="grid" x1="${left}" x2="${W}" y1="${y(v)}" y2="${y(v)}"/><text class="axis" x="${left - 6}" y="${y(v) + 4}" text-anchor="end">${v}</text>`)}
+${join(data, (r, i) => {
+    const h = Math.max(r.views ? 2 : 0, (r.views / max) * plotH);
+    const x = left + i * step + (step - barW) / 2;
+    return `<g class="bar-g" tabindex="0" data-tip="${esc(label(r.d))}: ${r.views} view${r.views === 1 ? '' : 's'}, ${r.visitors} visitor${r.visitors === 1 ? '' : 's'}">
+<rect class="hit" x="${left + i * step}" y="${top}" width="${step}" height="${plotH}"/>
+${h ? `<path class="mark" d="M${x},${top + plotH} V${top + plotH - h + Math.min(4, h)} q0,-${Math.min(4, h)} ${Math.min(4, barW / 2)},-${Math.min(4, h)} H${x + barW - Math.min(4, barW / 2)} q${Math.min(4, barW / 2)},0 ${Math.min(4, barW / 2)},${Math.min(4, h)} V${top + plotH} Z"/>` : ''}
+${i % every === 0 ? `<text class="axis" x="${x + barW / 2}" y="${H - 6}" text-anchor="middle">${esc(label(r.d))}</text>` : ''}
+</g>`;
+  })}
+</svg>
+<div class="chart-tip" role="status" hidden></div>
+</div>
+<details class="table-view"><summary>Show as table</summary>
+<table class="data-table"><thead><tr><th scope="col">Day</th><th scope="col">Views</th><th scope="col">Visitors</th></tr></thead>
+<tbody>${join([...data].reverse(), (r) => `<tr><td>${esc(r.d)}</td><td>${r.views}</td><td>${r.visitors}</td></tr>`)}</tbody></table>
+</details>
+</section>`;
+}
+
+const EVENT_TEXT = {
+  pageview: (e) => `Viewed ${e.path}`,
+  notfound: (e) => `Hit a missing page: ${e.path}`,
+  section: (e) => `Saw section “${e.label}”`,
+  detail: (e, cards) => `Expanded card: ${cards[e.label] || e.label}`,
+  more: (e) => `Opened the folded results for ${String(e.label || '').replace('exp-', '')}`,
+  filter: (e) => `Filtered by ${e.label}`,
+  contact: (e) => `Contact: ${e.label}`,
+  theme: (e) => `Switched to ${e.label} theme`,
+  print: () => 'Printed or saved as PDF',
+  outbound: (e) => `Left for ${e.label}`,
+  engage: (e) => `Spent ${fmtDur(e.value)} on ${e.path} (${e.label})`,
+};
+
+export function dashboardPage(ctx, d) {
+  const cards = {};
+  ctx.cv.experience.roles.forEach((r) => r.cards.forEach((c) => { cards[c.id] = `${r.company}: ${c.headline}`; }));
+  const sectionNames = { 'career-arc': 'Career arc', experience: 'Experience', 'ai-method': 'How I work with AI', builds: 'Builds', about: 'About', skills: 'Skills', education: 'Education', 'site-build': 'How this site was built', contact: 'Contact (footer)' };
+  const ranges = [['24h', 'Last 24 hours'], ['7d', '7 days'], ['30d', '30 days'], ['90d', '90 days'], ['all', 'All time']];
+  const t = d.totals;
+  const tile = (label, value, detail) => `<div class="stat"><span class="label">${esc(label)}</span><strong>${esc(value)}</strong>${detail ? `<span class="muted small">${esc(detail)}</span>` : ''}</div>`;
+  const where = (r) => [r.city, r.region, countryName(r.country)].filter(Boolean).join(', ') || 'Unknown location';
+
+  const main = `<main id="main" class="wrap dash">
+<header class="dash-head">
+<div><h1>Dashboard</h1><p class="muted">Visits to the public site. Cookieless; IP addresses are never stored; visitors are grouped per day with an anonymous ID.</p></div>
+<button type="button" class="btn-quiet" data-exclude hidden>Exclude this browser</button>
+</header>
+<nav class="range" aria-label="Date range">${join(ranges, ([k, l]) => `<a href="?range=${k}"${d.rangeKey === k ? ' aria-current="true"' : ''}>${l}</a>`)}</nav>
+
+<div class="stats">
+${tile('Visitors', fmtNum(t.visitors), 'one per person per day')}
+${tile('Page views', fmtNum(t.views))}
+${tile('Avg. engaged time', fmtDur(t.engaged), 'per page, tab visible')}
+${tile('Contact actions', fmtNum(t.contacts), 'email, copy, LinkedIn')}
+${tile('Printed / saved PDF', fmtNum(t.prints))}
+</div>
+
+${dailyChart(d.series, d.rangeKey)}
+
+<h2 class="dash-section">Where they came from</h2>
+<div class="dash-grid">
+${barList('Ref codes', d.refs.filter((r) => r.k !== '(none)'), { note: 'From tailored links like ?ref=acme. The reliable way to know a company looked.', empty: 'No ref links used yet.' })}
+${barList('Networks', d.orgs, { note: 'Who owns the visitor’s network. Often an ISP or carrier; sometimes the employer.' })}
+${barList('Referrers', d.referrers, { label: (r) => (r.k === '(none)' ? 'Direct / unknown' : r.k) })}
+${barList('Pages', d.pages)}
+</div>
+
+<h2 class="dash-section">Where they are</h2>
+<div class="dash-grid">
+${barList('Cities', d.cities)}
+${barList('Regions', d.regions, { label: (r) => r.k.replace(/, ([A-Z]{2})$/, (m, c) => `, ${countryName(c)}`) })}
+${barList('Countries', d.countries, { label: (r) => countryName(r.k) })}
+</div>
+
+<h2 class="dash-section">What they read and did</h2>
+<div class="dash-grid">
+${barList('Sections reached', d.sections, {
+    label: (r) => sectionNames[r.k] || r.k,
+    note: `Share of CV visitors (${fmtNum(d.cvVisitors)}) who scrolled each section into view.`,
+    measure: (r) => r.v,
+    valueText: (r) => `${d.cvVisitors ? Math.round((r.v / d.cvVisitors) * 100) : 0}%`,
+    sub: (r) => `${fmtNum(r.v)} visitor${r.v === 1 ? '' : 's'}`,
+  })}
+${barList('Cards expanded', d.details, { label: (r) => cards[r.k] || r.k, note: 'Which results people opened for the full line.' })}
+${barList('Contact actions', d.contacts)}
+${barList('Filter chips', d.filters)}
+${barList('Folded results opened', d.mores, { label: (r) => String(r.k).replace('exp-', '') })}
+${barList('Outbound links', d.outbound)}
+${barList('Missing pages (404)', d.notfound)}
+${barList('Theme switches', d.themes)}
+</div>
+
+<h2 class="dash-section">Devices</h2>
+<div class="dash-grid">
+${barList('Device', d.devices)}
+${barList('Browser', d.browsers)}
+${barList('Operating system', d.oses)}
+${barList('Screen size', d.screens)}
+</div>
+
+<h2 class="dash-section">Recent visits</h2>
+<p class="muted small">The latest 25 visitor-days, newest first. Open one for its timeline.</p>
+<ol class="visits">
+${d.recent.length ? join(d.recent, (v) => `<li><details>
+<summary><span class="visit-when mono">${esc(fmtTime(v.last))}</span>
+<span class="visit-who"><strong>${esc(where(v))}</strong>${v.org ? ` · ${esc(v.org)}` : ''}</span>
+<span class="visit-meta muted small">${esc([v.device, v.browser].filter(Boolean).join(' · '))}${v.ref ? ` · ref=${esc(v.ref)}` : ''}${v.referrer ? ` · from ${esc(v.referrer)}` : ''}${v.contacts ? ' · contacted' : ''}${v.prints ? ' · printed' : ''}</span></summary>
+<ol class="timeline">${join(v.events, (e) => `<li><span class="mono muted">${esc(new Date(e.ts).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour: 'numeric', minute: '2-digit', second: '2-digit' }))}</span> ${esc((EVENT_TEXT[e.type] || ((x) => x.type))(e, cards))}</li>`)}</ol>
+</details></li>`) : '<li class="muted">No visits recorded yet.</li>'}
+</ol>
+</main>`;
+  return layout(ctx, {
+    title: `Dashboard — ${ctx.cv.person.name}`, description: 'Site analytics.', path: '/admin/dashboard/', current: null, main, bare: true,
+    admin: adminBar(ctx, { mode: 'dashboard', drafts: 0 }).replace(/<span class="admin-drafts"[^>]*>[^<]*<\/span>/, ''),
+    scripts: '<script src="/admin/assets/dashboard.js" defer></script>\n',
+  });
+}
+
 export function notFoundPage(ctx) {
   const main = `<main id="main" class="wrap">
 <header class="page-title"><h1>Nothing here.</h1><div class="rule"></div><p class="lede">That page doesn't exist, or it moved.</p></header>
 <div class="page-main"><div class="row-links"><a class="btn btn--primary" href="/">Back to the CV</a><a class="btn btn--secondary" href="/builds/">See the builds</a></div></div>
 </main>`;
-  return layout(ctx, { title: `Not found — ${ctx.cv.person.name}`, description: 'Page not found.', path: '/404', current: null, main, noindex: true });
+  return layout(ctx, { title: `Not found — ${ctx.cv.person.name}`, description: 'Page not found.', path: '/404', current: null, main, noindex: true, pageType: '404' });
 }

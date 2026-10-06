@@ -10,16 +10,25 @@ import { validate } from '../build/validate.mjs';
 import { FLAGS } from '../build/flags.mjs';
 import bundledCv from '../content/cv.json';
 import { verifyAccessJwt } from './access.js';
+import { collect, prune, dashboardData } from './analytics.js';
 
 const CV_PATH = 'content/cv.json';
 const MAX_BODY = 512 * 1024;
 
 export default {
+  // Daily: enforce analytics retention (13 months) and drop old visitor-hash salts.
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil(prune(env));
+  },
+
   async fetch(request, env) {
     const url = new URL(request.url);
     const path = url.pathname;
     const isAdmin = path === '/admin' || path.startsWith('/admin/') || path.startsWith('/api/admin/');
     if (!isAdmin) {
+      if (path === '/api/collect') {
+        try { return await collect(request, env, url); } catch (err) { console.error('collect error', err); return new Response(null, { status: 204 }); }
+      }
       if (path.startsWith('/api/')) return json({ error: 'Not found' }, 404);
       return env.ASSETS.fetch(request);
     }
@@ -73,6 +82,11 @@ async function routeAdmin(request, env, url) {
   if (method !== 'GET' && method !== 'HEAD') {
     const origin = request.headers.get('Origin');
     if (origin !== url.origin) return json({ error: 'Cross-site request refused.' }, 403);
+  }
+
+  if (path === '/admin/dashboard/' && method === 'GET') {
+    const data = await dashboardData(env, url.searchParams.get('range') || '30d');
+    return html(T.dashboardPage(pageCtx(bundledCv), data));
   }
 
   if (path === '/admin/' && method === 'GET') {

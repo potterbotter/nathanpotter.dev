@@ -73,3 +73,45 @@
 .on-site { font-family: var(--mono); font-size: var(--fs-label); font-weight: 700; padding: 3px 8px; border-radius: var(--r-pill); background: var(--brand); color: var(--brand-ink); }
 .inline-add { display: flex; gap: var(--sp-2); }
 .inline-add input { flex: 1; min-width: 0; }
+
+/* Dashboard */
+.dash { display: flex; flex-direction: column; gap: var(--sp-5); padding-block: var(--sp-6) var(--sp-8); }
+.dash-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--sp-3); }
+.dash-head h1 { font-size: var(--fs-5); }
+.dash-head p { max-width: 70ch; }
+.range { display: flex; flex-wrap: wrap; gap: var(--sp-1); }
+.range a { display: inline-flex; align-items: center; min-height: 36px; padding: 0 12px; border: 1px solid var(--line); border-radius: var(--r-pill); color: var(--ink); text-decoration: none; font-size: var(--fs-1); }
+.range a[aria-current] { background: var(--brand); border-color: var(--brand); color: var(--brand-ink); font-weight: 600; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(170px, 100%), 1fr)); gap: var(--sp-3); }
+.stat { display: flex; flex-direction: column; gap: 2px; padding: var(--sp-4); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-2); }
+.stat strong { font-size: 2rem; font-weight: 800; line-height: 1.1; color: var(--ink); }
+.dash-section { font-size: var(--fs-4); color: var(--ink); margin-top: var(--sp-4); }
+.dash-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: var(--sp-3); }
+.dash-card { display: flex; flex-direction: column; gap: var(--sp-3); padding: var(--sp-4); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-2); min-width: 0; }
+.dash-card h2 { font-size: var(--fs-3); }
+.bar-list { width: 100%; border-collapse: collapse; font-size: var(--fs-1); }
+.bar-list th { position: relative; padding: 6px 8px; text-align: left; font-weight: 400; width: 100%; }
+.bar-list .bar { position: absolute; inset: 3px auto 3px 0; background: var(--chip); border-radius: 0 4px 4px 0; }
+.bar-list .bar-label { position: relative; overflow-wrap: anywhere; }
+.bar-list td { padding: 6px 0 6px 8px; text-align: right; white-space: nowrap; }
+.bar-list td strong { display: block; color: var(--ink); }
+.bar-list td span { color: var(--ink-2); font-size: var(--fs-label); }
+.chart { position: relative; overflow-x: auto; }
+.chart svg { width: 100%; min-width: 480px; height: auto; display: block; }
+.chart .grid { stroke: var(--line); stroke-width: 1; }
+.chart .axis { fill: var(--ink-2); font-size: 11px; font-family: var(--mono); }
+.chart .mark { fill: var(--brand); }
+.chart .hit { fill: transparent; }
+.chart .bar-g { outline: none; cursor: default; }
+.chart .bar-g.is-on .mark, .chart .bar-g:focus-visible .mark { fill: var(--accent-text); }
+.chart .bar-g:focus-visible .hit { stroke: var(--brand); stroke-width: 2; }
+.chart-tip { position: absolute; z-index: 2; padding: 6px 10px; background: var(--raised); border: 1px solid var(--line); border-radius: var(--r-1); box-shadow: var(--shadow-2); font-size: var(--fs-1); font-weight: 600; pointer-events: none; white-space: nowrap; }
+.table-view summary { font-size: var(--fs-1); font-weight: 600; color: var(--brand); min-height: 32px; display: inline-flex; align-items: center; }
+.data-table { margin-top: var(--sp-2); border-collapse: collapse; font-size: var(--fs-1); }
+.data-table th, .data-table td { padding: 4px 16px 4px 0; text-align: left; border-bottom: 1px solid var(--line); }
+.visits { display: flex; flex-direction: column; gap: var(--sp-2); }
+.visits > li > details { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-2); }
+.visits summary { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px var(--sp-3); padding: var(--sp-3) var(--sp-4); }
+.visit-when { font-size: var(--fs-1); color: var(--ink-2); min-width: 120px; }
+.timeline { display: flex; flex-direction: column; gap: 4px; padding: 0 var(--sp-4) var(--sp-4) var(--sp-5); border-top: 1px solid var(--line); padding-top: var(--sp-3); font-size: var(--fs-1); }
+.timeline .mono { display: inline-block; min-width: 92px; }

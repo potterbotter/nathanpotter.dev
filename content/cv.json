@@ -601,6 +601,7 @@
     "stack": [
       "Plain HTML and CSS, generated from one structured content file and served by Cloudflare. Minimal JavaScript; every page reads without it.",
       "Light and dark themes; the site follows your system setting until you pick one.",
+      "Visits are counted without cookies or third-party trackers, and IP addresses are never stored.",
       "[Decision and trade-off]",
       "Not resolved yet: [open question]"
     ],

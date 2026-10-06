@@ -29,6 +29,8 @@ wrangler.jsonc          ← Cloudflare config: build, assets, Worker, D1 binding
 
 **Admin / edit mode:** `/sign-in/` → `/admin/` (Cloudflare Access, GitHub login, one account) → `/admin/edit/`. Edits save as drafts in D1; **Publish** commits `content/cv.json` to `main` through the GitHub API, which redeploys. The Worker re-verifies Access's signed token and the allowed email on every request and fails closed if anything is missing. Secrets (`GITHUB_TOKEN`, `ADMIN_EMAIL`) live only in Cloudflare.
 
+**Analytics:** `/admin/dashboard/` shows first-party, cookieless visit data collected by `site.js` → `/api/collect` → D1 (`src/analytics.js`). No IP addresses are stored; see DESIGN.md.
+
 **Editing content:** change `content/cv.json`, then commit and push. Placeholder copy written as `[in brackets]` is hidden on the live site until it's replaced.
 
 **Feature flags** at the top of `build/build.mjs` keep unbuilt features off public pages: `jobFitLive` (fit CTAs), `adminLive` (footer Admin link), `pdfLive` (PDF download).
@@ -117,4 +119,7 @@ DNS and email are on Cloudflare too:
 | 2026-10-05 | Footer email button fixed (white on white) | Caught in an edit-mode screenshot. The footer link colour overrode the button's colour. |
 | 2026-10-05 | Tab icon "Ruled N" (from a Claude Design pass): teal N over the maroon title rule | Echoes the rule under every page heading. Built from shapes, not a font, so it renders the same everywhere. The SVG follows the system's light/dark setting. Sources and spec in `design/icon/`. |
 | 2026-10-05 | Name/URL removed from the header; CV rail made sticky, with the current section highlighted | Nathan's call after seeing it live. The hero already carries the name, and a sticky contents list helps on a long CV. Overrides the handoff's "not sticky". |
+| 2026-10-05 | First-party cookieless analytics in D1, shown in `/admin/dashboard/` | Only first-party data can show the visitor's network owner and join visits to the application tracker via `?ref=`. Third-party tools (Plausible, PostHog, Clarity) can do neither, or need cookies and consent banners. Cloudflare Web Analytics can run alongside as a free cross-check. |
+| 2026-10-05 | No IPs stored; daily-rotating anonymous visitor ID; 13-month retention | Location and network owner are derived at request time, so storing IPs adds risk and no insight. Keeps the site free of personal data (principle 9). |
+| 2026-10-05 | Session replay and heatmaps deliberately left out | They record individuals, need consent banners and cut against the privacy-first pitch. Revisit only for tool pages, behind consent. |
 | 2026-10-05 | Built with Claude Code (AI-assisted) | Scaffolding, README and deploy steps were produced in a Claude Code session, with dashboard steps done by hand. |
