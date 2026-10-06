@@ -94,35 +94,17 @@
           },
           {
             "id": "anchorage-2",
-            "metric": "Shipped",
+            "metric": "290+",
             "tag": "0→1",
-            "headline": "Progressive onboarding: new product lines with no repeat review",
-            "headlineSource": "condensed from detail by Claude — Nathan to review",
+            "headline": "Multi-product Customers use multiple product offerings that no longer require reanswering the same questions.",
             "detail": "Shipped progressive onboarding, which lets existing clients activate a new product line by reusing information they've already provided, with no repeat review."
           },
           {
-            "id": "anchorage-3",
-            "metric": "Underway",
-            "tag": "Platform",
-            "headline": "Re-architecting the core onboarding platform, live ops untouched",
-            "headlineSource": "condensed from detail by Claude — Nathan to review",
-            "detail": "Leading a re-architecture of the core onboarding platform (data-model redesign, account migration, legacy retirement) with no disruption to live operations."
-          },
-          {
             "id": "anchorage-4",
-            "metric": "8",
+            "metric": "8 Person Squad",
             "tag": "Leadership",
-            "headline": "Person squad (7 eng, 1 design), aligned with 5 compliance and ops teams",
-            "headlineSource": "condensed from detail by Claude — Nathan to review",
+            "headline": "(7 eng, 1 design), aligned with 5 compliance and ops teams",
             "detail": "Lead an 8-person squad (7 engineers, 1 designer), aligning priorities across compliance, sanctions, financial intelligence, due-diligence operations and periodic client review."
-          },
-          {
-            "id": "anchorage-5",
-            "metric": "62",
-            "tag": "Leadership",
-            "headline": "New product, design and eng hires trained on org-wide standards",
-            "headlineSource": "condensed from detail by Claude — Nathan to review",
-            "detail": "Co-developed org-wide product development standards (PRD templates, lifecycle expectations, training materials) and ran onboarding training for 62 new product, design and engineering hires."
           },
           {
             "id": "anchorage-6",
@@ -136,9 +118,24 @@
             "id": "anchorage-7",
             "metric": "3 squads",
             "tag": "AI",
-            "headline": "Swapped slide decks for my live, clickable roadmap",
+            "headline": "adopted an interactive roadmap artifact I built with Claude Code.",
+            "detail": "Built a live, clickable roadmap with embedded prototypes and easy cross team syncing for the latest true snapshot. It was adopted by 3 product squads in place of slide decks."
+          },
+          {
+            "id": "anchorage-5",
+            "metric": "62 trainees",
+            "tag": "Leadership",
+            "headline": "New product, design and eng hires trained on org-wide standards",
             "headlineSource": "condensed from detail by Claude — Nathan to review",
-            "detail": "Built a live, clickable roadmap with embedded prototypes, adopted by 3 product squads in place of slide decks."
+            "detail": "Co-developed org-wide product development standards (PRD templates, lifecycle expectations, training materials) and ran onboarding training for 62 new product, design and engineering hires."
+          },
+          {
+            "id": "anchorage-3",
+            "metric": "Refactor",
+            "tag": "Platform",
+            "headline": "Re-architecting the core onboarding platform, live ops untouched",
+            "headlineSource": "condensed from detail by Claude — Nathan to review",
+            "detail": "Product support and championship of a re-architecture of the core onboarding platform (data-model redesign, account migration, legacy retirement) with no disruption to live operations."
           }
         ]
       },
