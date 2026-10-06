@@ -116,7 +116,7 @@ export async function dashboardData(env, rangeKey) {
     top('country'), top("region || ', ' || country"), top("city || ', ' || COALESCE(region, country)"), top('org', 'pageview', 15),
     top('device'), top('browser'), top('os'), top('screen'),
     labels('section', 20),
-    one(`SELECT COUNT(DISTINCT day || visitor) AS v FROM events WHERE ts >= ?1 AND type = 'pageview' AND path IN ('/', '/builder/', '/fintech/', '/climate/')`),
+    one(`SELECT COUNT(DISTINCT day || visitor) AS v FROM events WHERE ts >= ?1 AND type = 'pageview' AND path IN ('/', '/builder/', '/fintech/', '/crypto/', '/onboarding/', '/climate/')`),
     labels('detail', 20), labels('more'), labels('filter'), labels('contact'), labels('outbound'), labels('theme'), top('path', 'notfound'),
     all(`SELECT day, visitor, MIN(ts) AS first, MAX(ts) AS last, COUNT(*) AS n,
            MAX(org) AS org, MAX(city) AS city, MAX(region) AS region, MAX(country) AS country,

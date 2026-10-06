@@ -28,9 +28,7 @@ cpSync(join(ROOT, 'admin'), join(DIST, 'admin', 'assets'), { recursive: true });
 
 const pages = {
   'index.html': T.cvPage(ctx, 'all'),
-  'builder/index.html': T.cvPage(ctx, 'builder'),
-  'fintech/index.html': T.cvPage(ctx, 'fintech'),
-  'climate/index.html': T.cvPage(ctx, 'climate'),
+  ...Object.fromEntries(T.curatedViews(cv).map((k) => [cv.views[k].path.slice(1) + 'index.html', T.cvPage(ctx, k)])),
   'views/index.html': T.viewsPage(ctx),
   'builds/index.html': T.buildsPage(ctx),
   'tools/job-fit/index.html': T.jobFitPage(ctx),

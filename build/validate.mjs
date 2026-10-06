@@ -24,10 +24,13 @@ export function validate(cv) {
   }
 
   const anchors = new Set(cv.experience.roles.map((r) => r.anchor));
+  const cardIds = new Set(cv.experience.roles.flatMap((r) => r.cards.map((c) => c.id)));
   for (const [key, view] of Object.entries(cv.views)) {
     if (key.startsWith('_')) continue;
     for (const a of view.roleOrder) must(anchors.has(a), `View ${key} orders unknown role ${a}`);
     for (const t of view.upFrontTags || []) must(tags.has(t), `View ${key} uses unknown tag "${t}"`);
+    for (const id of view.upFrontCards || []) must(cardIds.has(id), `View ${key} puts unknown card ${id} up front`);
+    if (key !== 'all') must(/^\/[a-z-]+\/$/.test(view.path) && view.landing?.upFront?.length, `View ${key} needs a /path/ and landing copy`);
   }
 
   for (const g of cv.skills.groups) {

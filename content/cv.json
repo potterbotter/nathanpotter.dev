@@ -828,6 +828,80 @@
         ]
       }
     },
+    "crypto": {
+      "label": "Crypto",
+      "path": "/crypto/",
+      "roleOrder": [
+        "exp-anchorage",
+        "exp-jaris",
+        "exp-mosaic"
+      ],
+      "focus": "Institutional crypto at Anchorage Digital: client onboarding, compliance and risk at a federally chartered crypto bank.",
+      "upFrontCards": [
+        "anchorage-0",
+        "anchorage-9",
+        "anchorage-2",
+        "anchorage-1",
+        "anchorage-8",
+        "anchorage-4"
+      ],
+      "landing": {
+        "for": "For digital-asset teams, where I run onboarding and risk at a federally chartered crypto bank.",
+        "cta": "See the crypto view",
+        "upFront": [
+          {
+            "metric": "380+",
+            "text": "Institutional clients onboarded to a crypto bank, with $18M+ in revenue"
+          },
+          {
+            "metric": "+139.9%",
+            "text": "AML case volume, with case operations scaling to match"
+          },
+          {
+            "metric": "Same day",
+            "text": "Approval for existing clients adding a new product line"
+          }
+        ]
+      }
+    },
+    "onboarding": {
+      "label": "Onboarding",
+      "path": "/onboarding/",
+      "roleOrder": [
+        "exp-anchorage",
+        "exp-jaris",
+        "exp-mosaic"
+      ],
+      "focus": "Getting customers and partners live faster without loosening controls, from institutional crypto clients to clean-energy lending partners.",
+      "upFrontCards": [
+        "anchorage-0",
+        "anchorage-1",
+        "anchorage-2",
+        "anchorage-9",
+        "anchorage-3",
+        "mosaic-4",
+        "mosaic-5",
+        "mosaic-6"
+      ],
+      "landing": {
+        "for": "For onboarding, KYC and activation teams: customers and partners live faster, with controls intact.",
+        "cta": "See the onboarding view",
+        "upFront": [
+          {
+            "metric": "4×",
+            "text": "Client onboarding throughput at a crypto bank, in a year"
+          },
+          {
+            "metric": "−90%",
+            "text": "Funding-approval turnaround for the largest lending partners"
+          },
+          {
+            "metric": "+9%",
+            "text": "Partner approval rates QoQ, from onboarding funnel analytics"
+          }
+        ]
+      }
+    },
     "climate": {
       "label": "Climate",
       "path": "/climate/",

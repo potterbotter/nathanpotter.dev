@@ -132,7 +132,7 @@ ${visible(ctx, openTo) ? `<p class="open-to"${ep(ctx, 'contact.openTo')}>${esc(o
 </div>
 </div>
 <nav class="sitemap noprint" aria-label="Site map">
-<div><span class="eyebrow">CV</span><a href="/">Full CV</a><a href="/views/">Role views</a><a href="/builder/">Builder</a><a href="/fintech/">Fintech</a><a href="/climate/">Climate</a></div>
+<div><span class="eyebrow">CV</span><a href="/">Full CV</a><a href="/views/">Role views</a>${join(curatedViews(ctx.cv), (k) => `<a href="${ctx.cv.views[k].path}">${esc(ctx.cv.views[k].label)}</a>`)}</div>
 <div><span class="eyebrow">Builds</span><a href="/builds/">All builds</a><a href="/tools/job-fit/">Job-fit</a><a href="/tools/dpr/">DPR calculator</a></div>
 ${ctx.flags.adminLive ? `<div><span class="eyebrow">Site</span><a href="/sign-in/">${I.lock}Admin</a></div>` : ''}
 </nav>
@@ -169,13 +169,16 @@ function fitCta(ctx, variant) {
 </a>`;
 }
 
-// ---------- CV page (/, /builder/, /fintech/, /climate/) ----------
+// Curated role views, in cv.json order (keys starting with _ are notes).
+export const curatedViews = (cv) => Object.keys(cv.views).filter((k) => k !== 'all' && !k.startsWith('_'));
+
+// ---------- CV page (/ and each role view) ----------
 // ctx.edit (admin only) adds edit hooks and controls; ctx.adminBar is the admin strip's HTML.
 export function cvPage(ctx, viewKey) {
   const { cv } = ctx;
   const view = cv.views[viewKey];
   const curated = viewKey !== 'all';
-  const viewKeys = ['all', 'builder', 'fintech', 'climate'];
+  const viewKeys = ['all', ...curatedViews(cv)];
   const aboutParas = ctx.edit ? cv.about : cv.about.filter((p) => visible(ctx, p));
   const steps = cv.aiMethod.steps.map((s, i) => ({ ...s, i })).filter((s) => visible(ctx, s.title) && visible(ctx, s.body));
 
@@ -315,6 +318,7 @@ function experienceSection(ctx, viewKey) {
   const roles = view.roleOrder.map((a) => cv.experience.roles.find((r) => r.anchor === a));
   const total = cv.experience.roles.reduce((n, r) => n + r.cards.length, 0);
   const upFront = (card, role) => !curated
+    || (view.upFrontCards || []).includes(card.id)
     || (view.upFrontTags || []).includes(card.tag)
     || (view.upFrontRoles || []).includes(role.anchor);
   const upFrontCount = roles.reduce((n, r) => n + r.cards.filter((c) => upFront(c, r)).length, 0);
@@ -433,7 +437,7 @@ export function viewsPage(ctx) {
 <p class="hero-lede measure">${esc(L.lede)}</p>
 </div></section>
 <div class="wrap page-main" style="padding-top: var(--sp-7)">
-<div class="tiles">${join(['builder', 'fintech', 'climate'], card)}</div>
+<div class="tiles tiles--views">${join(curatedViews(cv), card)}</div>
 <div class="tiles">
 <a class="dashed-card" href="/"><strong>Not sure?</strong><span class="tile__action">Read the full CV</span></a>
 ${ctx.flags.jobFitLive ? `<a class="cta cta--band" href="/tools/job-fit/"><span class="cta-text"><span class="eyebrow">Hiring for one specific role?</span><span class="cta-title">Am I the right fit for your company?</span></span><span class="cta-arrow" aria-hidden="true">${I.arrow(22)}</span></a>` : ''}

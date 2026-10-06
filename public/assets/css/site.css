@@ -189,6 +189,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 
 /* Tiles (builds, view picker) */
 .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: var(--sp-4); }
+.tiles--views { grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); }
 .tile { display: flex; flex-direction: column; gap: var(--sp-3); padding: var(--sp-5); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-2); box-shadow: var(--shadow-1); color: var(--ink); text-decoration: none; transition: transform .15s ease, border-color .15s ease; }
 .tile:hover { color: var(--ink); border-color: var(--brand); transform: translateY(-3px); }
 .tile--unbuilt { border-style: dashed; box-shadow: none; }

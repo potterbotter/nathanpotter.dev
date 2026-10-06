@@ -59,7 +59,7 @@ The generic CV is the homepage. Navigation makes the CV's role views and the too
 ```
 PUBLIC
 /                     Interactive CV, generic view (default)
-/builder/  /fintech/  /climate/
+/builder/  /fintech/  /crypto/  /onboarding/  /climate/
                       Role views of the same CV: same facts, different order and emphasis.
                       Paths, so a tailored link is easy to send: nathanpotter.dev/fintech/?ref=acme
 /views/               Role views landing (pick a view)
