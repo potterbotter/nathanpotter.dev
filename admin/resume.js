@@ -151,6 +151,10 @@
       reassemble(true).then(function () { navigator.clipboard.writeText(state.text).then(function () { copy.textContent = 'Copied'; setTimeout(function () { copy.textContent = 'Copy as text'; }, 2000); }); });
     });
     actions.appendChild(pdf); actions.appendChild(docx); actions.appendChild(copy);
+    // Hand this résumé (company, role, posting, ref code) to the application tracker.
+    var track = el('a', 'btn btn--secondary', 'Track this application');
+    track.href = '/admin/applications/?resume=' + state.id;
+    actions.appendChild(track);
     actions.appendChild(el('span', 'muted small', 'Site link on this résumé: ' + (state.doc.contact.site || '')));
     frag.appendChild(actions);
     frag.appendChild(paper());

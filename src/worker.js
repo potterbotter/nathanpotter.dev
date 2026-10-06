@@ -15,6 +15,7 @@ import { handleJobFit, handleFetchPosting, monthSpend } from './jobfit-api.js';
 import { handleKbChat, handleKbApply, handleKbNotes } from './kb.js';
 import { handleResumePlan, handleResumeAssemble, handleResumeDocx, handleResumeSettings } from './resume-api.js';
 import { handleReviewNext, handleReviewGenerate, handleReviewDecide } from './review.js';
+import * as Tracker from './tracker.js';
 
 const CV_PATH = 'content/cv.json';
 const MAX_BODY = 512 * 1024;
@@ -153,6 +154,26 @@ async function routeAdmin(request, env, url, ctx) {
   if (path === '/api/admin/resume/assemble' && method === 'POST') return handleResumeAssemble(request, env, (await workingContent(env)).content);
   if (path === '/api/admin/resume/docx' && method === 'POST') return handleResumeDocx(request, env, (await workingContent(env)).content);
   if (path === '/api/admin/resume/settings') return handleResumeSettings(request, env);
+
+  // Application tracker: jobs, applications, timelines, duplicate checks and visits by ref code.
+  if (path === '/admin/applications/' && method === 'GET') {
+    const draft = await getDraft(env);
+    return html(T.trackerPage(pageCtx(bundledCv), { drafts: draft ? draft.changes : 0 }));
+  }
+  if (path === '/api/admin/applications') {
+    if (method === 'GET') return Tracker.handleList(env);
+    if (method === 'POST') return Tracker.handleCreate(request, env);
+  }
+  if (path === '/api/admin/applications/check' && method === 'POST') return Tracker.handleCheck(request, env);
+  if (path === '/api/admin/applications/fetch' && method === 'POST') return Tracker.handleFetch(request);
+  if (path === '/api/admin/applications/resumes' && method === 'GET') return Tracker.handleResumes(env, url);
+  const appMatch = /^\/api\/admin\/applications\/(\d+)$/.exec(path);
+  if (appMatch) {
+    const id = Number(appMatch[1]);
+    if (method === 'GET') return Tracker.handleDetail(env, id);
+    if (method === 'PATCH') return Tracker.handleUpdate(request, env, id);
+    if (method === 'DELETE') return Tracker.handleDelete(env, id);
+  }
 
   // Review queue: Claude proposes résumé blocks in batches; Nathan decides one at a time. Approvals go to the draft.
   if (path === '/admin/review/' && method === 'GET') {

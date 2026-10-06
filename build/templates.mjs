@@ -651,6 +651,10 @@ ${mode === 'review' ? '<a class="admin-link" href="/admin/job-fit/">Test bench</
 <a class="admin-link" href="/admin/edit/">Edit the CV</a>
 <a class="admin-link admin-link--outline" href="/admin/edit/?preview=1" target="_blank" rel="noopener" data-review${drafts ? '' : ' hidden'}>Review draft</a>
 <button type="button" class="admin-publish" data-publish${drafts ? '' : ' disabled'}>Publish</button>`
+      : mode === 'tracker'
+        ? `<a class="admin-link" href="/admin/">Admin home</a>
+<a class="admin-link" href="/admin/job-fit/#resume">Résumé generator</a>
+<a class="admin-link" href="/admin/dashboard/">Dashboard</a>`
       : mode === 'dashboard'
         ? `<a class="admin-link" href="/admin/">Admin home</a>
 <a class="admin-link" href="/admin/job-fit/">Test bench</a>
@@ -660,7 +664,7 @@ ${mode === 'review' ? '<a class="admin-link" href="/admin/job-fit/">Test bench</
   return `<div class="admin-bar noprint" role="region" aria-label="Admin">
 <div class="wrap">
 <div class="admin-bar__left">
-<span class="admin-badge">${mode === 'edit' ? 'Edit mode' : mode === 'preview' ? 'Preview' : mode === 'dashboard' ? 'Dashboard' : mode === 'bench' ? 'Test bench' : mode === 'review' ? 'Review queue' : 'Admin'}</span>
+<span class="admin-badge">${mode === 'edit' ? 'Edit mode' : mode === 'preview' ? 'Preview' : mode === 'dashboard' ? 'Dashboard' : mode === 'bench' ? 'Test bench' : mode === 'review' ? 'Review queue' : mode === 'tracker' ? 'Applications' : 'Admin'}</span>
 <span>Signed in with GitHub as <strong>${handle}</strong></span>
 <span class="admin-drafts" aria-live="polite" data-draft-label>${esc(label)}</span>
 </div>
@@ -700,6 +704,11 @@ export function adminHomePage(ctx, { drafts, lastPublished }) {
 <span class="muted">Tailored, ATS-safe résumés assembled only from your approved blocks. Lives in the test bench's Résumé tab.</span>
 <span class="tile__action">Open the Résumé tab</span>
 </a>
+<a class="tile" href="/admin/applications/">
+<span class="tile__head"><span class="tile__name">Applications</span><span class="status">Ready</span></span>
+<span class="muted">Every application, its status and next step, the résumé you sent, and site visits through its link.</span>
+<span class="tile__action">Open the tracker</span>
+</a>
 <a class="tile" href="/admin/review/">
 <span class="tile__head"><span class="tile__name">Review queue</span><span class="status">Ready</span></span>
 <span class="muted">Proposed titles, summaries, bullet rewordings and skill wordings, one at a time. Approve, edit, reject or skip.</span>
@@ -709,6 +718,53 @@ export function adminHomePage(ctx, { drafts, lastPublished }) {
 <p class="mono muted">Last published: ${esc(lastPublished || '—')} · Drafts: ${drafts}</p>
 </main>`;
   return layout(ctx, { title: `Admin — ${ctx.cv.person.name}`, description: 'Admin.', path: '/admin/', current: null, main, admin: adminBar(ctx, { mode: 'home', drafts }), bare: true });
+}
+
+// ---------- application tracker (admin) ----------
+// The list, form and detail are filled in by admin/tracker.js.
+export function trackerPage(ctx, { drafts }) {
+  const sources = ['Greenhouse', 'Lever', 'Ashby', 'Company site', 'LinkedIn', 'Referral', 'Recruiter', 'Other'];
+  const main = `<main id="main" class="wrap page-main tracker" style="padding-top: var(--sp-6)" data-tracker>
+<header class="tracker-head">
+<div><h1>Applications</h1><p class="muted" data-t-summary>Loading…</p></div>
+<button type="button" class="btn btn--primary" data-t-add>Add application</button>
+</header>
+<form class="tracker-form" data-t-form hidden novalidate>
+<h2>Add an application</h2>
+<div class="tf-row tf-row--link">
+<label for="tf-url">Link to the posting</label>
+<div class="tf-inline"><input id="tf-url" name="url" type="url" inputmode="url" placeholder="https://jobs.example.com/…"><button type="button" class="btn btn--secondary" data-t-fetch>Fill from link</button></div>
+</div>
+<div class="tf-grid">
+<div class="tf-row"><label for="tf-company">Company</label><input id="tf-company" name="company" required></div>
+<div class="tf-row"><label for="tf-title">Role title</label><input id="tf-title" name="title" required></div>
+<div class="tf-row"><label for="tf-location">Location</label><input id="tf-location" name="location" placeholder="Remote, San Francisco…"></div>
+<div class="tf-row"><label for="tf-source">Source</label><select id="tf-source" name="source"><option value="">—</option>${join(sources, (s) => `<option>${esc(s)}</option>`)}</select></div>
+<div class="tf-row"><label for="tf-status">Status</label><select id="tf-status" name="status" data-t-statuses></select></div>
+<div class="tf-row"><label for="tf-applied">Applied on</label><input id="tf-applied" name="appliedOn" type="date"></div>
+<div class="tf-row"><label for="tf-resume">Résumé sent</label><select id="tf-resume" name="resumeId" data-t-resumes><option value="">None or not generated here</option></select></div>
+<div class="tf-row"><label for="tf-req">Requisition ID</label><input id="tf-req" name="reqId" placeholder="Optional"></div>
+<div class="tf-row"><label for="tf-next">Next step</label><input id="tf-next" name="nextStep" placeholder="Follow up with the recruiter"></div>
+<div class="tf-row"><label for="tf-next-on">Next step date</label><input id="tf-next-on" name="nextOn" type="date"></div>
+</div>
+<div class="tf-row"><label for="tf-note">Note</label><textarea id="tf-note" name="note" rows="2" placeholder="Referral from…, salary range…"></textarea></div>
+<details class="tf-jd"><summary>Posting text (<span data-t-jd-count>empty</span>)</summary><textarea id="tf-jd" name="jdText" rows="8" aria-label="Posting text"></textarea></details>
+<div class="tf-dupes" data-t-dupes hidden></div>
+<div class="row-links"><button type="submit" class="btn btn--primary" data-t-save>Save</button><button type="button" class="btn-quiet" data-t-cancel>Cancel</button><span class="muted small" role="status" data-t-form-status></span></div>
+</form>
+<div class="chips" role="group" aria-label="Show applications" data-t-filters>
+<button type="button" class="chip-btn" aria-pressed="true" data-t-filter="active">Active <span class="count" data-t-count="active">0</span></button>
+<button type="button" class="chip-btn" aria-pressed="false" data-t-filter="closed">Closed <span class="count" data-t-count="closed">0</span></button>
+<button type="button" class="chip-btn" aria-pressed="false" data-t-filter="all">All <span class="count" data-t-count="all">0</span></button>
+</div>
+<ul class="tracker-list" data-t-list></ul>
+<p class="muted small" role="status" data-t-status></p>
+</main>`;
+  return layout(ctx, {
+    title: `Applications — ${ctx.cv.person.name}`, description: 'Admin application tracker.', path: '/admin/applications/', current: null, main, bare: true,
+    admin: adminBar(ctx, { mode: 'tracker', drafts }),
+    scripts: '<script src="/admin/assets/tracker.js" defer></script>\n',
+  });
 }
 
 // ---------- review queue (admin) ----------
