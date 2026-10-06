@@ -92,7 +92,7 @@
         "title": "Senior Product Manager, Client Onboarding & Risk Platform",
         "dates": "Jan 2025 – present",
         "note": "Moved from Client Insights & Automation to take over Client Onboarding & Risk when the team needed a PM to lead it. Onboarding serves institutional clients worldwide across Anchorage’s US, Singapore and Cayman Islands entities.",
-        "nextCard": 9,
+        "nextCard": 10,
         "cards": [
           {
             "id": "anchorage-0",
@@ -109,6 +109,13 @@
             "headline": "Average handle time, cut by automation while volume quadrupled",
             "headlineSource": "condensed from detail by Claude — Nathan to review",
             "detail": "Drove onboarding automation (partner verification reliance, automated document collection, reusable questionnaires), bringing average handle time down to 4.5 days while quarterly volume quadrupled."
+          },
+          {
+            "id": "anchorage-9",
+            "metric": "$20M+",
+            "tag": "Scale",
+            "headline": "Onboarded 380+ institutional clients that have so far driven $18M+ in revenue",
+            "detail": "Lead the product lifecycle and PDE team for the onboarding of 380+ institutional clients to a regulated financial institution, resulting in an additional $18M+ in revenue."
           },
           {
             "id": "anchorage-2",
@@ -140,6 +147,13 @@
             "detail": "Built a live, clickable roadmap with embedded prototypes and easy cross team syncing for the latest true snapshot. It was adopted by 3 product squads in place of slide decks."
           },
           {
+            "id": "anchorage-8",
+            "metric": "+139.9%",
+            "tag": "Scale",
+            "headline": "Kept AML case operations scaling through a 139.9% volume rise",
+            "detail": "Supported compliance operations through a 139.9% rise in comparable alert and case volume versus the same-length period before I joined. All of it ran through the case-management system I administer, while I shipped workflow optimizations and Slack automations to ensure the team could continue to scale volume."
+          },
+          {
             "id": "anchorage-5",
             "metric": "62 trainees",
             "tag": "Leadership",
@@ -154,13 +168,6 @@
             "headline": "Re-architecting the core onboarding platform, live ops untouched",
             "headlineSource": "condensed from detail by Claude — Nathan to review",
             "detail": "Product support and championship of a re-architecture of the core onboarding platform (data-model redesign, account migration, legacy retirement) with no disruption to live operations."
-          },
-          {
-            "id": "anchorage-8",
-            "metric": "+139.9%",
-            "tag": "Scale",
-            "headline": "Kept AML case operations scaling through a 139.9% volume rise",
-            "detail": "Supported compliance operations through a 139.9% rise in comparable alert and case volume versus the same-length period before I joined. All of it ran through the case-management system I administer, while I shipped workflow optimizations and Slack automations to ensure the team could continue to scale volume."
           }
         ]
       },
@@ -191,10 +198,9 @@
           },
           {
             "id": "jaris-2",
-            "metric": "SR 11-7",
+            "metric": "Audit Ready",
             "tag": "Risk",
-            "headline": "Model-risk procedures that made lending models audit-ready",
-            "headlineSource": "condensed from detail by Claude — Nathan to review",
+            "headline": "Established embedded model-risk procedures that made lending models SR 11-7 audit-ready",
             "detail": "Led data, underwriting and compliance teams to create SR 11-7 model-risk procedures, making lending models audit-ready."
           }
         ]
@@ -205,7 +211,7 @@
         "kind": "clean-energy financing",
         "title": "Product Analyst → Product Manager",
         "dates": "Oct 2018 – Mar 2023",
-        "note": "Owned product areas end to end from the start, with the same scope as the PM team; the Product Manager title came later.",
+        "note": "Owned product areas end to end from the start while growing into an ever increasing subject area domain",
         "nextCard": 8,
         "cards": [
           {
@@ -281,18 +287,18 @@
     "steps": [
       {
         "n": "01",
-        "title": "[Step]",
-        "body": "[What happens, and why]"
+        "title": "Research & Define",
+        "body": "AI tools empower highly streamlined research processes for any unfamiliar aspects of a problem's surface area"
       },
       {
         "n": "02",
-        "title": "[Step]",
-        "body": "[What happens, and why]"
+        "title": "Align & Iterate",
+        "body": "Rapid prototyping plus processes to consolidate notes, decisions, and context allow for the seamless creation of high impact facilitation and alignment tools"
       },
       {
         "n": "03",
-        "title": "[Step]",
-        "body": "[What happens, and why]"
+        "title": "Build & Own",
+        "body": "Decisions are our most precious commodity these days, and with good decisions made, we can move quickly. Well defined decisions then also empower me to effectively test, own, and ship high quality outcomes."
       }
     ]
   },
@@ -880,7 +886,7 @@
     "openTo": "[One line on what I'm open to.]"
   },
   "siteBuild": {
-    "intro": "[One paragraph: why the site is the evidence for the CV, and what I'd do differently.]",
+    "intro": "This website is entirely the result of me working via Claude. Layout, user experience, features, and content all come from me. The underlying code and infrastructure is guided and executed by Claude. I built this because I can and because I had fun doing it.",
     "stack": [
       "Plain HTML and CSS, generated from one structured content file and served by Cloudflare. Minimal JavaScript; every page reads without it.",
       "Light and dark themes; the site follows your system setting until you pick one.",
