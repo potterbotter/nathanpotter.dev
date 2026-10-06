@@ -112,6 +112,8 @@ CV content lives in one structured file, [`content/cv.json`](content/cv.json), i
 - **Contact:** `hello@nathanpotter.dev` (the same address as the site) plus the phone number from private D1 settings (never on the public site or in the repo), LinkedIn, and `nathanpotter.dev/?ref=<code>` so analytics can tie a visit to the application.
 - **Output:** PDF (print-ready page) and copy as text now; `.docx` next. Each run is stored in the D1 `resumes` table (posting, keywords, plan, text, scores, exported flag) and costs about 5 cents from the job-fit budget.
 
+**Review queue** (`/admin/review/`, `src/review.js`, `admin/review.js`): the fastest way to grow the approved blocks. Claude Opus 5.5 proposes about 20 at a time (titles, summary variants, bullet rewordings, skill wordings), using the role views, keywords from postings he has tailored for, and everything already approved, rejected or waiting. Code drops anything that adds a claim or repeats an earlier decision. Nathan sees one proposal at a time with what exists now and one line of why, and decides with a button or a key (A approve, E edit, R reject, S skip). Approved items go to the draft; rejected ones are listed in later prompts so they are not proposed again. A batch costs about 15 cents from the job-fit budget.
+
 **Application tracker** (`/admin/applications/`)
 - **Jobs and applications are separate records.** A job can be seen on several sources and links to at most one application.
 - **Every application gets its own `?ref=` code**, so site analytics can tie a company's visit to the application ("opened the Fintech view 2 days after applying").

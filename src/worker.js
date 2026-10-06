@@ -14,6 +14,7 @@ import { collect, prune, dashboardData } from './analytics.js';
 import { handleJobFit, handleFetchPosting, monthSpend } from './jobfit-api.js';
 import { handleKbChat, handleKbApply, handleKbNotes } from './kb.js';
 import { handleResumePlan, handleResumeAssemble, handleResumeSettings } from './resume-api.js';
+import { handleReviewNext, handleReviewGenerate, handleReviewDecide } from './review.js';
 
 const CV_PATH = 'content/cv.json';
 const MAX_BODY = 512 * 1024;
@@ -151,6 +152,15 @@ async function routeAdmin(request, env, url, ctx) {
   if (path === '/api/admin/resume/plan' && method === 'POST') return handleResumePlan(request, env, url, (await workingContent(env)).content);
   if (path === '/api/admin/resume/assemble' && method === 'POST') return handleResumeAssemble(request, env, (await workingContent(env)).content);
   if (path === '/api/admin/resume/settings') return handleResumeSettings(request, env);
+
+  // Review queue: Claude proposes résumé blocks in batches; Nathan decides one at a time. Approvals go to the draft.
+  if (path === '/admin/review/' && method === 'GET') {
+    const draft = await getDraft(env);
+    return html(T.reviewPage(pageCtx(bundledCv), { drafts: draft ? draft.changes : 0 }));
+  }
+  if (path === '/api/admin/review' && method === 'GET') return handleReviewNext(env, (await workingContent(env)).content);
+  if (path === '/api/admin/review/generate' && method === 'POST') return handleReviewGenerate(request, env, url, (await workingContent(env)).content);
+  if (path === '/api/admin/review/decide' && method === 'POST') return handleReviewDecide(request, env, { workingContent, saveDraft });
 
   if (path === '/api/admin/publish' && method === 'POST') {
     const draft = await getDraft(env);

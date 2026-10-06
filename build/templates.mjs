@@ -645,8 +645,9 @@ export function adminBar(ctx, { mode, drafts }) {
 <button type="button" class="admin-publish" data-publish${drafts ? '' : ' disabled'}>Publish</button>`
     : mode === 'preview'
       ? `<a class="admin-link admin-link--outline" href="/admin/edit/">Back to editing</a>`
-      : mode === 'bench'
+      : mode === 'bench' || mode === 'review'
         ? `<a class="admin-link" href="/admin/">Admin home</a>
+${mode === 'review' ? '<a class="admin-link" href="/admin/job-fit/">Test bench</a>' : '<a class="admin-link" href="/admin/review/">Review queue</a>'}
 <a class="admin-link" href="/admin/edit/">Edit the CV</a>
 <a class="admin-link admin-link--outline" href="/admin/edit/?preview=1" target="_blank" rel="noopener" data-review${drafts ? '' : ' hidden'}>Review draft</a>
 <button type="button" class="admin-publish" data-publish${drafts ? '' : ' disabled'}>Publish</button>`
@@ -659,7 +660,7 @@ export function adminBar(ctx, { mode, drafts }) {
   return `<div class="admin-bar noprint" role="region" aria-label="Admin">
 <div class="wrap">
 <div class="admin-bar__left">
-<span class="admin-badge">${mode === 'edit' ? 'Edit mode' : mode === 'preview' ? 'Preview' : mode === 'dashboard' ? 'Dashboard' : mode === 'bench' ? 'Test bench' : 'Admin'}</span>
+<span class="admin-badge">${mode === 'edit' ? 'Edit mode' : mode === 'preview' ? 'Preview' : mode === 'dashboard' ? 'Dashboard' : mode === 'bench' ? 'Test bench' : mode === 'review' ? 'Review queue' : 'Admin'}</span>
 <span>Signed in with GitHub as <strong>${handle}</strong></span>
 <span class="admin-drafts" aria-live="polite" data-draft-label>${esc(label)}</span>
 </div>
@@ -699,10 +700,58 @@ export function adminHomePage(ctx, { drafts, lastPublished }) {
 <span class="muted">Tailored, ATS-safe résumés assembled only from your approved blocks. Lives in the test bench's Résumé tab.</span>
 <span class="tile__action">Open the Résumé tab</span>
 </a>
+<a class="tile" href="/admin/review/">
+<span class="tile__head"><span class="tile__name">Review queue</span><span class="status">Ready</span></span>
+<span class="muted">Proposed titles, summaries, bullet rewordings and skill wordings, one at a time. Approve, edit, reject or skip.</span>
+<span class="tile__action">Open the review queue</span>
+</a>
 </div>
 <p class="mono muted">Last published: ${esc(lastPublished || '—')} · Drafts: ${drafts}</p>
 </main>`;
   return layout(ctx, { title: `Admin — ${ctx.cv.person.name}`, description: 'Admin.', path: '/admin/', current: null, main, admin: adminBar(ctx, { mode: 'home', drafts }), bare: true });
+}
+
+// ---------- review queue (admin) ----------
+// One proposal at a time; admin/review.js fills it in. Keys: A approve, E edit, R reject, S skip.
+export function reviewPage(ctx, { drafts }) {
+  const main = `<main id="main" class="wrap page-main review" style="padding-top: var(--sp-6)" data-review-app>
+<header class="review-head">
+<h1>Review queue</h1>
+<p class="muted">One proposal at a time. Approved items go to your draft, so nothing is live until you publish.</p>
+<div class="review-progress"><span class="mono small" data-rv-progress>Loading…</span><span class="review-bar" aria-hidden="true"><span data-rv-bar></span></span></div>
+</header>
+<article class="review-card" data-rv-card hidden aria-live="polite">
+<p class="review-meta"><span class="status" data-rv-kind></span><span class="review-target" data-rv-target></span><span class="status status--unbuilt" data-rv-skipped hidden>Skipped earlier</span></p>
+<div class="review-proposed">
+<span class="label">Proposed</span>
+<p class="review-text" data-rv-text></p>
+<div class="review-edit" data-rv-edit hidden></div>
+</div>
+<p class="review-why" data-rv-why></p>
+<details class="review-now"><summary>What's there now (<span data-rv-now-count>0</span>)</summary><ul data-rv-now></ul></details>
+<div class="review-actions" data-rv-actions>
+<button type="button" class="btn btn--primary" data-rv="approve">Approve <kbd>A</kbd></button>
+<button type="button" class="btn btn--secondary" data-rv="edit">Edit <kbd>E</kbd></button>
+<button type="button" class="btn btn--secondary" data-rv="reject">Reject <kbd>R</kbd></button>
+<button type="button" class="btn-quiet" data-rv="skip">Skip <kbd>S</kbd></button>
+</div>
+<div class="review-actions" data-rv-edit-actions hidden>
+<button type="button" class="btn btn--primary" data-rv="save">Save and approve</button>
+<button type="button" class="btn-quiet" data-rv="cancel">Cancel</button>
+</div>
+</article>
+<section class="review-empty" data-rv-empty hidden>
+<h2>Nothing left to review.</h2>
+<p class="muted">Claude can propose about 20 more: titles, summary variants, bullet rewordings and skill wordings, avoiding anything you've rejected. One batch costs roughly 15 cents from the monthly budget and takes about a minute.</p>
+<button type="button" class="btn btn--primary" data-rv-generate>Suggest new proposals</button>
+</section>
+<p class="muted small" role="status" data-rv-status></p>
+</main>`;
+  return layout(ctx, {
+    title: `Review queue — ${ctx.cv.person.name}`, description: 'Admin review queue.', path: '/admin/review/', current: null, main, bare: true,
+    admin: adminBar(ctx, { mode: 'review', drafts }),
+    scripts: '<script src="/admin/assets/review.js" defer></script>\n',
+  });
 }
 
 // ---------- analytics dashboard (admin) ----------

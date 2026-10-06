@@ -14,7 +14,7 @@ const MAX_MESSAGES = 40;
 const MAX_CHARS = 80_000;
 
 const Proposal = z.object({
-  kind: z.enum(['add_card', 'edit_card', 'add_fact', 'add_skill_wording', 'add_summary_variant', 'add_bullet_variant', 'add_private_note']),
+  kind: z.enum(['add_card', 'edit_card', 'add_fact', 'add_skill_wording', 'add_summary_variant', 'add_bullet_variant', 'add_title', 'add_private_note']),
   role_anchor: z.string().describe('add_card only: exp-anchorage, exp-jaris or exp-mosaic. Otherwise empty.'),
   card_id: z.string().describe('edit_card or add_bullet_variant: the existing card ID. Otherwise empty.'),
   label: z.string().describe('add_summary_variant: a short name such as "Fintech and risk". Otherwise empty.'),
@@ -22,7 +22,7 @@ const Proposal = z.object({
   tag: z.string().describe('Cards: one of the experience tags. Otherwise empty.'),
   headline: z.string().describe('Cards: at most 12 words, self-contained. Otherwise empty.'),
   detail: z.string().describe('Cards: the full CV bullet. Otherwise empty.'),
-  text: z.string().describe('add_fact, add_private_note, add_summary_variant or add_bullet_variant: the text. Otherwise empty.'),
+  text: z.string().describe('add_fact, add_private_note, add_summary_variant, add_bullet_variant or add_title: the text. Otherwise empty.'),
   skill: z.string().describe('add_skill_wording: the skill as shown on the site, or a new skill name. Otherwise empty.'),
   wording: z.string().describe('add_skill_wording: the wording to add. Otherwise empty.'),
   why: z.string().describe('One sentence: what this changes for recruiters or the tools.'),
@@ -50,7 +50,7 @@ Where new information goes (default: facts)
 - edit_card to correct or strengthen an existing card when Nathan's answer is about that card.
 - add_skill_wording for a true synonym or a new skill.
 - add_private_note for anything useful but not for the public: the story behind a number, caveats, sensitive details, interview context.
-- Résumé blocks (used only by the résumé generator, which assembles résumés from approved blocks and never writes text itself): add_summary_variant for a 2–3 sentence summary angled at a kind of role, and add_bullet_variant for an alternative phrasing of an existing card's bullet, such as a shorter version or one using a posting's vocabulary. Variants must state the same facts as the card; never stronger.
+- Résumé blocks (used only by the résumé generator, which assembles résumés from approved blocks and never writes text itself): add_summary_variant for a 2–3 sentence summary angled at a kind of role, and add_bullet_variant for an alternative phrasing of an existing card's bullet, such as a shorter version or one using a posting's vocabulary, and add_title for a résumé headline title (always Senior Product Manager, optionally with a focus such as ", Onboarding & Risk"). Variants must state the same facts as the card; never stronger.
 
 Voice for public text
 - Résumé register: confident, plain, specific. Facts flat; numbers over adjectives; no exclamation points; no hype words.
@@ -204,6 +204,13 @@ export function applyProposal(content, p) {
       for (let n = 2; ids.has(id); n++) id = `${baseId}-${n}`;
       cv.resume.summaries.push({ id, label, text: t });
       return { cv, summary: `Added summary variant "${label}"` };
+    }
+    case 'add_title': {
+      const t = clean(p.text);
+      if (!t) throw new Error('The title is empty.');
+      if (cv.resume.titles.some((x) => x.toLowerCase() === t.toLowerCase())) return { cv, summary: `The title "${t}" already exists` };
+      cv.resume.titles.push(t);
+      return { cv, summary: `Added the title "${t}"` };
     }
     case 'add_bullet_variant': {
       const t = clean(p.text);
