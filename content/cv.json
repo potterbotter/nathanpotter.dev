@@ -648,6 +648,20 @@
           },
           {
             "forms": [
+              "CCPA",
+              "California Consumer Privacy Act (CCPA)"
+            ],
+            "shown": 0
+          },
+          {
+            "forms": [
+              "GLBA",
+              "Gramm-Leach-Bliley Act (GLBA)"
+            ],
+            "shown": 0
+          },
+          {
+            "forms": [
               "Regulatory compliance",
               "Risk and compliance",
               "Model risk management",
