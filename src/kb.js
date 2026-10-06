@@ -43,9 +43,12 @@ Honesty (non-negotiable)
 - Keep his ownership words: "supported" stays "supported", "limited" stays limited.
 - Never propose content about time between jobs unless he explicitly asks for it.
 
-Public vs private
-- Public proposals appear on his public CV and in the public tool. add_card for a result with an outcome; edit_card to strengthen an existing card; add_fact for a stable fact (level, scope, domains); add_skill_wording for a true synonym or new skill.
-- add_private_note for anything useful but not for the public page: the story behind a number, caveats, sensitive details, interview context.
+Where new information goes (default: facts)
+- add_fact is the default for new information. Facts are context for the job-fit tool: they are not shown on the CV page, but the tool can cite them as evidence, and they live in the public repo. Write facts as plain, specific, third-person statements ("At Anchorage Digital, Nathan owns…").
+- add_card adds a visible result card to the CV. Propose it only when Nathan asks for a card or asks to turn a fact into one. Keep the CV uncluttered.
+- edit_card to correct or strengthen an existing card when Nathan's answer is about that card.
+- add_skill_wording for a true synonym or a new skill.
+- add_private_note for anything useful but not for the public: the story behind a number, caveats, sensitive details, interview context.
 
 Voice for public text
 - Résumé register: confident, plain, specific. Facts flat; numbers over adjectives; no exclamation points; no hype words.
@@ -95,6 +98,7 @@ export async function handleKbChat(request, env, ctx, cv) {
       // Local development without an API key: a canned turn with one proposal of each scope.
       const turn = { reply: 'Got it. How many experiments did you run, and what changed as a result?', proposals: [
         { kind: 'add_skill_wording', role_anchor: '', card_id: '', metric: '', tag: '', headline: '', detail: '', text: '', skill: 'A/B testing with feature flags', wording: 'LaunchDarkly experiments', why: 'Matches postings that name the tool.' },
+        { kind: 'add_fact', role_anchor: '', card_id: '', metric: '', tag: '', headline: '', detail: '', text: 'At Anchorage Digital, Nathan ran A/B tests on onboarding steps with LaunchDarkly feature flags.', skill: '', wording: '', why: 'Gives the tool evidence for experimentation requirements.' },
         { kind: 'add_private_note', role_anchor: '', card_id: '', metric: '', tag: '', headline: '', detail: '', text: 'A/B tests were small-scale; be ready to describe one.', skill: '', wording: '', why: 'Interview context.' },
       ] };
       await send({ type: 'partial', turn: { reply: turn.reply.slice(0, 20) } });

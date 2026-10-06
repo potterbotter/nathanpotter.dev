@@ -57,7 +57,7 @@
   var history = []; // [{role, content}] sent to the server
   var context = { jd: '', read: null };
 
-  var KIND = { add_card: 'New result card', edit_card: 'Edit a result card', add_fact: 'New fact', add_skill_wording: 'Skill wording', add_private_note: 'Private note' };
+  var KIND = { add_card: 'New CV card', edit_card: 'Edit a CV card', add_fact: 'New context fact', add_skill_wording: 'Skill wording', add_private_note: 'Private note' };
   var FIELDS = {
     add_card: [['role_anchor', 'Role'], ['metric', 'Metric'], ['tag', 'Theme'], ['headline', 'Headline'], ['detail', 'Detail', true]],
     edit_card: [['card_id', 'Card'], ['metric', 'Metric'], ['tag', 'Theme'], ['headline', 'Headline'], ['detail', 'Detail', true]],
@@ -96,7 +96,14 @@
     var card = el('li', 'kb-proposal' + (p.kind === 'add_private_note' ? ' kb-proposal--private' : ''));
     var head = el('div', 'kb-proposal__head');
     head.appendChild(el('strong', null, KIND[p.kind] || p.kind));
-    head.appendChild(el('span', 'kb-scope', p.kind === 'add_private_note' ? '🔒 Private' : 'Public · goes to your draft'));
+    var SCOPE = {
+      add_private_note: '🔒 Private · saved now, never public',
+      add_fact: 'Context for the tool · not shown on the CV · draft',
+      add_skill_wording: 'Skill matching · draft',
+      add_card: 'Shown on your CV · draft',
+      edit_card: 'Shown on your CV · draft',
+    };
+    head.appendChild(el('span', 'kb-scope', SCOPE[p.kind] || 'Draft'));
     card.appendChild(head);
     if (p.why) card.appendChild(el('p', 'muted small', p.why));
     var inputs = {};
@@ -116,6 +123,17 @@
     approve.type = dismiss.type = 'button';
     actions.appendChild(approve);
     actions.appendChild(dismiss);
+    // Facts are context only; this asks Claude to redraft one as a visible CV card for approval.
+    if (p.kind === 'add_fact') {
+      var escalate = el('button', 'btn-quiet', 'Make it a CV card');
+      escalate.type = 'button';
+      escalate.title = 'Ask Claude to rewrite this as a result card on your CV';
+      escalate.addEventListener('click', function () {
+        var factText = inputs.text ? inputs.text.value : p.text;
+        sendMessage('Turn this fact into a CV result card instead (propose add_card; ask me for anything missing, like the metric or role): "' + factText + '"');
+      });
+      actions.appendChild(escalate);
+    }
     card.appendChild(actions);
 
     dismiss.addEventListener('click', function () {
@@ -156,6 +174,10 @@
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     var text = input.value.trim();
+    if (text) sendMessage(text);
+  });
+
+  function sendMessage(text) {
     if (!text || send.disabled) return;
     history.push({ role: 'user', content: text });
     log.appendChild(el('li', 'kb-msg kb-msg--me', text));
@@ -200,7 +222,7 @@
         input.value = text;
       })
       .finally(function () { send.disabled = false; input.focus(); });
-  });
+  }
   input.addEventListener('keydown', function (e) { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) form.requestSubmit(); });
 
   function loadNotes() {
