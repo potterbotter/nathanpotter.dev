@@ -17,7 +17,7 @@
     {
       "binding": "DB",
       "database_name": "nathanpotter-dev",
-      "database_id": "REPLACE_WITH_D1_DATABASE_ID",
+      "database_id": "a7a93cf1-0cf5-49f0-99b1-5a02180a6e45",
       "migrations_dir": "migrations"
     }
   ],
