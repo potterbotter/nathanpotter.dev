@@ -261,3 +261,16 @@
 .tr-jd { max-height: 320px; overflow: auto; white-space: pre-wrap; font-size: var(--fs-1); padding: var(--sp-3); background: var(--surface-2); border-radius: var(--r-1); }
 .tr-delete { align-self: flex-start; color: var(--ink-2); }
 .tr-delete[data-armed] { color: var(--accent-text); font-weight: 700; }
+.tr-inbox { display: flex; flex-direction: column; gap: var(--sp-3); padding: var(--sp-4) var(--sp-5); border: 1px solid var(--accent); border-radius: var(--r-2); background: var(--surface); }
+.tr-inbox h2 { font-size: var(--fs-3); }
+.tr-mail-list { display: flex; flex-direction: column; gap: var(--sp-3); }
+.tr-mail { display: flex; flex-direction: column; gap: 4px; padding-bottom: var(--sp-3); border-bottom: 1px solid var(--line); }
+.tr-mail:last-child { border-bottom: 0; padding-bottom: 0; }
+.tr-mail .tr-status { align-self: flex-start; }
+.tr-mail--rejection .tr-status { background: transparent; border: 1px solid var(--line); color: var(--ink-2); }
+.tr-mail--next_step .tr-status, .tr-mail--offer .tr-status { background: var(--brand); color: var(--brand-ink); }
+.tr-mail-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); margin-top: var(--sp-1); }
+.tr-mail-actions select { flex: 1 1 220px; width: auto; }
+.tr-auto summary { cursor: pointer; color: var(--ink-2); font-weight: 600; min-height: var(--tap); display: flex; align-items: center; }
+.tr-auto .tr-mail { flex-direction: column; }
+.tr-auto .btn-quiet { align-self: flex-start; }

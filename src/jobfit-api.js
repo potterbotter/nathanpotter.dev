@@ -62,7 +62,7 @@ async function budgetAlerts(env, ctx) {
   }
 }
 
-async function sendAlert(env, subject, body) {
+export async function sendAlert(env, subject, body) {
   const to = env.ALERT_EMAIL || env.ADMIN_EMAIL;
   if (!env.ALERTS || !to) return;
   try {

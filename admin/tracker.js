@@ -39,9 +39,95 @@
       S.apps = r.d.applications; S.statuses = r.d.statuses; S.today = r.d.today;
       fillStatusSelect();
       renderList();
+      loadInbox();
       if (openId) openDetail(openId);
     });
   }
+
+  // ---------- job emails (read from hello@) ----------
+  var CATEGORY = { confirmation: 'Application received', rejection: 'Rejection', next_step: 'Next step', offer: 'Offer', outreach: 'Recruiter outreach', other: 'Job email' };
+  var inbox = $('[data-t-inbox]');
+  function mailLine(m) { return (m.from_name || m.from_addr) + ' · ' + fmtTs(m.ts); }
+  function loadInbox() {
+    api('GET', '/api/admin/mail').then(function (r) { if (r.ok) renderInbox(r.d); });
+  }
+  function mailAction(id, body, msg) {
+    return api('POST', '/api/admin/mail/' + id, body).then(function (r) {
+      if (!r.ok) { statusEl.textContent = r.d.error || 'That didn\'t work.'; return r; }
+      statusEl.textContent = msg; load(r.d.applicationId || S.open);
+      return r;
+    });
+  }
+  function renderInbox(d) {
+    inbox.textContent = '';
+    inbox.hidden = !d.suggestions.length && !d.recent.length;
+    if (d.suggestions.length) {
+      inbox.appendChild(el('h2', null, 'Emails to confirm (' + d.suggestions.length + ')'));
+      var ul = el('ul', 'tr-mail-list');
+      d.suggestions.forEach(function (m) {
+        var li = el('li', 'tr-mail tr-mail--' + m.category);
+        li.appendChild(el('span', 'tr-status', CATEGORY[m.category] || m.category));
+        li.appendChild(el('strong', null, m.subject || '(no subject)'));
+        li.appendChild(el('span', 'muted small', mailLine(m)));
+        if (m.summary) li.appendChild(el('span', null, m.summary));
+        if (m.action) li.appendChild(el('span', 'tr-next--due small', 'To do: ' + m.action));
+        var row = el('div', 'tr-mail-actions');
+        // Which application: the suggested one, or any open one.
+        var sel = el('select'); sel.setAttribute('aria-label', 'Application this email is about');
+        var none = el('option', null, 'Choose the application…'); none.value = ''; sel.appendChild(none);
+        S.apps.forEach(function (a) { var o = el('option', null, a.company + ' · ' + a.title + ' (' + a.statusLabel + ')'); o.value = a.id; if (a.id === m.application_id) o.selected = true; sel.appendChild(o); });
+        row.appendChild(sel);
+        var ok = el('button', 'btn btn--primary', 'Confirm'); ok.type = 'button';
+        ok.addEventListener('click', function () {
+          if (!sel.value) { statusEl.textContent = 'Choose the application first, or add it as a new one.'; return; }
+          mailAction(m.id, { action: 'apply', applicationId: Number(sel.value) }, 'Applied to the application.');
+        });
+        row.appendChild(ok);
+        var add = el('button', 'btn btn--secondary', 'Add as new application'); add.type = 'button';
+        add.addEventListener('click', function () {
+          var company = m.mail_company || '', title = m.mail_role || '';
+          if (!company || !title) {
+            // Not enough to create it blindly: open the form with what we know.
+            openForm(); F('company').value = company; F('title').value = title; F('source').value = 'Recruiter';
+            F('note').value = 'From email: ' + (m.subject || '') + (m.summary ? ' (' + m.summary + ')' : '');
+            F('status').value = m.category === 'outreach' ? 'saved' : 'applied';
+            statusEl.textContent = 'Fill in the missing details, save, then confirm the email against it.';
+            return;
+          }
+          api('POST', '/api/admin/applications', { company: company, title: title, source: 'Recruiter', status: m.category === 'outreach' ? 'saved' : 'applied', note: 'From email: ' + (m.subject || '') }).then(function (r) {
+            if (r.status === 409) { statusEl.textContent = 'Already tracked: ' + r.d.duplicates[0].company + ' · ' + r.d.duplicates[0].title + '. Choose it from the list instead.'; return; }
+            if (!r.ok) { statusEl.textContent = r.d.error || 'Could not add it.'; return; }
+            mailAction(m.id, { action: 'apply', applicationId: r.d.id }, 'Added ' + company + ' and linked the email.');
+          });
+        });
+        row.appendChild(add);
+        var dis = el('button', 'btn-quiet', 'Not about an application'); dis.type = 'button';
+        dis.addEventListener('click', function () { mailAction(m.id, { action: 'dismiss' }, 'Dismissed.'); });
+        row.appendChild(dis);
+        li.appendChild(row);
+        ul.appendChild(li);
+      });
+      inbox.appendChild(ul);
+    }
+    if (d.recent.length) {
+      var det = el('details', 'tr-auto');
+      det.appendChild(el('summary', null, 'Updated automatically from email (' + d.recent.length + ' in the last 14 days)'));
+      var ol = el('ul', 'tr-mail-list');
+      d.recent.forEach(function (m) {
+        var li = el('li', 'tr-mail');
+        var changed = m.prev_status && m.new_status && m.prev_status !== m.new_status;
+        li.appendChild(el('strong', null, (m.company || 'Application') + ' · ' + (CATEGORY[m.category] || m.category) + (changed ? ': ' + labelOf(m.prev_status) + ' → ' + labelOf(m.new_status) : '')));
+        li.appendChild(el('span', 'muted small', '"' + (m.subject || '') + '" · ' + mailLine(m)));
+        var undo = el('button', 'btn-quiet', 'Undo'); undo.type = 'button';
+        undo.addEventListener('click', function () { mailAction(m.id, { action: 'undo' }, 'Undone.'); });
+        li.appendChild(undo);
+        ol.appendChild(li);
+      });
+      det.appendChild(ol);
+      inbox.appendChild(det);
+    }
+  }
+  function labelOf(id) { var s = S.statuses.filter(function (x) { return x.id === id; })[0]; return s ? s.label : id; }
 
   function summary() {
     var active = S.apps.filter(function (a) { return isOpen(a.status); });
@@ -193,6 +279,24 @@
     vs.appendChild(vl);
     if (d.visits.some(function (v) { return v.org; })) vs.appendChild(el('p', 'muted small', 'Network names are a hint (often an internet provider), not proof of who visited.'));
     box.appendChild(vs);
+
+    // Emails read from hello@ about this application.
+    var es = el('section', 'tr-section');
+    es.appendChild(el('h3', null, 'Emails'));
+    var eList = el('ul', 'tr-mail-list'); eList.appendChild(el('li', 'muted small', 'Loading…'));
+    es.appendChild(eList);
+    box.appendChild(es);
+    api('GET', '/api/admin/mail?app=' + a.id).then(function (r) {
+      eList.textContent = '';
+      if (!r.ok || !r.d.emails.length) { eList.appendChild(el('li', 'muted small', 'None yet. Replies to hello@ from this company or its hiring system appear here.')); return; }
+      r.d.emails.forEach(function (m) {
+        var li = el('li', 'tr-mail');
+        li.appendChild(el('strong', null, (CATEGORY[m.category] || m.category) + ': ' + (m.subject || '(no subject)')));
+        li.appendChild(el('span', 'muted small', mailLine(m) + (m.outcome === 'undone' ? ' · undone' : m.outcome === 'dismissed' ? ' · dismissed' : '')));
+        if (m.summary) li.appendChild(el('span', null, m.summary));
+        eList.appendChild(li);
+      });
+    });
 
     // Timeline and notes.
     var tl = el('section', 'tr-section');

@@ -752,6 +752,7 @@ export function trackerPage(ctx, { drafts }) {
 <div class="tf-dupes" data-t-dupes hidden></div>
 <div class="row-links"><button type="submit" class="btn btn--primary" data-t-save>Save</button><button type="button" class="btn-quiet" data-t-cancel>Cancel</button><span class="muted small" role="status" data-t-form-status></span></div>
 </form>
+<section class="tr-inbox" aria-label="Job emails" data-t-inbox hidden></section>
 <div class="chips" role="group" aria-label="Show applications" data-t-filters>
 <button type="button" class="chip-btn" aria-pressed="true" data-t-filter="active">Active <span class="count" data-t-count="active">0</span></button>
 <button type="button" class="chip-btn" aria-pressed="false" data-t-filter="closed">Closed <span class="count" data-t-count="closed">0</span></button>

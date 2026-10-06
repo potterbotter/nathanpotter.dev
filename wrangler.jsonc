@@ -22,7 +22,8 @@
     }
   ],
   // Not secret. ACCESS_* come from the Cloudflare Access application (Zero Trust dashboard).
-  // Secrets (set in the dashboard, never here): GITHUB_TOKEN, ADMIN_EMAIL, ANTHROPIC_API_KEY, TURNSTILE_SECRET (optional).
+  // Secrets (set in the dashboard, never here): GITHUB_TOKEN, ADMIN_EMAIL, ANTHROPIC_API_KEY, TURNSTILE_SECRET (optional),
+  // EMAIL_FORWARD_TO (optional: where hello@ mail is forwarded; defaults to ALERT_EMAIL, then ADMIN_EMAIL).
   "vars": {
     "GITHUB_REPO": "potterbotter/nathanpotter.dev",
     "COMMIT_NAME": "Nathan Potter",

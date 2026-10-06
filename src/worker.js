@@ -16,14 +16,20 @@ import { handleKbChat, handleKbApply, handleKbNotes } from './kb.js';
 import { handleResumePlan, handleResumeAssemble, handleResumeDocx, handleResumeSettings } from './resume-api.js';
 import { handleReviewNext, handleReviewGenerate, handleReviewDecide } from './review.js';
 import * as Tracker from './tracker.js';
+import { handleEmail, handleMailList, handleMailAction, pruneMail } from './mail.js';
 
 const CV_PATH = 'content/cv.json';
 const MAX_BODY = 512 * 1024;
 
 export default {
-  // Daily: enforce analytics retention (13 months) and drop old visitor-hash salts.
+  // Daily: enforce analytics retention (13 months), drop old visitor-hash salts and job emails (180 days).
   async scheduled(event, env, ctx) {
-    ctx.waitUntil(prune(env));
+    ctx.waitUntil(Promise.all([prune(env), pruneMail(env)]));
+  },
+
+  // Mail to hello@ (Email Routing rule → this Worker): forwarded to Nathan first, then read for job updates.
+  async email(message, env, ctx) {
+    await handleEmail(message, env, ctx);
   },
 
   async fetch(request, env, ctx) {
@@ -167,6 +173,9 @@ async function routeAdmin(request, env, url, ctx) {
   if (path === '/api/admin/applications/check' && method === 'POST') return Tracker.handleCheck(request, env);
   if (path === '/api/admin/applications/fetch' && method === 'POST') return Tracker.handleFetch(request);
   if (path === '/api/admin/applications/resumes' && method === 'GET') return Tracker.handleResumes(env, url);
+  if (path === '/api/admin/mail' && method === 'GET') return handleMailList(env, url);
+  const mailMatch = /^\/api\/admin\/mail\/(\d+)$/.exec(path);
+  if (mailMatch && method === 'POST') return handleMailAction(request, env, Number(mailMatch[1]));
   const appMatch = /^\/api\/admin\/applications\/(\d+)$/.exec(path);
   if (appMatch) {
     const id = Number(appMatch[1]);
