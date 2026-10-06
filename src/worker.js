@@ -11,7 +11,7 @@ import { FLAGS } from '../build/flags.mjs';
 import bundledCv from '../content/cv.json';
 import { verifyAccessJwt } from './access.js';
 import { collect, prune, dashboardData } from './analytics.js';
-import { handleJobFit, monthSpend } from './jobfit-api.js';
+import { handleJobFit, handleFetchPosting, monthSpend } from './jobfit-api.js';
 
 const CV_PATH = 'content/cv.json';
 const MAX_BODY = 512 * 1024;
@@ -28,6 +28,7 @@ export default {
     const isAdmin = path === '/admin' || path.startsWith('/admin/') || path.startsWith('/api/admin/');
     if (!isAdmin) {
       if (path === '/api/job-fit') return handleJobFit(request, env, ctx, url, bundledCv);
+      if (path === '/api/job-fit/fetch') return handleFetchPosting(request, env, url);
       if (path === '/api/collect') {
         try { return await collect(request, env, url); } catch (err) { console.error('collect error', err); return new Response(null, { status: 204 }); }
       }

@@ -479,6 +479,12 @@ export function jobFitPage(ctx) {
 <div class="page-main">
 <div class="fit-layout">
 <form class="fit-form" data-fit-form novalidate>
+<div class="fit-link" data-fit-link hidden>
+<label for="jd-url">Link to the posting</label>
+<div class="fit-link__row"><input id="jd-url" type="url" inputmode="url" autocomplete="off" placeholder="https://jobs.lever.co/…"><button type="button" class="btn btn--secondary" data-fit-fetch>Fetch</button></div>
+<p class="muted small" data-fit-fetch-status aria-live="polite">Works best with Greenhouse, Lever and Ashby links. For LinkedIn or Indeed, paste the text below.</p>
+<p class="fit-or" aria-hidden="true">or paste it</p>
+</div>
 <label for="jd">Job description</label>
 <textarea id="jd" name="jd" rows="16" maxlength="15000" required placeholder="Paste the full posting: responsibilities, requirements, nice-to-haves."></textarea>
 <p class="fit-count muted small" data-fit-count aria-live="polite"></p>

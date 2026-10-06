@@ -23,6 +23,39 @@
   }
   area.addEventListener('input', updateCount);
 
+  // Fetch from a link: fills the box for review; nothing is assessed until "Assess".
+  var linkBox = form.querySelector('[data-fit-link]');
+  var urlInput = form.querySelector('#jd-url');
+  var fetchBtn = form.querySelector('[data-fit-fetch]');
+  var fetchStatus = form.querySelector('[data-fit-fetch-status]');
+  if (linkBox) {
+    linkBox.hidden = false;
+    var fetching = false;
+    var doFetch = function () {
+      var link = urlInput.value.trim();
+      if (!link || fetching) { if (!link) urlInput.focus(); return; }
+      fetching = true;
+      fetchBtn.disabled = true;
+      fetchBtn.textContent = 'Fetching…';
+      fetchStatus.textContent = 'Reading the posting…';
+      fetch('/api/job-fit/fetch', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url: link }) })
+        .then(function (res) { return res.json().catch(function () { return {}; }).then(function (data) { return { ok: res.ok, data: data }; }); })
+        .then(function (r) {
+          if (!r.ok) { fetchStatus.textContent = r.data.message || "Couldn't read that page. Paste the text instead."; return; }
+          area.value = r.data.text;
+          updateCount();
+          fetchStatus.textContent = 'Fetched from ' + r.data.source + (r.data.truncated ? ' (trimmed to fit)' : '') + '. Check the text below, then Assess.';
+          area.focus();
+          area.setSelectionRange(0, 0);
+          area.scrollTop = 0;
+        })
+        .catch(function () { fetchStatus.textContent = "Couldn't reach the server. Paste the text instead."; })
+        .finally(function () { fetching = false; fetchBtn.disabled = false; fetchBtn.textContent = 'Fetch'; });
+    };
+    fetchBtn.addEventListener('click', doFetch);
+    urlInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); doFetch(); } });
+  }
+
   form.querySelector('[data-fit-clear]').addEventListener('click', function () {
     area.value = '';
     updateCount();

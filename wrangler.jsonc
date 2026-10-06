@@ -38,7 +38,8 @@
   },
   // Burst limit for the job-fit tool: 3 requests per minute per IP (counted by Cloudflare, never stored).
   "ratelimits": [
-    { "name": "JOBFIT_BURST", "namespace_id": "1001", "simple": { "limit": 3, "period": 60 } }
+    { "name": "JOBFIT_BURST", "namespace_id": "1001", "simple": { "limit": 3, "period": 60 } },
+    { "name": "JOBFIT_FETCH", "namespace_id": "1002", "simple": { "limit": 10, "period": 60 } }
   ],
   // Budget alert emails, sent from alerts@nathanpotter.dev to a verified Email Routing address.
   "send_email": [

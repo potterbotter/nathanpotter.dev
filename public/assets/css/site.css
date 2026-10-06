@@ -310,3 +310,9 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .fit-loading { color: var(--ink-2); font-family: var(--mono); font-size: var(--fs-1); }
 .fit-error { padding: var(--sp-3) var(--sp-4); border-left: 4px solid var(--accent); background: var(--surface-2); }
 .small { font-size: var(--fs-1); }
+.fit-link { display: flex; flex-direction: column; gap: var(--sp-2); }
+.fit-link label { font-weight: 600; }
+.fit-link__row { display: flex; gap: var(--sp-2); }
+.fit-link__row input { flex: 1; min-width: 0; min-height: var(--tap); padding: 0 var(--sp-3); border: 1px solid var(--line); border-radius: var(--r-1); background: var(--bg); color: var(--ink); }
+.fit-or { display: flex; align-items: center; gap: var(--sp-3); margin-top: var(--sp-2); color: var(--ink-2); font-family: var(--mono); font-size: var(--fs-label); text-transform: uppercase; letter-spacing: .08em; }
+.fit-or::before, .fit-or::after { content: ""; flex: 1; height: 1px; background: var(--line); }

@@ -5,6 +5,7 @@
 import { assess, fakeAssess, PROMPT_VERSION } from './jobfit.js';
 import { verifyAccessJwt } from './access.js';
 import { dayKey } from './analytics.js';
+import { fetchPosting, FetchError } from './fetchjd.js';
 
 const MIN_CHARS = 200;
 const MAX_CHARS = 15000;
@@ -73,6 +74,28 @@ async function sendAlert(env, subject, body) {
     await env.ALERTS.send(new EmailMessage(from, to, raw));
   } catch (err) {
     console.error('alert email failed', err);
+  }
+}
+
+// POST /api/job-fit/fetch — read a posting from a link into the text box for review. No AI call.
+export async function handleFetchPosting(request, env, url) {
+  if (request.method !== 'POST') return fail(405, 'method', 'Use POST.');
+  if (request.headers.get('Origin') !== url.origin) return fail(403, 'origin', 'Cross-site request refused.');
+  if (env.JOBFIT_ENABLED !== 'true') return fail(503, 'disabled', 'The job-fit tool is switched off right now.');
+  const ip = request.headers.get('CF-Connecting-IP') || '0.0.0.0';
+  if (env.JOBFIT_FETCH && !(await isAdmin(request, env))) {
+    const { success } = await env.JOBFIT_FETCH.limit({ key: ip });
+    if (!success) return fail(429, 'burst', 'Too many links at once. Wait a minute and try again.');
+  }
+  let body;
+  try { body = JSON.parse(await request.text()); } catch { return fail(400, 'bad_request', 'Send the link as JSON.'); }
+  try {
+    const posting = await fetchPosting(body?.url);
+    return json(posting);
+  } catch (err) {
+    if (err instanceof FetchError) return fail(422, 'unreadable', err.message);
+    console.error('fetch posting error', err);
+    return fail(502, 'failed', "Couldn't read that page. Paste the text instead.");
   }
 }
 
