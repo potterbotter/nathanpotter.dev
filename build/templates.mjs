@@ -521,7 +521,7 @@ ${fitForm(ctx.cv, { bench: true, compare })}
 </div>
 <div class="row-links"><button type="button" class="btn btn--primary" data-r-generate>Generate tailored résumé</button><span class="muted small" data-r-status aria-live="polite">Uses the posting in the box on the left. About 5¢ per run.</span></div>
 <details class="resume-contact"><summary>Contact details on résumés</summary>
-<p class="muted small">Email: <span data-r-email>jobs@nathanpotter.dev</span>. Your phone is stored privately and only appears on résumés you generate here.</p>
+<p class="muted small">Email: <span data-r-email>hello@nathanpotter.dev</span>. Your phone is stored privately and only appears on résumés you generate here.</p>
 <div class="inline-add"><input type="tel" data-r-phone placeholder="Phone number" aria-label="Phone number"><button type="button" class="edit-btn" data-r-phone-save>Save</button></div>
 </details>
 </div>

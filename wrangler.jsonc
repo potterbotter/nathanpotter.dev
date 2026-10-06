@@ -35,7 +35,7 @@
     "JOBFIT_MONTHLY_BUDGET_USD": "4",
     "JOBFIT_EFFORT": "medium",
     "JOBFIT_COMPARE": "false", // admin-only Opus vs Sonnet side-by-side in the test bench
-    "RESUME_EMAIL": "jobs@nathanpotter.dev", // contact email printed on generated résumés
+    "RESUME_EMAIL": "hello@nathanpotter.dev", // contact email printed on generated résumés
     "JOBFIT_DAILY_CAP": "100",
     "JOBFIT_PER_IP_DAILY": "5"
   },

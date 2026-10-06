@@ -11,7 +11,7 @@ const json = (d, s = 200) => new Response(JSON.stringify(d), { status: s, header
 async function contact(env, cv, ref) {
   const row = await env.DB.prepare("SELECT value FROM meta WHERE key = 'resume_phone'").first();
   return {
-    email: env.RESUME_EMAIL || 'jobs@nathanpotter.dev',
+    email: env.RESUME_EMAIL || 'hello@nathanpotter.dev',
     phone: row ? row.value : '',
     location: cv.person.location,
     linkedin: cv.person.linkedin.replace(/^https?:\/\/(www\.)?/, ''),
@@ -80,5 +80,5 @@ export async function handleResumeSettings(request, env) {
     return json({ ok: true });
   }
   const row = await env.DB.prepare("SELECT value FROM meta WHERE key = 'resume_phone'").first();
-  return json({ phone: row ? row.value : '', email: env.RESUME_EMAIL || 'jobs@nathanpotter.dev' });
+  return json({ phone: row ? row.value : '', email: env.RESUME_EMAIL || 'hello@nathanpotter.dev' });
 }

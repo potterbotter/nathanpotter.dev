@@ -109,13 +109,13 @@ CV content lives in one structured file, [`content/cv.json`](content/cv.json), i
 - **Page budget in code:** one page by default (about 54 lines, 13 bullets), two pages optional. Over budget, the last (least relevant) bullet of the longest role is trimmed, and every role keeps at least one. The editor works on the plan as applied, so trimmed bullets don't silently return.
 - **Match dashboard:** keyword coverage against the untailored CV (the baseline), must-haves covered, and length. Missing keywords are chips that open the chat to ask whether Nathan has that experience.
 - **Manual edits without AI:** switch the title or summary, change a bullet's wording, remove or add bullets, remove skills. Each change re-assembles and re-scores at no cost.
-- **Contact:** `jobs@nathanpotter.dev` plus the phone number from private D1 settings (never on the public site or in the repo), LinkedIn, and `nathanpotter.dev/?ref=<code>` so analytics can tie a visit to the application.
+- **Contact:** `hello@nathanpotter.dev` (the same address as the site) plus the phone number from private D1 settings (never on the public site or in the repo), LinkedIn, and `nathanpotter.dev/?ref=<code>` so analytics can tie a visit to the application.
 - **Output:** PDF (print-ready page) and copy as text now; `.docx` next. Each run is stored in the D1 `resumes` table (posting, keywords, plan, text, scores, exported flag) and costs about 5 cents from the job-fit budget.
 
 **Application tracker** (`/admin/applications/`)
 - **Jobs and applications are separate records.** A job can be seen on several sources and links to at most one application.
 - **Every application gets its own `?ref=` code**, so site analytics can tie a company's visit to the application ("opened the Fintech view 2 days after applying").
-- **Email ingestion:** applications use `jobs@nathanpotter.dev`. An Email Worker receives each message, matches it to an application, classifies it (confirmation · rejection · interview request · recruiter outreach), then forwards it to Gmail. Routine updates apply automatically; anything uncertain or important appears as a suggestion to confirm.
+- **Email ingestion:** résumés use `hello@nathanpotter.dev`, the same address as the site. An Email Worker receives each message, matches it to an application by sender (applicant-tracking systems such as Greenhouse, Lever, Ashby and Workday, the company's domain, or the `?ref=` code), classifies it (confirmation · rejection · interview request · recruiter outreach), then forwards it to Gmail. Routine updates apply automatically; anything uncertain or important appears as a suggestion to confirm.
 
 **Analytics** (`/admin/dashboard/`): first-party and cookieless. `site.js` sends events to `/api/collect`: page views, engaged time and scroll depth, sections seen, card expands, folded results opened, filter chips, contact actions, theme switches, prints, outbound links and 404s. The Worker adds Cloudflare's location (city, region, country, timezone), the network owner (ASN organization) and device details from the user agent. **IP addresses are never stored.** Visitors are grouped per day by a hash of a daily random salt plus IP and user agent; salts are deleted after two days, so IDs can't be linked across days. Raw events are kept 13 months (daily cron). Bots, foreign-origin posts, unknown event types and `/admin` paths are dropped. Nathan's own browser can opt out from the dashboard. Network owner is a hint, not identification (usually an ISP); `?ref=` codes are the reliable company signal and will join to the tracker.
 
@@ -133,7 +133,7 @@ CV content lives in one structured file, [`content/cv.json`](content/cv.json), i
 3. Job-fit engine and its test set (used privately first)
 4. Access, D1/R2, tracker and résumé generator: usable for real applications from here
 5. Edit mode (until then, CV edits go through Claude Code)
-6. `jobs@` email ingestion
+6. Application email ingestion (matched by sender)
 7. Analytics dashboard
 8. Job scanning, scoring, duplicate detection and notifications
 9. Public job-fit tool (same engine), DPR calculator, `/how-i-built-this/`, "ask me about my experience" chat, role-view polish
