@@ -14,6 +14,45 @@
   var notesList = root.querySelector('[data-kb-notes-list]');
   var notesCount = root.querySelector('[data-kb-notes-count]');
   var draftLabel = document.querySelector('[data-draft-label]');
+  var publishBtn = document.querySelector('[data-publish]');
+  var reviewLink = document.querySelector('[data-review]');
+  var barMsg = document.querySelector('[data-admin-msg]');
+
+  // Approved public changes collect in the draft; Publish commits them to GitHub, which redeploys the site.
+  function setDrafts(n) {
+    if (draftLabel) draftLabel.textContent = n ? n + ' draft change' + (n === 1 ? '' : 's') + ' · not live until you publish' : 'Published · no unsaved changes';
+    if (publishBtn) publishBtn.disabled = !n;
+    if (reviewLink) reviewLink.hidden = !n;
+  }
+  function say(text, kind) {
+    if (!barMsg) return;
+    barMsg.hidden = !text;
+    barMsg.className = 'admin-msg' + (kind ? ' admin-msg--' + kind : '');
+    barMsg.textContent = text || '';
+  }
+  if (publishBtn) {
+    var initial = draftLabel && /^(\d+)/.exec(draftLabel.textContent);
+    setDrafts(initial ? Number(initial[1]) : 0);
+    publishBtn.addEventListener('click', function () {
+      if (!publishBtn.getAttribute('data-armed')) {
+        publishBtn.setAttribute('data-armed', '1');
+        publishBtn.textContent = 'Confirm publish';
+        setTimeout(function () { publishBtn.removeAttribute('data-armed'); publishBtn.textContent = 'Publish'; }, 5000);
+        return;
+      }
+      publishBtn.disabled = true;
+      publishBtn.textContent = 'Publishing…';
+      fetch('/api/admin/publish', { method: 'POST' })
+        .then(function (res) { return res.json().then(function (d) { return { ok: res.ok, d: d }; }); })
+        .then(function (r) {
+          if (!r.ok) { say(r.d.message || r.d.error || 'Publishing failed.', 'error'); publishBtn.disabled = false; return; }
+          setDrafts(0);
+          say('Published. The live site updates in about a minute.', 'ok');
+          if (r.d.commitUrl) { var a = el('a', null, 'See the commit'); a.href = r.d.commitUrl; barMsg.appendChild(document.createTextNode(' ')); barMsg.appendChild(a); }
+        })
+        .finally(function () { publishBtn.removeAttribute('data-armed'); publishBtn.textContent = 'Publish'; });
+    });
+  }
 
   var history = []; // [{role, content}] sent to the server
   var context = { jd: '', read: null };
@@ -94,9 +133,9 @@
         .then(function (r) {
           if (!r.ok) { approve.disabled = dismiss.disabled = false; approve.textContent = 'Approve'; actions.appendChild(el('span', 'kb-error small', r.d.error || 'Could not save.')); return; }
           card.classList.add('is-done');
-          actions.replaceChildren(el('span', 'kb-ok small', '✓ ' + r.d.summary + (r.d.private ? '' : ' (in your draft)')));
+          actions.replaceChildren(el('span', 'kb-ok small', '✓ ' + r.d.summary + (r.d.private ? ' (private, saved now)' : ' (in your draft: Publish to make it live)')));
           history.push({ role: 'user', content: '(Approved and saved: ' + r.d.summary + ')' });
-          if (r.d.changes && draftLabel) draftLabel.textContent = r.d.changes + ' draft change' + (r.d.changes === 1 ? '' : 's');
+          if (r.d.changes) setDrafts(r.d.changes);
           if (r.d.private) loadNotes();
         });
     });

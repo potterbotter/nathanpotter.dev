@@ -498,7 +498,7 @@ export function testBenchPage(ctx, { drafts, notes, compare }) {
   const main = `<main id="main" class="wrap bench">
 <header class="page-title" style="padding-top: var(--sp-5)">
 <h1>Job-fit test bench</h1><div class="rule"></div>
-<p class="lede">Run a read, then answer its feedback in the chat. Claude asks for specifics and proposes changes; nothing is saved until you approve it. Public changes go to your draft (<a href="/admin/edit/">${drafts} change${drafts === 1 ? '' : 's'} so far</a>); publish them from edit mode.</p>
+<p class="lede">Run a read, then answer its feedback in the chat. Claude asks for specifics and proposes changes; nothing is saved until you approve it. Approved public changes collect in your draft and are <strong>not live until you click Publish</strong> in the bar above (Review draft shows them first). Private notes save immediately and are never public.</p>
 </header>
 <div class="bench-grid">
 <div class="bench-left">
@@ -611,9 +611,14 @@ export function adminBar(ctx, { mode, drafts }) {
 <button type="button" class="admin-publish" data-publish${drafts ? '' : ' disabled'}>Publish</button>`
     : mode === 'preview'
       ? `<a class="admin-link admin-link--outline" href="/admin/edit/">Back to editing</a>`
-      : mode === 'dashboard' || mode === 'bench'
+      : mode === 'bench'
         ? `<a class="admin-link" href="/admin/">Admin home</a>
-<a class="admin-link" href="${mode === 'bench' ? '/admin/dashboard/">Dashboard' : '/admin/job-fit/">Test bench'}</a>
+<a class="admin-link" href="/admin/edit/">Edit the CV</a>
+<a class="admin-link admin-link--outline" href="/admin/edit/?preview=1" target="_blank" rel="noopener" data-review${drafts ? '' : ' hidden'}>Review draft</a>
+<button type="button" class="admin-publish" data-publish${drafts ? '' : ' disabled'}>Publish</button>`
+      : mode === 'dashboard'
+        ? `<a class="admin-link" href="/admin/">Admin home</a>
+<a class="admin-link" href="/admin/job-fit/">Test bench</a>
 <a class="admin-link" href="/admin/edit/">Edit the CV</a>`
         : `<a class="admin-link" href="/admin/dashboard/">Dashboard</a>
 <a class="admin-link" href="/admin/edit/">Edit the CV</a>`;
