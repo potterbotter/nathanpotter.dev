@@ -941,7 +941,7 @@
       "name": "Job-fit assessment",
       "status": "live",
       "route": "/tools/job-fit/",
-      "summary": "Paste a job description. It reads the fit against this CV and cites the evidence."
+      "summary": "Paste a job description or link. It reads the fit against this CV and cites the evidence."
     },
     {
       "name": "DPR calculator",
@@ -977,7 +977,7 @@
     "lede": "Pick the kind of role you're hiring for. It's the same CV, with the most relevant results up front and the rest a click away."
   },
   "jobFit": {
-    "lede": "Paste a job description. You get a read on how my experience fits, requirement by requirement, with the evidence quoted from my CV and the gaps stated plainly.",
+    "lede": "Paste a job description or link. You get a read on how my experience fits, requirement by requirement, with the evidence quoted from my CV and the gaps stated plainly.",
     "dataNote": "The job description you paste is sent to Anthropic's Claude to produce the read, and saved on this site so I can see which roles were checked. Please don't paste anything confidential. No cookies are set, and your IP address isn't stored.",
     "method": "Claude reads the posting against my CV with instructions to cite evidence for every match and to say so when the CV is silent. Code then checks every citation against the CV and downgrades any match it can't verify. The quotes you see are my CV's own words."
   }
