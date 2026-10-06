@@ -20,13 +20,42 @@
   "resume": {
     "_note": "Résumé building blocks. The generator only selects and orders approved blocks: a title, a summary variant, card bullets (or approved bullet variants on each card), skill wordings. It never writes new text.",
     "titles": [
-      "Senior Product Manager"
+      "Senior Product Manager",
+      "Senior Product Manager, Onboarding & Risk",
+      "Senior Product Manager, Fintech",
+      "Senior Product Manager, Lending & Originations",
+      "Senior Product Manager, Client Onboarding & Compliance"
     ],
     "summaries": [
       {
         "id": "general",
         "label": "General",
         "text": "Senior product manager with 7+ years across clean-energy lending, embedded finance and institutional crypto banking, often stepping into whichever role the team needed most. I turn messy, high-stakes workflows into products that scale."
+      },
+      {
+        "id": "crypto",
+        "label": "Crypto",
+        "text": "Senior product manager with 7+ years in regulated financial services, now leading Client Onboarding & Risk at Anchorage Digital, a federally chartered crypto bank. I quadrupled quarterly onboarding throughput while aligning priorities across compliance, sanctions and financial intelligence teams."
+      },
+      {
+        "id": "fintech",
+        "label": "Fintech",
+        "text": "Senior product manager with 7+ years building regulated financial products across clean-energy lending, embedded finance and institutional crypto banking. I've launched point-of-sale financing and B2B2B payment products, built and managed partner APIs, and scaled institutional client onboarding."
+      },
+      {
+        "id": "onboarding",
+        "label": "Onboarding",
+        "text": "Senior product manager with 7+ years getting customers and partners live faster without loosening controls, from institutional crypto clients to clean-energy lending partners. At Anchorage Digital I quadrupled quarterly onboarding throughput and brought average handle time to 4.5 days; at Mosaic I lifted partner approval rates 9% QoQ."
+      },
+      {
+        "id": "climate",
+        "label": "Climate",
+        "text": "Senior product manager with 7+ years in regulated financial services, including four-plus years financing clean energy at Mosaic. I led the 0→1 launch of a leasing point-of-sale product with a top-5 US HVAC manufacturer and served as product owner for the platform behind $70MM+ in monthly solar loan originations across a full spectrum of installation types."
+      },
+      {
+        "id": "builder",
+        "label": "Builder",
+        "text": "Senior product manager with 7+ years who can directly deliver solutions to the problems I own. I built a lending origination tool single-handedly as PM, designer and engineer, production back-office tools in Retool, and used claude extensively for building both features and context banks."
       }
     ]
   },
@@ -72,7 +101,7 @@
     ]
   },
   "experience": {
-    "intro": "One card per result. The number first, the full line under Detail.",
+    "intro": "",
     "tags": [
       "Scale",
       "Automation",
@@ -100,7 +129,13 @@
             "tag": "Scale",
             "headline": "Client onboarding throughput, ~265 → 1,000+ a quarter, in a year",
             "headlineSource": "condensed from detail by Claude — Nathan to review",
-            "detail": "Quadrupled throughput of a complex, high-stakes client onboarding workflow (~265 → 1,000+ completed per quarter) within a year of taking over the squad."
+            "detail": "Quadrupled throughput of a complex, high-stakes client onboarding workflow (~265 → 1,000+ completed per quarter) within a year of taking over the squad.",
+            "variants": [
+              {
+                "id": "v1",
+                "text": "Quadrupled quarterly client onboarding throughput (~265 → 1,000+) within a year of taking over the squad."
+              }
+            ]
           },
           {
             "id": "anchorage-1",
@@ -108,21 +143,39 @@
             "tag": "Automation",
             "headline": "Average handle time, cut by automation while volume quadrupled",
             "headlineSource": "condensed from detail by Claude — Nathan to review",
-            "detail": "Drove onboarding automation (partner verification reliance, automated document collection, reusable questionnaires), bringing average handle time down to 4.5 days while quarterly volume quadrupled."
+            "detail": "Drove onboarding automation (partner verification reliance, automated document collection, reusable questionnaires), bringing average handle time down to 4.5 days while quarterly volume quadrupled.",
+            "variants": [
+              {
+                "id": "v1",
+                "text": "Brought average onboarding handle time to 4.5 days via verification and document-collection automation as volume quadrupled."
+              }
+            ]
           },
           {
             "id": "anchorage-9",
             "metric": "$20M+",
             "tag": "Scale",
             "headline": "Onboarded 380+ institutional clients that have so far driven $18M+ in revenue",
-            "detail": "Lead the product lifecycle and PDE team for the onboarding of 380+ institutional clients to a regulated financial institution, resulting in an additional $18M+ in revenue."
+            "detail": "Lead the product lifecycle and PDE team for the onboarding of 380+ institutional clients to a regulated financial institution, resulting in an additional $18M+ in revenue.",
+            "variants": [
+              {
+                "id": "v1",
+                "text": "Led the product lifecycle for onboarding 380+ institutional clients to a regulated institution, adding $18M+ in revenue."
+              }
+            ]
           },
           {
             "id": "anchorage-2",
             "metric": "Same day",
             "tag": "0→1",
             "headline": "New product lines approved same day, without a multi-day re-application",
-            "detail": "Shipped progressive onboarding, letting existing clients add a product line by reusing what they've already provided. A multi-day application became same-day approval with no new questions, and clients using more than one product line grew ~30% after launch."
+            "detail": "Shipped progressive onboarding, letting existing clients add a product line by reusing what they've already provided. A multi-day application became same-day approval with no new questions, and clients using more than one product line grew ~30% after launch.",
+            "variants": [
+              {
+                "id": "v1",
+                "text": "Shipped progressive onboarding: same-day approval for added product lines; multi-product clients grew ~30% after launch."
+              }
+            ]
           },
           {
             "id": "anchorage-4",
@@ -137,7 +190,13 @@
             "tag": "AI",
             "headline": "Teammates querying a Claude knowledge system I built",
             "headlineSource": "condensed from detail by Claude — Nathan to review",
-            "detail": "Built Claude-based team tools: a knowledge system that auto-files meeting notes (escalating uncertain cases for review) and makes PRDs and discovery docs queryable for 15–20 teammates."
+            "detail": "Built Claude-based team tools: a knowledge system that auto-files meeting notes (escalating uncertain cases for review) and makes PRDs and discovery docs queryable for 15–20 teammates.",
+            "variants": [
+              {
+                "id": "v1",
+                "text": "Built Claude-based knowledge tools that auto-file meeting notes and make PRDs queryable for 15–20 teammates."
+              }
+            ]
           },
           {
             "id": "anchorage-7",
@@ -201,7 +260,13 @@
             "metric": "Audit Ready",
             "tag": "Risk",
             "headline": "Established embedded model-risk procedures that made lending models SR 11-7 audit-ready",
-            "detail": "Led data, underwriting and compliance teams to create SR 11-7 model-risk procedures, making lending models audit-ready."
+            "detail": "Led data, underwriting and compliance teams to create SR 11-7 model-risk procedures, making lending models audit-ready.",
+            "variants": [
+              {
+                "id": "v1",
+                "text": "Led data, underwriting and compliance teams to build SR 11-7 model risk management procedures, making lending models audit-ready."
+              }
+            ]
           }
         ]
       },
@@ -228,7 +293,13 @@
             "tag": "Built it myself",
             "headline": "Built the origination tool as PM, designer and engineer",
             "headlineSource": "condensed from detail by Claude — Nathan to review",
-            "detail": "Built the origination tool single-handedly as PM, designer and engineer (Glide, Zapier, Google Sheets, SignNow); it became the model for the next-gen platform."
+            "detail": "Built the origination tool single-handedly as PM, designer and engineer (Glide, Zapier, Google Sheets, SignNow); it became the model for the next-gen platform.",
+            "variants": [
+              {
+                "id": "v1",
+                "text": "Built an origination tool solo as PM, designer and engineer with no-code tools; it became the model for the next-gen platform."
+              }
+            ]
           },
           {
             "id": "mosaic-2",
@@ -252,7 +323,13 @@
             "tag": "Scale",
             "headline": "Partner approval rates QoQ, from funnel analytics",
             "headlineSource": "condensed from detail by Claude — Nathan to review",
-            "detail": "Formed and led a 7-person cross-functional team that used onboarding funnel analytics to lift partner approval rates 9% QoQ."
+            "detail": "Formed and led a 7-person cross-functional team that used onboarding funnel analytics to lift partner approval rates 9% QoQ.",
+            "variants": [
+              {
+                "id": "v1",
+                "text": "Led a 7-person cross-functional team using funnel analytics to lift partner approval rates 9% QoQ."
+              }
+            ]
           },
           {
             "id": "mosaic-5",
@@ -585,7 +662,8 @@
               "Agile / Scrum",
               "Scrum",
               "Agile delivery",
-              "Product owner"
+              "Product owner",
+              "Scrum master"
             ],
             "shown": 0
           },
@@ -629,7 +707,8 @@
               "Partnerships",
               "Partner integrations",
               "B2B2C partnerships",
-              "API partners"
+              "API partners",
+              "Partner onboarding"
             ],
             "shown": 0
           }
@@ -647,7 +726,8 @@
               "KYB",
               "Compliance workflows",
               "Global client onboarding",
-              "Multi-jurisdiction onboarding"
+              "Multi-jurisdiction onboarding",
+              "Know Your Customer (KYC)"
             ],
             "shown": 0
           },
@@ -661,7 +741,8 @@
           {
             "forms": [
               "Sanctions screening (OFAC)",
-              "OFAC screening / Sanctions screening / Sanctions monitoring"
+              "OFAC screening / Sanctions screening / Sanctions monitoring",
+              "Sanctions compliance"
             ],
             "shown": 0
           },
