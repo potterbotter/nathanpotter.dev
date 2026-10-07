@@ -63,7 +63,7 @@ async function budgetAlerts(env, ctx) {
 }
 
 export async function sendAlert(env, subject, body) {
-  const to = env.ALERT_EMAIL || env.ADMIN_EMAIL;
+  const to = String(env.ALERT_EMAIL || env.ADMIN_EMAIL || '').trim().toLowerCase();
   if (!env.ALERTS || !to) return;
   try {
     const { EmailMessage } = await import('cloudflare:email');

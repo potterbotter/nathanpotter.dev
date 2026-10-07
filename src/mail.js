@@ -152,7 +152,7 @@ export async function readMail(env, mail, apps, { useClaude = true } = {}) {
 export async function handleEmail(message, env, ctx) {
   // 1. Forward. Nothing touches the message before this, so delivery never depends on reading.
   const source = env.EMAIL_FORWARD_TO ? 'EMAIL_FORWARD_TO' : env.ALERT_EMAIL ? 'ALERT_EMAIL' : env.ADMIN_EMAIL ? 'ADMIN_EMAIL' : 'none';
-  const to = env.EMAIL_FORWARD_TO || env.ALERT_EMAIL || env.ADMIN_EMAIL;
+  const to = String(env.EMAIL_FORWARD_TO || env.ALERT_EMAIL || env.ADMIN_EMAIL || '').trim().toLowerCase();
   try {
     if (!to) throw new Error('No forwarding address configured');
     await message.forward(to);
