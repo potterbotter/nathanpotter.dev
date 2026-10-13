@@ -495,8 +495,8 @@
     ]
   },
   "about": [
-    "[A short paragraph in first person: how I got into product, what I care about in the work.]",
-    "[A second paragraph: outside work, briefly.]"
+    "I was the little gear keeping all the big gears turning in Mosaic's legal department when I partnered with our head of product on a patent application. I started asking user questions nobody had thought to ask yet, and fell in love with product work. I moved over as a product analyst and realized I'd found the job built around what I like doing most: thinking critically, communicating and solving problems. Now I look for three things: complex problems that need elegant solutions, colleagues who challenge me to keep learning, and products that make the world a better place to share.",
+    "I have way too many hobbies. Seriously. Ask me about the games I play, the weird things I build with a 3D printer, the book I'm writing, the LARP events I go to or martial arts, and that's only scratching the surface. I like talking about all of them. Definitely ask me about my German Shepherd and two black cats."
   ],
   "skills": {
     "_note": "Each skill has one or more wordings (forms). forms[shown] is displayed on the site; the résumé generator and job-fit matching may use any form. All wordings were approved by Nathan on 2026-10-05.",
@@ -1219,7 +1219,7 @@
     }
   ],
   "contact": {
-    "openTo": "[One line on what I'm open to.]"
+    "openTo": "Open to senior PM roles, Bay Area or remote. I'm happiest turning a complicated, high-stakes workflow into something that scales."
   },
   "siteBuild": {
     "intro": "This website is entirely the result of me working via Claude. Layout, user experience, features, and content all come from me. The underlying code and infrastructure is guided and executed by Claude. I built this because I can and because I had fun doing it.",
@@ -1227,8 +1227,8 @@
       "Plain HTML and CSS, generated from one structured content file and served by Cloudflare. Minimal JavaScript; every page reads without it.",
       "Light and dark themes; the site follows your system setting until you pick one.",
       "Visits are counted without cookies or third-party trackers, and IP addresses are never stored. Links from my LinkedIn and GitHub carry a source tag (?ref=linkedin, ?ref=github), so I can see which channel a visit came from.",
-      "[Decision and trade-off]",
-      "Not resolved yet: [open question]"
+      "The job-fit tool can't take the model's word for it: every citation is checked against a real result on this page, and the quotes are mine, not the model's. It costs a little flexibility in what the tool can say, which I think is the point.",
+      "Not resolved yet: how valuable the role views are. Page view analytics will tell the story with time."
     ],
     "repo": "https://github.com/potterbotter/nathanpotter.dev"
   },
