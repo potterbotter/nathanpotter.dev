@@ -133,7 +133,7 @@
         "title": "Senior Product Manager, Client Onboarding & Risk Platform",
         "dates": "Jan 2025 – present",
         "note": "Moved from Client Insights & Automation to take over Client Onboarding & Risk when the team needed a PM to lead it. Onboarding serves institutional clients worldwide across Anchorage’s US, Singapore and Cayman Islands entities.",
-        "nextCard": 10,
+        "nextCard": 13,
         "cards": [
           {
             "id": "anchorage-0",
@@ -179,6 +179,20 @@
             ]
           },
           {
+            "id": "anchorage-11",
+            "metric": ">$16M",
+            "tag": "Scale",
+            "headline": "Built onboarding path for a trading entity, enabling ~1200 counterparties and >$16M in revenue.",
+            "detail": "Launched counterparty onboarding for a new Anchorage legal entity, enabling the product to grow to ~1200 counterparties and driving >$16M in revenue."
+          },
+          {
+            "id": "anchorage-12",
+            "metric": "$11B",
+            "tag": "0→1",
+            "headline": "Delivered KYB onboarding support for a new entity with $11B YTD notional trade volume",
+            "detail": "Built sophisticated KYB and trading risk onboarding solution for complex entities to onboard to a new product with $11B YTD notional trade volume."
+          },
+          {
             "id": "anchorage-2",
             "metric": "Same day",
             "tag": "0→1",
@@ -213,11 +227,24 @@
             ]
           },
           {
+            "id": "anchorage-8",
+            "metric": "+140%",
+            "tag": "Scale",
+            "headline": "Kept AML case operations scaling through a 140% volume rise",
+            "detail": "Supported compliance operations through a 140% rise in comparable alert and case volume versus the same-length period before I joined. All of it ran through the case-management system I administer, while I shipped workflow optimizations and Slack automations to ensure the team could continue to scale volume.",
+            "variants": [
+              {
+                "id": "v1",
+                "text": "Supported compliance operations through a 140% rise in alert and case volume while shipping workflow optimizations and Slack automations."
+              }
+            ]
+          },
+          {
             "id": "anchorage-6",
-            "metric": "15–20",
+            "metric": "20",
             "tag": "AI",
             "headline": "Teammates querying a Claude knowledge system I built",
-            "detail": "Built Claude-based team tools: a knowledge system that auto-files meeting notes (escalating uncertain cases for review) and makes PRDs and discovery docs queryable for 15–20 teammates.",
+            "detail": "Built Claude-based team tools: a knowledge system that auto-files meeting notes (escalating uncertain cases for review) and makes PRDs and discovery docs queryable for each and every stakeholder.",
             "variants": [
               {
                 "id": "v1",
@@ -243,19 +270,6 @@
             ]
           },
           {
-            "id": "anchorage-8",
-            "metric": "+140%",
-            "tag": "Scale",
-            "headline": "Kept AML case operations scaling through a 140% volume rise",
-            "detail": "Supported compliance operations through a 140% rise in comparable alert and case volume versus the same-length period before I joined. All of it ran through the case-management system I administer, while I shipped workflow optimizations and Slack automations to ensure the team could continue to scale volume.",
-            "variants": [
-              {
-                "id": "v1",
-                "text": "Supported compliance operations through a 140% rise in alert and case volume while shipping workflow optimizations and Slack automations."
-              }
-            ]
-          },
-          {
             "id": "anchorage-5",
             "metric": "62 trainees",
             "tag": "Leadership",
@@ -271,6 +285,13 @@
                 "text": "Co-developed org-wide PRD templates, lifecycle standards and training materials; ran onboarding training for 62 new product, design and engineering hires."
               }
             ]
+          },
+          {
+            "id": "anchorage-10",
+            "metric": "10,000/Day",
+            "tag": "Scale",
+            "headline": "Building KYC onboarding automation to be able to onboard 10,000 individuals per day.",
+            "detail": "Designed and am driving delivery of a comprehensive overhaul to our KYC collection and verification process to eliminate manual bottlenecks and achieve happy path automation."
           },
           {
             "id": "anchorage-3",
