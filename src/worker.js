@@ -11,10 +11,19 @@ import bundledCv from '../content/cv.json';
 import { collect, prune } from './analytics.js';
 import { handleJobFit, handleFetchPosting } from './jobfit-api.js';
 
+const PRUNE_CRON = '17 10 * * *';
+
 export default {
-  // Daily: enforce analytics retention (13 months) and drop old visitor-hash salts.
+  // Daily: enforce analytics retention (13 months) and drop old visitor-hash salts. Every other schedule in
+  // wrangler.jsonc belongs to the private admin Worker and is handed to it over the service binding (its own cron
+  // triggers never fired). The admin Worker answers when its job is done, so the work isn't cut short.
   async scheduled(event, env, ctx) {
-    ctx.waitUntil(prune(env));
+    if (event.cron === PRUNE_CRON) { ctx.waitUntil(prune(env)); return; }
+    if (!env.ADMIN) return;
+    ctx.waitUntil(env.ADMIN.fetch('https://admin.internal/__scheduled', {
+      method: 'POST', headers: { 'X-Scheduled-Cron': event.cron, 'X-Scheduled-Time': String(event.scheduledTime) },
+    }).then((r) => { if (!r.ok) console.error('admin schedule failed', event.cron, r.status); })
+      .catch((err) => console.error('admin schedule error', event.cron, err)));
   },
 
   async fetch(request, env, ctx) {
