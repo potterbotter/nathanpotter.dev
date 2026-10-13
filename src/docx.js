@@ -2,7 +2,7 @@
 // résumé needs and what applicant-tracking systems parse reliably: one column, Arial, plain paragraphs, real bullet
 // lists, and contact details in the body (not in a page header).
 //
-// Input: { name, title, contact: { email, phone, location, linkedin, site }, summary: { text }, callout?,
+// Input: { name, title, contact: { email, phone, location, linkedin, site }, summary: { text }, callout?, calloutUrl?,
 //          roles: [{ company, title, dates, bullets: [{ text }] }], skills: [{ text, group, groupIndex }],
 //          education: [{ school, detail }] }
 
@@ -30,11 +30,15 @@ const esc = (s) => String(s ?? '')
 const BRAND = '0F6E73';
 // Sizes are in half-points; spacing in twentieths of a point.
 const TEXT_WIDTH = 12240 - 2 * 864; // letter width minus left and right margins, in twips
-const run = (text, { bold, italic, size, color, caps, spacing } = {}) =>
-  `<w:r><w:rPr>${bold ? '<w:b/>' : ''}${italic ? '<w:i/>' : ''}${caps ? '<w:caps/>' : ''}${spacing ? `<w:spacing w:val="${spacing}"/>` : ''}${color ? `<w:color w:val="${color}"/>` : ''}${size ? `<w:sz w:val="${size}"/><w:szCs w:val="${size}"/>` : ''}</w:rPr><w:t xml:space="preserve">${esc(text)}</w:t></w:r>`;
+const run = (text, { bold, italic, size, color, caps, spacing, shade } = {}) =>
+  `<w:r><w:rPr>${bold ? '<w:b/>' : ''}${italic ? '<w:i/>' : ''}${caps ? '<w:caps/>' : ''}${spacing ? `<w:spacing w:val="${spacing}"/>` : ''}${color ? `<w:color w:val="${color}"/>` : ''}${size ? `<w:sz w:val="${size}"/><w:szCs w:val="${size}"/>` : ''}${shade ? `<w:shd w:val="clear" w:color="auto" w:fill="${shade}"/>` : ''}</w:rPr><w:t xml:space="preserve">${esc(text)}</w:t></w:r>`;
 const tab = '<w:r><w:tab/></w:r>';
 const para = (runs, { after = 40, before = 0, style, keepNext, bullet, border, rightTab } = {}) =>
   `<w:p><w:pPr>${style ? `<w:pStyle w:val="${style}"/>` : ''}${keepNext ? '<w:keepNext/>' : ''}${bullet ? '<w:numPr><w:ilvl w:val="0"/><w:numId w:val="1"/></w:numPr>' : ''}${border ? `<w:pBdr><w:bottom w:val="single" w:sz="6" w:space="1" w:color="B9C4C4"/></w:pBdr>` : ''}${rightTab ? `<w:tabs><w:tab w:val="right" w:pos="${TEXT_WIDTH}"/></w:tabs>` : ''}<w:spacing w:before="${before}" w:after="${after}"/></w:pPr>${runs}</w:p>`;
+const NBSP = '\u00a0'; // non-breaking space: pads the band so it reads as a button
+const button = (text) => run(`${NBSP}${NBSP}${text}${NBSP}→${NBSP}${NBSP}`, { bold: true, size: 19, color: 'FFFFFF', shade: BRAND });
+const callout = (doc) => (doc.calloutUrl ? `<w:hyperlink r:id="${LINK_ID}" w:history="1">${button(doc.callout)}</w:hyperlink>` : button(doc.callout));
+const LINK_ID = 'rId3';
 const heading = (text) => para(run(text, { bold: true, caps: true, size: 20, color: BRAND, spacing: 16 }), { before: 160, after: 70, keepNext: true, border: true });
 
 export function documentXml(doc) {
@@ -47,7 +51,9 @@ export function documentXml(doc) {
     heading('Summary'),
     para(run(doc.summary.text)),
     // Optional one-line pointer to the site, in italics under the summary.
-    ...(doc.callout ? [para(run(doc.callout, { italic: true, color: '333333' }), { before: 20 })] : []),
+    // Optional pointer to the site under the summary, styled like a button: white bold text on a teal band, as a
+    // real hyperlink. Plain text to an applicant-tracking system (no text box, table or image).
+    ...(doc.callout ? [para(callout(doc), { before: 60, after: 40 })] : []),
     heading('Experience'),
     ...doc.roles.flatMap((r, i) => [
       // Company left, dates right (a right-aligned tab stop), then the title in italics.
@@ -61,7 +67,7 @@ export function documentXml(doc) {
     ...doc.education.map((e) => para(run(e.school, { bold: true }) + run(` — ${e.detail}`), { after: 24 })),
   ].join('');
   return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${body}<w:sectPr><w:pgSz w:w="12240" w:h="15840"/><w:pgMar w:top="792" w:right="864" w:bottom="792" w:left="864" w:header="432" w:footer="432" w:gutter="0"/></w:sectPr></w:body></w:document>`;
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><w:body>${body}<w:sectPr><w:pgSz w:w="12240" w:h="15840"/><w:pgMar w:top="792" w:right="864" w:bottom="792" w:left="864" w:header="432" w:footer="432" w:gutter="0"/></w:sectPr></w:body></w:document>`;
 }
 
 const STYLES = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -76,8 +82,9 @@ const CONTENT_TYPES = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 const ROOT_RELS = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/></Relationships>`;
 
-const DOC_RELS = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering" Target="numbering.xml"/></Relationships>`;
+const docRels = (doc) => `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering" Target="numbering.xml"/>${
+  doc.callout && doc.calloutUrl ? `<Relationship Id="${LINK_ID}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="${esc(doc.calloutUrl)}" TargetMode="External"/>` : ''}</Relationships>`;
 
 const core = (doc, title) => `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><dc:title>${esc(title)}</dc:title><dc:creator>${esc(doc.name)}</dc:creator><cp:lastModifiedBy>${esc(doc.name)}</cp:lastModifiedBy></cp:coreProperties>`;
@@ -87,7 +94,7 @@ export function buildDocx(doc, { title } = {}) {
     ['[Content_Types].xml', CONTENT_TYPES],
     ['_rels/.rels', ROOT_RELS],
     ['docProps/core.xml', core(doc, title || `${doc.name} - Resume`)],
-    ['word/_rels/document.xml.rels', DOC_RELS],
+    ['word/_rels/document.xml.rels', docRels(doc)],
     ['word/document.xml', documentXml(doc)],
     ['word/styles.xml', STYLES],
     ['word/numbering.xml', NUMBERING],

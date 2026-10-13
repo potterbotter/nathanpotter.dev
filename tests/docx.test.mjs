@@ -71,12 +71,19 @@ test('skills group by category in category order; contact splits into two lines'
   assert.deepEqual(contactLines(contact), ['hello@nathanpotter.dev · (555) 010-0000 · Bay Area', 'linkedin.com/in/x · nathanpotter.dev']);
 });
 
-test('an optional call-out prints in italics under the summary, and is left out when absent', () => {
+test('an optional call-out prints under the summary as a linked, shaded button, and is left out when absent', () => {
   const doc = sampleDoc();
   assert.ok(!unzip(buildDocx(doc))['word/document.xml'].includes('for humans'));
+  assert.ok(!unzip(buildDocx(doc))['word/_rels/document.xml.rels'].includes('hyperlink'));
   doc.callout = 'Interactive CV for humans: nathanpotter.dev';
-  const xml = unzip(buildDocx(doc))['word/document.xml'];
+  doc.calloutUrl = 'https://nathanpotter.dev';
+  const files = unzip(buildDocx(doc));
+  const xml = files['word/document.xml'];
   const at = xml.indexOf(doc.callout);
   assert.ok(at > xml.indexOf('Summary') && at < xml.indexOf('Experience'), 'between the summary and Experience');
-  assert.ok(xml.lastIndexOf('<w:i/>', at) > xml.lastIndexOf('<w:r>', at), 'italic');
+  const runStart = xml.lastIndexOf('<w:r>', at);
+  assert.match(xml.slice(runStart, at), /<w:b\/>.*<w:color w:val="FFFFFF"\/>.*<w:shd w:val="clear" w:color="auto" w:fill="0F6E73"\/>/, 'white bold text on teal');
+  assert.ok(xml.lastIndexOf('<w:hyperlink r:id="rId3"', at) > xml.lastIndexOf('</w:p>', at), 'inside a hyperlink');
+  assert.match(files['word/_rels/document.xml.rels'], /Id="rId3" Type="[^"]+\/hyperlink" Target="https:\/\/nathanpotter\.dev" TargetMode="External"/);
+  assert.match(xml, /xmlns:r="http:\/\/schemas\.openxmlformats\.org\/officeDocument\/2006\/relationships"/);
 });
