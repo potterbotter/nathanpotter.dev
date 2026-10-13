@@ -50,8 +50,9 @@
   "send_email": [
     { "name": "ALERTS" }
   ],
-  // Daily analytics retention cleanup (03:17 Pacific during PDT). The other three are the private admin Worker's
-  // schedules, handed to it over the ADMIN binding: every 5 minutes, 03:27 and 08:00 Pacific (during PDT).
-  "triggers": { "crons": ["17 10 * * *", "*/5 * * * *", "27 10 * * *", "0 15 * * *"] },
+  // Daily analytics retention cleanup (03:17 Pacific during PDT). The other two are the private admin Worker's daily
+  // jobs, handed to it over the ADMIN binding (03:27 and 08:00 Pacific during PDT); its 5-minute work runs on its own
+  // timer, since cron triggers that run several times an hour don't fire on this account.
+  "triggers": { "crons": ["17 10 * * *", "27 10 * * *", "0 15 * * *"] },
   "observability": { "enabled": true }
 }
