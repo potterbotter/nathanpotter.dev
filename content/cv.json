@@ -294,7 +294,7 @@
         "title": "Senior Product Manager, Originations",
         "dates": "Mar 2023 – Dec 2023",
         "note": null,
-        "nextCard": 3,
+        "nextCard": 4,
         "cards": [
           {
             "id": "jaris-0",
@@ -312,6 +312,13 @@
                 "text": "Launched a payment-collection product with two new third-party partners, doubling major partnerships in its B2B2B model."
               }
             ]
+          },
+          {
+            "id": "jaris-3",
+            "metric": "E2E",
+            "tag": "Platform",
+            "headline": "Managed the end to end application, underwriting, and origination experience for all customers",
+            "detail": "Owned the roadmap and run the business support of the platform responsible for all new customer applications, underwriting, and loan originations."
           },
           {
             "id": "jaris-1",
@@ -495,7 +502,9 @@
     ]
   },
   "about": [
-    "I was the little gear keeping all the big gears turning in Mosaic's legal department when I partnered with our head of product on a patent application. I started asking user questions nobody had thought to ask yet, and fell in love with product work. I moved over as a product analyst and realized I'd found the job built around what I like doing most: thinking critically, communicating and solving problems. Now I look for three things: complex problems that need elegant solutions, colleagues who challenge me to keep learning, and products that make the world a better place to share.",
+    "My path to Product Management:",
+    "I was the little gear keeping all the big gears turning in Mosaic's legal department when I partnered with our head of product on a patent application. I started asking user questions nobody had thought to ask yet and fell in love with product work. I moved over as a product analyst and realized I'd found the job built around what I like doing most: thinking critically, communicating and solving problems. Now I look for three things: complex problems that need elegant solutions, colleagues who challenge me to keep learning, and products that make the world a better place to share.",
+    "---",
     "I have way too many hobbies. Seriously. Ask me about the games I play, the weird things I build with a 3D printer, the book I'm writing, the LARP events I go to or martial arts, and that's only scratching the surface. I like talking about all of them. Definitely ask me about my German Shepherd and two black cats."
   ],
   "skills": {
