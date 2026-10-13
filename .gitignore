@@ -1,0 +1,18 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Local Worker settings and secrets for wrangler dev (never commit)
+.dev.vars
+.env
+.env.*
+
+# Build output (generated from content/cv.json on every deploy)
+dist/
+
+# Wrangler / Node
+.wrangler/
+node_modules/
