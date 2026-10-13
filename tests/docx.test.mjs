@@ -70,3 +70,13 @@ test('skills group by category in category order; contact splits into two lines'
   assert.deepEqual(groups, [{ name: 'One', items: ['a'] }, { name: 'Two', items: ['b', 'c'] }]);
   assert.deepEqual(contactLines(contact), ['hello@nathanpotter.dev · (555) 010-0000 · Bay Area', 'linkedin.com/in/x · nathanpotter.dev']);
 });
+
+test('an optional call-out prints in italics under the summary, and is left out when absent', () => {
+  const doc = sampleDoc();
+  assert.ok(!unzip(buildDocx(doc))['word/document.xml'].includes('for humans'));
+  doc.callout = 'Interactive CV for humans: nathanpotter.dev';
+  const xml = unzip(buildDocx(doc))['word/document.xml'];
+  const at = xml.indexOf(doc.callout);
+  assert.ok(at > xml.indexOf('Summary') && at < xml.indexOf('Experience'), 'between the summary and Experience');
+  assert.ok(xml.lastIndexOf('<w:i/>', at) > xml.lastIndexOf('<w:r>', at), 'italic');
+});

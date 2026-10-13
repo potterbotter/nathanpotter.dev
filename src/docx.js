@@ -2,7 +2,7 @@
 // résumé needs and what applicant-tracking systems parse reliably: one column, Arial, plain paragraphs, real bullet
 // lists, and contact details in the body (not in a page header).
 //
-// Input: { name, title, contact: { email, phone, location, linkedin, site }, summary: { text },
+// Input: { name, title, contact: { email, phone, location, linkedin, site }, summary: { text }, callout?,
 //          roles: [{ company, title, dates, bullets: [{ text }] }], skills: [{ text, group, groupIndex }],
 //          education: [{ school, detail }] }
 
@@ -46,6 +46,8 @@ export function documentXml(doc) {
     ...lines.map((l, i) => para(run(l, { size: 19, color: '333333' }), { after: i === lines.length - 1 ? 40 : 0 })),
     heading('Summary'),
     para(run(doc.summary.text)),
+    // Optional one-line pointer to the site, in italics under the summary.
+    ...(doc.callout ? [para(run(doc.callout, { italic: true, color: '333333' }), { before: 20 })] : []),
     heading('Experience'),
     ...doc.roles.flatMap((r, i) => [
       // Company left, dates right (a right-aligned tab stop), then the title in italics.
