@@ -180,17 +180,17 @@
           },
           {
             "id": "anchorage-11",
-            "metric": ">$16M",
+            "metric": "$16M+",
             "tag": "Scale",
-            "headline": "Built onboarding path for a trading entity, enabling ~1200 counterparties and >$16M in revenue.",
-            "detail": "Launched counterparty onboarding for a new Anchorage legal entity, enabling the product to grow to ~1200 counterparties and driving >$16M in revenue."
+            "headline": "Launched onboarding for a new trading entity: ~1,200 counterparties, $16M+ revenue",
+            "detail": "Launched counterparty onboarding for a new Anchorage legal entity, enabling the product to grow to ~1,200 counterparties and $16M+ in revenue."
           },
           {
             "id": "anchorage-12",
             "metric": "$11B",
             "tag": "0→1",
-            "headline": "Delivered KYB onboarding support for a new entity with $11B YTD notional trade volume",
-            "detail": "Built sophisticated KYB and trading risk onboarding solution for complex entities to onboard to a new product with $11B YTD notional trade volume."
+            "headline": "Built KYB and trading-risk onboarding for a product that traded $11B in 2026",
+            "detail": "Built KYB and trading-risk onboarding for complex entities joining a new trading product, which traded $11B in notional volume in 2026."
           },
           {
             "id": "anchorage-2",
@@ -290,21 +290,8 @@
             "id": "anchorage-10",
             "metric": "10,000/Day",
             "tag": "Scale",
-            "headline": "Building KYC onboarding automation to be able to onboard 10,000 individuals per day.",
-            "detail": "Designed and am driving delivery of a comprehensive overhaul to our KYC collection and verification process to eliminate manual bottlenecks and achieve happy path automation."
-          },
-          {
-            "id": "anchorage-3",
-            "metric": "Refactor",
-            "tag": "Platform",
-            "headline": "Re-architecting the core onboarding platform, live ops untouched",
-            "detail": "Product support and championship of a re-architecture of the core onboarding platform (data-model redesign, account migration, legacy retirement) with no disruption to live operations.",
-            "variants": [
-              {
-                "id": "v1",
-                "text": "Supported and championed a core onboarding platform re-architecture (data model, migration, legacy retirement) with no live disruption."
-              }
-            ]
+            "headline": "Designing KYC automation to onboard up to 10,000 individuals a day",
+            "detail": "Designed and leading a KYC collection and verification overhaul that removes manual bottlenecks and automates the happy path, built for 10,000 onboardings a day."
           }
         ]
       },
@@ -1170,7 +1157,7 @@
         "anchorage-1",
         "anchorage-2",
         "anchorage-9",
-        "anchorage-3",
+        "anchorage-10",
         "mosaic-4",
         "mosaic-5",
         "mosaic-6"
