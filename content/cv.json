@@ -15,7 +15,8 @@
   "facts": [
     "The entire career is in regulated financial services: clean-energy lending, embedded finance and institutional crypto banking.",
     "At both Mosaic and Anchorage Digital, Nathan has been responsible for OFAC monitoring of onboarded customers. He works directly with compliance and sanctions teams and has built and improved automation infrastructure and vendor integrations for OFAC screening.",
-    "At Anchorage Digital, Nathan's Client Onboarding & Risk Platform scope also covers transaction monitoring, SAR monitoring and reporting, and initial and ongoing sanctions, PEP and negative-news screening. He owns the roadmap for these areas, plans, builds and prioritizes vendor integrations, and is an admin for the internal case-management tooling."
+    "At Anchorage Digital, Nathan's Client Onboarding & Risk Platform scope also covers transaction monitoring, SAR monitoring and reporting, and initial and ongoing sanctions, PEP and negative-news screening. He owns the roadmap for these areas, plans, builds and prioritizes vendor integrations, and is an admin for the internal case-management tooling.",
+    "All three employers (Mosaic, jaris and Anchorage Digital) were startups when Nathan joined; jaris was the earliest-stage."
   ],
   "resume": {
     "_note": "Résumé building blocks. The generator only selects and orders approved blocks: a title, a summary variant, card bullets (or approved bullet variants on each card), skill wordings. It never writes new text.",
@@ -68,6 +69,11 @@
         "id": "growth",
         "label": "Growth",
         "text": "Senior product manager with 7+ years getting customers and partners live faster and growing what they use, from institutional crypto clients to clean-energy lending partners. I quadrupled quarterly onboarding throughput, grew multi-product clients ~30% with progressive onboarding, and used funnel analytics to lift partner approval rates 9% QoQ."
+      },
+      {
+        "id": "startup",
+        "label": "Startup",
+        "text": "Senior product manager with 7+ years at three regulated-finance startups, from early-stage jaris to Anchorage Digital, a federally chartered crypto bank. I turn messy, high-stakes workflows into products that scale."
       }
     ]
   },
@@ -158,6 +164,10 @@
               {
                 "id": "v1",
                 "text": "Brought average onboarding handle time to 4.5 days via verification and document-collection automation as volume quadrupled."
+              },
+              {
+                "id": "v2",
+                "text": "Optimized onboarding through automation (partner verification reliance, automated document collection, reusable questionnaires), bringing average handle time to 4.5 days while quarterly volume quadrupled."
               }
             ]
           },
@@ -175,6 +185,10 @@
               {
                 "id": "v2",
                 "text": "Led the product lifecycle for onboarding 380+ institutional clients, adding $20M+ in revenue."
+              },
+              {
+                "id": "v3",
+                "text": "Led the product lifecycle for onboarding 380+ institutional clients, with $20M+ in added revenue impact."
               }
             ]
           },
@@ -183,7 +197,13 @@
             "metric": "$16M+",
             "tag": "Scale",
             "headline": "Launched onboarding for a new trading entity: ~1,200 counterparties, $16M+ revenue",
-            "detail": "Launched counterparty onboarding for a new Anchorage legal entity, enabling the product to grow to ~1,200 counterparties and $16M+ in revenue."
+            "detail": "Launched counterparty onboarding for a new Anchorage legal entity, enabling the product to grow to ~1,200 counterparties and $16M+ in revenue.",
+            "variants": [
+              {
+                "id": "v1",
+                "text": "Launched counterparty onboarding for a new Anchorage legal entity, enabling growth to ~1,200 counterparties and $16M+ in revenue impact."
+              }
+            ]
           },
           {
             "id": "anchorage-12",
@@ -206,6 +226,10 @@
               {
                 "id": "v2",
                 "text": "Shipped progressive onboarding so existing clients could add product lines with no new questions; a multi-day application became same-day approval, and multi-product clients grew ~30% after launch."
+              },
+              {
+                "id": "v3",
+                "text": "Shipped progressive onboarding so existing clients could add a product line with no new questions; same-day approval, and multi-product attach grew ~30% after launch."
               }
             ]
           },
@@ -223,6 +247,10 @@
               {
                 "id": "v2",
                 "text": "Lead an 8-person squad (7 engineers, 1 designer), driving cross-functional collaboration with compliance, sanctions and financial intelligence stakeholders."
+              },
+              {
+                "id": "v3",
+                "text": "Lead an 8-person squad of 7 engineers and 1 product designer, aligning priorities across compliance, sanctions and financial intelligence teams."
               }
             ]
           },
@@ -249,6 +277,14 @@
               {
                 "id": "v1",
                 "text": "Built Claude-based knowledge tools that auto-file meeting notes and make PRDs queryable for 15–20 teammates."
+              },
+              {
+                "id": "v2",
+                "text": "Built AI-powered team tools on Claude: a knowledge system that auto-files meeting notes, escalating uncertain cases for review, and makes PRDs and discovery docs queryable for every stakeholder."
+              },
+              {
+                "id": "v3",
+                "text": "Built Claude-based knowledge tools designed to be trustworthy: auto-filing meeting notes, escalating uncertain cases for review, and making PRDs and discovery docs queryable for every stakeholder."
               }
             ]
           },
@@ -266,6 +302,10 @@
               {
                 "id": "v2",
                 "text": "Built a live, clickable product roadmap with embedded prototypes, adopted by 3 product squads in place of slide decks."
+              },
+              {
+                "id": "v3",
+                "text": "Built a live, clickable roadmap with embedded prototypes to communicate the latest progress across teams; adopted by 3 product squads in place of slide decks."
               }
             ]
           },
@@ -291,7 +331,17 @@
             "metric": "10,000/Day",
             "tag": "Scale",
             "headline": "Designing KYC automation to onboard up to 10,000 individuals a day",
-            "detail": "Designed and leading a KYC collection and verification overhaul that removes manual bottlenecks and automates the happy path, built for 10,000 onboardings a day."
+            "detail": "Designed and leading a KYC collection and verification overhaul that removes manual bottlenecks and automates the happy path, built for 10,000 onboardings a day.",
+            "variants": [
+              {
+                "id": "v1",
+                "text": "Designed and leading a high-scale KYC collection and verification overhaul that removes manual bottlenecks and automates the happy path, built for 10,000 onboardings a day."
+              },
+              {
+                "id": "v2",
+                "text": "Set the roadmap for and leading a KYC collection and verification overhaul that removes manual bottlenecks and automates the happy path, built for 10,000 onboardings a day."
+              }
+            ]
           }
         ]
       },
@@ -326,7 +376,17 @@
             "metric": "E2E",
             "tag": "Platform",
             "headline": "Managed the end to end application, underwriting, and origination experience for all customers",
-            "detail": "Owned the roadmap and run the business support of the platform responsible for all new customer applications, underwriting, and loan originations."
+            "detail": "Owned the roadmap and run the business support of the platform responsible for all new customer applications, underwriting, and loan originations.",
+            "variants": [
+              {
+                "id": "v1",
+                "text": "Owned the product roadmap for the platform behind all new customer applications, underwriting and loan originations."
+              },
+              {
+                "id": "v2",
+                "text": "Owned the roadmap and business support for the platform behind all new customer applications, underwriting decisioning and loan originations."
+              }
+            ]
           },
           {
             "id": "jaris-1",
@@ -351,6 +411,10 @@
               {
                 "id": "v1",
                 "text": "Led data, underwriting and compliance teams to build SR 11-7 model risk management procedures, making lending models audit-ready."
+              },
+              {
+                "id": "v2",
+                "text": "Led data, underwriting and compliance teams to create SR 11-7 model-risk procedures governing lending model quality and reliability, making the models audit-ready."
               }
             ]
           }
@@ -443,6 +507,10 @@
               {
                 "id": "v2",
                 "text": "Formed and led a 7-person cross-functional team that used onboarding funnel analytics to lift partner approval (conversion) rates 9% QoQ."
+              },
+              {
+                "id": "v3",
+                "text": "Formed and led a 7-person cross-functional team that used onboarding funnel analytics to drive a 9% QoQ uplift in partner approval rates."
               }
             ]
           },
@@ -456,6 +524,10 @@
               {
                 "id": "v1",
                 "text": "Designed a cross-team cash-flow process for partner onboarding of a new distributor that grew to ~40% of the solar business."
+              },
+              {
+                "id": "v2",
+                "text": "Designed a cross-functional cash-flow process to onboard a new distributor that grew to ~40% of the solar business."
               }
             ]
           },
@@ -482,6 +554,10 @@
               {
                 "id": "v1",
                 "text": "Launched a white-glove support program for API-integrated partners (60%+ of loan volume) to retain Tier-1 partners."
+              },
+              {
+                "id": "v2",
+                "text": "Launched white-glove support for API-integrated partners (60%+ of loan volume) to drive retention of Tier-1 partners."
               }
             ]
           }
@@ -561,7 +637,8 @@
               "Executive communication",
               "Stakeholder communication",
               "Written communication",
-              "Cross-functional communication"
+              "Cross-functional communication",
+              "Communication and storytelling"
             ],
             "shown": 0
           },
@@ -582,7 +659,8 @@
               "Zero-to-one product development",
               "Product launch",
               "Go-to-market (GTM)",
-              "Scaling products"
+              "Scaling products",
+              "Product launches"
             ],
             "shown": 0
           },
@@ -783,7 +861,8 @@
               "Roadmapping",
               "Product roadmap",
               "Product strategy",
-              "Platform roadmapping"
+              "Platform roadmapping",
+              "Product vision, strategy and roadmap"
             ],
             "shown": 0
           },
@@ -836,7 +915,8 @@
               "Product analytics",
               "Metrics and KPIs",
               "Data and evaluation",
-              "Conversion funnel analysis"
+              "Conversion funnel analysis",
+              "Success metrics"
             ],
             "shown": 0
           },
@@ -846,7 +926,8 @@
               "A/B testing",
               "Feature flagging",
               "Experimentation",
-              "A/B tests"
+              "A/B tests",
+              "Experimentation and measurement"
             ],
             "shown": 0
           },
@@ -904,6 +985,12 @@
           {
             "forms": [
               "Customer Retention"
+            ],
+            "shown": 0
+          },
+          {
+            "forms": [
+              "B2B SaaS"
             ],
             "shown": 0
           }
