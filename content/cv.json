@@ -165,16 +165,16 @@
             "id": "anchorage-9",
             "metric": "$20M+",
             "tag": "Scale",
-            "headline": "Onboarded 380+ institutional clients that have so far driven $1$20M+ in revenue",
-            "detail": "Lead the product lifecycle and PDE team for the onboarding of 380+ institutional clients to a regulated financial institution, resulting in an additional $1$20M+ in revenue.",
+            "headline": "Onboarded 380+ institutional clients that have so far driven $20M+ in revenue",
+            "detail": "Lead the product lifecycle and PDE team for the onboarding of 380+ institutional clients to a regulated financial institution, resulting in an additional $20M+ in revenue.",
             "variants": [
               {
                 "id": "v1",
-                "text": "Led the product lifecycle for onboarding 380+ institutional clients to a regulated institution, adding $1$20M+ in revenue."
+                "text": "Led the product lifecycle for onboarding 380+ institutional clients to a regulated institution, adding $20M+ in revenue."
               },
               {
                 "id": "v2",
-                "text": "Led the product lifecycle for onboarding 380+ institutional clients, adding $1$20M+ in revenue."
+                "text": "Led the product lifecycle for onboarding 380+ institutional clients, adding $20M+ in revenue."
               }
             ]
           },
@@ -747,6 +747,12 @@
               "API contracts"
             ],
             "shown": 0
+          },
+          {
+            "forms": [
+              "Amplitude"
+            ],
+            "shown": 0
           }
         ]
       },
@@ -1107,7 +1113,7 @@
         "upFront": [
           {
             "metric": "380+",
-            "text": "Institutional clients onboarded to a crypto bank, with $1$20M+ in revenue"
+            "text": "Institutional clients onboarded to a crypto bank, with $20M+ in revenue"
           },
           {
             "metric": "+140%",
