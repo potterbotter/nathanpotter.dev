@@ -224,6 +224,15 @@
       .finally(function () { clearInterval(tick); });
   }
 
+  // ---------- a saved read (test bench only): shown again without re-running it ----------
+  document.addEventListener('np-fit-show', function (e) {
+    var d = e.detail || {};
+    if (!d.report || busy) return;
+    if (d.jd != null) { area.value = d.jd; updateCount(); }
+    render(out, d.report, d.meta || {}, false);
+    document.dispatchEvent(new CustomEvent('np-fit-read', { detail: { report: d.report, jd: area.value.trim(), saved: true } }));
+  });
+
   // ---------- compare mode (test bench only; JOBFIT_COMPARE flag on the server) ----------
   var columns = null;
   function buildColumns() {
