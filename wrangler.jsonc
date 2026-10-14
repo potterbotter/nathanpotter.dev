@@ -34,7 +34,8 @@
     // Job-fit tool: kill switch, model and limits (DESIGN.md, "Job-fit tool").
     "JOBFIT_ENABLED": "true",
     "JOBFIT_MODEL": "claude-opus-5-5",
-    "JOBFIT_MONTHLY_BUDGET_USD": "4",
+    "JOBFIT_MONTHLY_BUDGET_USD": "10", // visitors' job-fit runs
+    "ADMIN_MONTHLY_BUDGET_USD": "20",  // the site owner's own AI use in /admin, counted apart
     "JOBFIT_EFFORT": "medium",
     "JOBFIT_DAILY_CAP": "20", // about $1.50 a day at ~7¢ a run, so one bad day cannot use the whole monthly budget
     "JOBFIT_PER_IP_DAILY": "5"

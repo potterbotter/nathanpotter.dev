@@ -31,9 +31,11 @@ async function isAdmin(request, env) {
   return !!p && String(p.email || '').toLowerCase() === env.ADMIN_EMAIL.toLowerCase();
 }
 
-export async function monthSpend(env, month = monthKey()) {
-  const row = await env.DB.prepare('SELECT COALESCE(SUM(cost_usd), 0) AS spent, COUNT(*) AS runs FROM jobfit_runs WHERE month = ?1').bind(month).first();
-  return { spent: row.spent, runs: row.runs, budget: Number(env.JOBFIT_MONTHLY_BUDGET_USD || 10) };
+// Two budgets, counted separately: visitors' runs of the job-fit tool, and the site owner's own AI use (admin = 1).
+export async function monthSpend(env, month = monthKey(), { admin = false } = {}) {
+  const row = await env.DB.prepare('SELECT COALESCE(SUM(cost_usd), 0) AS spent, COUNT(*) AS runs FROM jobfit_runs WHERE month = ?1 AND admin = ?2').bind(month, admin ? 1 : 0).first();
+  const budget = admin ? Number(env.ADMIN_MONTHLY_BUDGET_USD || 20) : Number(env.JOBFIT_MONTHLY_BUDGET_USD || 10);
+  return { spent: row.spent, runs: row.runs, budget };
 }
 
 async function verifyTurnstile(env, token, ip) {
@@ -45,20 +47,24 @@ async function verifyTurnstile(env, token, ip) {
   return (await res.json()).success === true;
 }
 
-// Email Nathan once per month at 80% and at 100% of the budget.
-async function budgetAlerts(env, ctx) {
-  const { spent, budget } = await monthSpend(env);
+// Email Nathan once per month at 80% and at 100% of each budget. Without ctx, waits for the email itself.
+export async function budgetAlerts(env, ctx, { admin = false } = {}) {
+  const { spent, budget } = await monthSpend(env, monthKey(), { admin });
   const month = monthKey();
   for (const level of [80, 100]) {
     if (spent < (budget * level) / 100) continue;
-    const key = `jobfit_alert_${level}_${month}`;
+    const key = `${admin ? 'admin_ai' : 'jobfit'}_alert_${level}_${month}`;
     const claimed = await env.DB.prepare("INSERT OR IGNORE INTO meta (key, value) VALUES (?1, 'sent')").bind(key).run();
     if (!claimed.meta.changes) continue;
-    ctx.waitUntil(sendAlert(env,
-      level === 100 ? `Job-fit tool paused: $${budget} monthly budget reached` : `Job-fit tool at ${level}% of its $${budget} monthly budget`,
+    const what = admin ? 'Your admin AI tools' : 'Job-fit tool';
+    const sent = sendAlert(env,
+      level === 100 ? `${what} paused: $${budget} monthly budget reached` : `${what} at ${level}% of the $${budget} monthly budget`,
       `Spent so far in ${month}: $${spent.toFixed(2)} of $${budget}.\n\n${level === 100
-        ? 'The tool is now switched off for visitors until next month. Raise JOBFIT_MONTHLY_BUDGET_USD in wrangler.jsonc to turn it back on sooner.'
-        : 'It switches itself off at 100%.'}\n\nDetails: https://nathanpotter.dev/admin/dashboard/`));
+        ? (admin
+          ? 'Your admin AI tools are paused until next month. Raise ADMIN_MONTHLY_BUDGET_USD in wrangler.jsonc to turn them back on sooner.'
+          : 'The tool is now switched off for visitors until next month. Raise JOBFIT_MONTHLY_BUDGET_USD in wrangler.jsonc to turn it back on sooner.')
+        : 'It pauses at 100%.'}\n\nDetails: https://nathanpotter.dev/admin/dashboard/`);
+    if (ctx) ctx.waitUntil(sent); else await sent;
   }
 }
 
@@ -137,8 +143,12 @@ export async function handleJobFit(request, env, ctx, url, cv, { verifiedAdmin =
     const all = await env.DB.prepare("SELECT COUNT(*) AS n FROM jobfit_runs WHERE day = ?1 AND admin = 0 AND status IN ('ok', 'refused')").bind(day).first();
     if (all.n >= cap) return fail(429, 'daily_cap', 'The tool has hit its daily limit. Try again tomorrow.');
   }
-  const { spent, budget } = await monthSpend(env, month);
-  if (spent + ESTIMATED_RUN_USD > budget) return fail(503, 'budget', 'The tool is paused for the rest of the month. Email hello@nathanpotter.dev and Nathan will reply directly.');
+  const { spent, budget } = await monthSpend(env, month, { admin });
+  if (spent + ESTIMATED_RUN_USD > budget) {
+    return fail(503, 'budget', admin
+      ? `Your monthly admin AI budget ($${budget}) is used up. Raise ADMIN_MONTHLY_BUDGET_USD to keep going.`
+      : 'The tool is paused for the rest of the month. Email hello@nathanpotter.dev and Nathan will reply directly.');
+  }
 
   // Model choice is admin-only (the Opus vs Sonnet comparison); visitors always get the default.
   let modelKey = 'opus';
@@ -177,7 +187,7 @@ export async function handleJobFit(request, env, ctx, url, cv, { verifiedAdmin =
         u.cache_read_input_tokens ?? null, u.cache_creation_input_tokens ?? null, result.cost || 0, result.durationMs ?? null,
         r.fit || null, r.role_title || null, r.company || null, jd.length, jd, result.report ? JSON.stringify(result.report) : null, result.error || null,
       ).run();
-      await budgetAlerts(env, ctx);
+      await budgetAlerts(env, ctx, { admin });
     } catch (err) {
       console.error('job-fit logging error', err);
     }
