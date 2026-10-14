@@ -32,7 +32,10 @@
       "Senior Product Manager, Partner Integrations",
       "Senior Product Manager, Customer Onboarding",
       "Senior Product Manager, Internal Tools & Automation",
-      "Senior Product Manager, Onboarding & Activation"
+      "Senior Product Manager, Onboarding & Activation",
+      "Senior Product Manager, KYC & Verification",
+      "Senior Product Manager, Workflow Automation",
+      "Senior Product Manager, B2B Platforms"
     ],
     "summaries": [
       {
@@ -714,7 +717,8 @@
           },
           {
             "forms": [
-              "Prompt engineering"
+              "Prompt engineering",
+              "Prompt and context engineering"
             ],
             "shown": 0
           },
@@ -936,7 +940,8 @@
               "Process automation",
               "Operational efficiency",
               "Workflow automation",
-              "Business process improvement"
+              "Business process improvement",
+              "AI and automation"
             ],
             "shown": 0
           },
