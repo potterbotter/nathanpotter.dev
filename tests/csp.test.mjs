@@ -15,7 +15,7 @@ const ctx = { cv, flags: FLAGS, updated: 'today' };
 test('every inline executable script on public pages is allowed by its hash; no unsafe-inline scripts', () => {
   assert.ok(csp, 'CSP header present');
   assert.doesNotMatch(csp, /script-src[^;]*'unsafe-inline'/);
-  const pages = [T.cvPage(ctx, 'all'), T.viewsPage(ctx), T.jobFitPage(ctx), T.buildsPage(ctx), T.notFoundPage(ctx)];
+  const pages = [T.cvPage(ctx, 'all'), T.viewsPage(ctx), T.jobFitPage(ctx), T.buildsPage(ctx), T.notFoundPage(ctx), T.dprPage(ctx), T.dprAppPage(ctx)];
   for (const html of pages) {
     for (const m of html.matchAll(/<script(?![^>]*\b(src|type)=)[^>]*>([\s\S]*?)<\/script>/g)) {
       const hash = `'sha256-${createHash('sha256').update(m[2], 'utf8').digest('base64')}'`;

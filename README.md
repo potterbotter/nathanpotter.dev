@@ -63,9 +63,9 @@ npm run preview
 
 Then open http://localhost:8787. `npm run build:draft` builds with the `[placeholder]` copy visible.
 
-The job-fit tool locally: create `.dev.vars` (git-ignored) with an `ANTHROPIC_API_KEY` (or `DEV_FAKE_MODEL=true` for a canned read at no cost), run `npx wrangler d1 migrations apply nathanpotter-dev --local` once, then `npm run dev`.
+The job-fit tool locally: create `.dev.vars` (git-ignored) with an `ANTHROPIC_API_KEY` (or `DEV_FAKE_MODEL=true` for a canned read at no cost), run `npx wrangler d1 migrations apply nathanpotter-dev --local` once, then `npm run dev`. The same migration step creates the DPR calculator's preset table; without `TURNSTILE_SECRET` in `.dev.vars`, saves skip the bot check locally.
 
-`npm test` runs the test suite: the job-fit honesty checks, Access token verification, the streaming parser, link fetching, the Word writer and the CSP hash. CI runs it and the build on every push and pull request.
+`npm test` runs the test suite: the job-fit honesty checks, Access token verification, the streaming parser, link fetching, the Word writer, the DPR engine and presets API, and the CSP hash. CI runs it and the build on every push and pull request.
 
 ## Deployment
 
@@ -149,3 +149,8 @@ DNS and email are on Cloudflare too:
 | 2026-10-12 | CI runs the tests and the build on every push and pull request | The deploy already ran the build; tests now run before anything is merged. |
 | 2026-10-12 | Turnstile on the job-fit form; `/api/collect` rate-limited; the analytics salt cached per isolate | Turnstile stops scripted runs before they cost anything. The beacon endpoint only checked Origin, which a script can fake. Caching the salt saves two database calls per beacon. |
 | 2026-10-12 | Private tools moved to a separate private repo, joined by a service binding; this repo restarted with a clean history | The public repo is portfolio evidence and doesn't need to carry Nathan's private tooling. The private Worker handles `/admin/*` and `/api/admin/*`, has no public route, and still checks the Access token itself. It uses this repo as a package, so templates, content and validation stay in one place. Both Workers share one D1 database, each with its own migration history. |
+| 2026-10-14 | DPR calculator ported from Nathan's Python app as exact math in the browser, not a simulation | The same build always gets the same answer, and it's fast enough to recalculate as you type. Checked against the Python simulation's results: hit chances match exactly, averages within its margin of error (`tests/dpr.test.mjs`). |
+| 2026-10-14 | DPR calculator is a standalone themed page (`/tools/dpr/app/`) behind a site-styled landing page, not an iframe | The site refuses to be framed (`frame-ancestors 'none'`), and the fantasy styling would fight the CV's design system. A separate page lets it go all the way. |
+| 2026-10-14 | House rules (exploding dice, bigger dice against Large targets) left out of the public calculator | Results should match standard 5e rules. Rerolls and minimum die results stay: both are standard Great Weapon Fighting variants. |
+| 2026-10-14 | Visitors can save fighter presets for everyone | Nathan's call. Public by design, and the save dialog says so first. Saves pass Turnstile, a 3-a-minute burst limit, 10 a day per visitor (hashed, like the job-fit tool), 100 a day site-wide and 2,000 stored. The same `normalizeFighter()` validates in the browser and the Worker, so only short names and bounded numbers are stored. Nathan hides a preset with `UPDATE dpr_presets SET hidden = 1 WHERE id = …`; `DPR_SAVING_ENABLED` switches saving off. |
+| 2026-10-14 | The calculator's lettering is Sanguine Eye, Nathan's own typeface; numbers fall back to Georgia | The font has letters and basic punctuation only, by choice. Served from `public/assets/fonts/`. |

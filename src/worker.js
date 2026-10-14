@@ -1,6 +1,7 @@
 // nathanpotter.dev Worker. Public pages are static assets and never reach this code.
 // It runs only for /admin/* and /api/* (see run_worker_first in wrangler.jsonc):
 //   /api/job-fit, /api/job-fit/fetch  the public job-fit tool
+//   /api/dpr/presets                  shared fighter presets for the DPR calculator
 //   /api/collect                      first-party, cookieless analytics
 //   /admin/*, /api/admin/*            passed unchanged to the private admin Worker through a service binding
 //
@@ -10,6 +11,7 @@
 import bundledCv from '../content/cv.json';
 import { collect, prune } from './analytics.js';
 import { handleJobFit, handleFetchPosting } from './jobfit-api.js';
+import { handleDprPresets } from './dpr-api.js';
 
 const PRUNE_CRON = '17 10 * * *';
 
@@ -35,6 +37,9 @@ export default {
     }
     if (path === '/api/job-fit') return handleJobFit(request, env, ctx, url, bundledCv);
     if (path === '/api/job-fit/fetch') return handleFetchPosting(request, env, url);
+    if (path === '/api/dpr/presets') {
+      try { return await handleDprPresets(request, env, url); } catch (err) { console.error('dpr presets error', err); return json({ error: 'failed', message: 'Something went wrong. Try again.' }, 500); }
+    }
     if (path === '/api/collect') {
       try { return await collect(request, env, url); } catch (err) { console.error('collect error', err); return new Response(null, { status: 204 }); }
     }

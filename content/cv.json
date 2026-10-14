@@ -1311,9 +1311,9 @@
     },
     {
       "name": "DPR calculator",
-      "status": "placeholder",
+      "status": "live",
       "route": "/tools/dpr/",
-      "summary": "Damage per round for 5e-compatible games: expected damage from an attack routine against a given armour class."
+      "summary": "Damage per round for 5e-compatible games: compare fighters across a range of armour classes, with exact odds rather than a simulation."
     },
     {
       "name": "This site",
