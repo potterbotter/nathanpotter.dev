@@ -342,6 +342,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .fit-read-chip--close { background: var(--chip); border-color: var(--brand); color: var(--ink); }
 .fit-read-chip--stretch { background: var(--chip); }
 .fit-read-chip--gap { background: transparent; color: var(--ink-2); }
+.stack { display: flex; flex-direction: column; gap: var(--sp-3); }
 .fit-list { list-style: disc; padding-left: 1.2em; display: flex; flex-direction: column; gap: var(--sp-1); }
 .fit-how summary { font-weight: 600; color: var(--brand); min-height: var(--tap); display: inline-flex; align-items: center; }
 .fit-how p { margin-top: var(--sp-2); }

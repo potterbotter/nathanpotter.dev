@@ -42,13 +42,14 @@ Site copy is written in Nathan's voice, public register:
 |---|---|---|
 | Site code, templates, public CV facts (`content/cv.json`) | GitHub (public) | Everyone |
 | Analytics events, job-fit runs and anything Nathan's private tools store | Cloudflare **D1** (SQL database) | Nathan, via `/admin` |
+| DPR calculator presets visitors choose to save (fighter names and numbers only) | Cloudflare **D1** (`dpr_presets`) | Everyone: public by design, and the page says so before saving |
 | AI API key, other credentials | Cloudflare secrets | Nobody (the Workers only) |
 
 **Guardrails**
 - **Personal data never goes in the repo.** That includes test fixtures with real job descriptions and exports. Test sets for the public job-fit tool use job descriptions Nathan has chosen to publish.
 - **A pre-commit hook** (`.githooks/pre-commit`) blocks data-looking files: documents, database files, exports, emails.
 - **Two locks on every private route.** Cloudflare Access (GitHub login, Nathan's account only) guards `/admin/*` and `/api/admin/*`. The private Worker also verifies the Access token on every request (`src/access.js`, tested for forged, tampered, expired and wrong-audience tokens) and rejects anything else, so a misconfigured Access rule can't expose data. That Worker has no public route of its own: this Worker passes private paths to it through a service binding.
-- **Public routes never read private tables.** The public job-fit tool reads `cv.json` only.
+- **Public routes never read private tables.** The public job-fit tool reads `cv.json` only. The DPR calculator reads and writes only `dpr_presets`, which holds nothing private.
 
 ## Structure
 
@@ -62,7 +63,8 @@ The generic CV is the homepage. Navigation makes the CV's role views and the too
 /views/               Role views landing (pick a view)
 /builds/              Builds landing
 /tools/job-fit/       Job-fit tool, then its write-up
-/tools/dpr/           Damage-per-round calculator (5e-compatible, SRD content only), then its write-up
+/tools/dpr/           DPR calculator: what it does and how it's built, with a link to the calculator
+/tools/dpr/app/       The calculator itself: a standalone, themed page ("Scribe's sketch"), 5e-compatible, standard rules only
 /how-i-built-this/    Long-form site write-up
 /api/job-fit, /api/job-fit/fetch, /api/collect
                       Public endpoints (rate limits, spend caps)
@@ -130,5 +132,4 @@ Where the handoff and this file disagreed:
 - **Accepted from the handoff:** `/views/`, `/builds/`, `#site-build`, the footer Admin link, hero metrics, the tag-based role-view rules.
 
 ## Open questions
-- **Placeholders Nathan writes:** About (two paragraphs), AI-method steps, Contact "open to" line, site-build paragraph and decisions, job-fit write-up, DPR "what it will do" list.
-- **DPR calculator:** where the existing code lives and how it's brought in.
+- **Placeholders Nathan writes:** About (two paragraphs), AI-method steps, Contact "open to" line, site-build paragraph and decisions, job-fit write-up.

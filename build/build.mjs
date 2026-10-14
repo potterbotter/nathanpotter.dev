@@ -30,7 +30,8 @@ const pages = {
   'views/index.html': T.viewsPage(ctx),
   'builds/index.html': T.buildsPage(ctx),
   'tools/job-fit/index.html': T.jobFitPage(ctx),
-  'tools/dpr/index.html': T.placeholderPage(ctx, 'dpr'),
+  'tools/dpr/index.html': T.dprPage(ctx),
+  'tools/dpr/app/index.html': T.dprAppPage(ctx),
   'sign-in/index.html': T.signInPage(ctx),
   '404.html': T.notFoundPage(ctx),
 };

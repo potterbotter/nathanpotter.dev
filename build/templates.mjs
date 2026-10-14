@@ -37,6 +37,10 @@ export const I = {
 const linkedinHandle = (url) => url.replace(/^https?:\/\/(www\.)?linkedin\.com\//, '').replace(/\/$/, '');
 
 // ---------- layout ----------
+// Applies a saved light/dark choice before first paint. The only inline script on the site: the CSP allows it by hash
+// (tests/csp.test.mjs), so every page must use this exact text.
+const THEME_SCRIPT = `<script>(function(){try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}})();</script>`;
+
 export function layout(ctx, { title, description, path, current, main, footer = 'slim', jsonld = '', noindex = false, admin = '', bare = false, pageType = '', scripts = '' }) {
   const url = SITE + path;
   if (admin) noindex = true;
@@ -58,7 +62,7 @@ ${noindex ? '<meta name="robots" content="noindex">\n' : ''}<link rel="canonical
 <link rel="manifest" href="/site.webmanifest">
 <meta name="theme-color" content="#0F6E73" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0B2F32" media="(prefers-color-scheme: dark)">
-<script>(function(){try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}})();</script>
+${THEME_SCRIPT}
 <link rel="stylesheet" href="/assets/css/tokens.css">
 <link rel="stylesheet" href="/assets/css/site.css">
 <script src="/assets/js/site.js" defer></script>
@@ -593,4 +597,151 @@ export function notFoundPage(ctx) {
 <div class="page-main"><div class="row-links"><a class="btn btn--primary" href="/">Back to the CV</a><a class="btn btn--secondary" href="/builds/">See the builds</a></div></div>
 </main>`;
   return layout(ctx, { title: `Not found — ${ctx.cv.person.name}`, description: 'Page not found.', path: '/404', current: null, main, noindex: true, pageType: '404' });
+}
+
+// ---------- /tools/dpr/ ----------
+// The landing page stays in the site's own style; the calculator itself is a separate, fully themed page.
+export function dprPage(ctx) {
+  const { cv } = ctx;
+  const b = cv.builds.find((x) => x.route === '/tools/dpr/');
+  const main = `<main id="main" class="wrap">
+<header class="page-title">
+<p class="crumbs"><a href="/builds/">Builds</a> / DPR calculator</p>
+<h1>${esc(b.name)}</h1><div class="rule"></div>
+<p class="lede">${esc(b.summary)}</p>
+</header>
+<div class="page-main">
+<div class="row-links">
+<a class="btn btn--primary" href="/tools/dpr/app/">Open the calculator ${I.arrow()}</a>
+<a class="btn btn--secondary" href="/builds/">All builds</a>
+</div>
+<section class="section" aria-labelledby="h-does">
+<h2 id="h-does">What it does</h2>
+<ul class="fit-list measure">
+<li>Compares up to four fighters, each with up to six kinds of attack.</li>
+<li>Works out hit, crit and miss chances, average damage, a typical round and a big round, for every armour class in the range you pick.</li>
+<li>Shows who out-damages whom, round by round, when two fighters are on the page.</li>
+<li>Starts from six level 5 example builds, or from presets other visitors have saved. You can save your own too. Saved presets are public: anyone who uses the calculator can see and load them.</li>
+<li>Downloads the full results as a CSV.</li>
+</ul>
+</section>
+<section class="section" id="how" aria-labelledby="h-how">
+<h2 id="h-how">How it's built</h2>
+<div class="measure stack">
+<p>I first built this as a Python app to compare characters from my own game. That version simulated 100,000 rounds for each armour class. This one works out the exact chance of every possible damage total instead, so the same build always gets the same answer, and it's fast enough to recalculate as you type. I checked it against the old simulation: hit chances match exactly, and average damage lands within the simulation's own margin of error.</p>
+<p>The original also supported exploding dice and bigger dice against Large targets. Both were house rules from my table, so I left them out here and kept to standard 5e mechanics.</p>
+<p>The lettering is Sanguine Eye, a blackletter typeface I made. I used ChatGPT to generate alternate versions of several letters, so repeated letters don't look stamped. It has no numerals, so I kept it to the titles. Everything else is in Fondamento, a quill hand by Brian J. Bonislawsky, released under the SIL Open Font License.</p>
+<p>Shared presets are the one part with a server behind it. Saves go through a bot check and per-visitor limits, and only numbers and short names are ever stored. I can hide a preset if something inappropriate gets through.</p>
+<p>What it doesn't do yet: once-per-turn damage like Sneak Attack, and effects that only trigger when another attack hits. Both need the engine to treat a round's attacks as linked rather than independent, which is the next thing I'd add.</p>
+</div>
+</section>
+</div>
+</main>`;
+  return layout(ctx, { title: `${b.name} — ${cv.person.name}`, description: b.summary, path: b.route, current: 'builds', main });
+}
+
+// The calculator: a standalone page in the "Scribe's sketch" style (design: the DPR canvas, Sketch boards). It doesn't
+// use the site layout, but keeps the same theme script, icons and analytics. dpr.js renders the fighters and results.
+export function dprAppPage(ctx) {
+  const { cv } = ctx;
+  const config = JSON.stringify({ turnstileSiteKey: ctx.flags.turnstileSiteKey || '' }).replace(/</g, '\\u003c');
+  const description = 'Compare damage per round for 5e-compatible builds across a range of armour classes. Exact odds, not a simulation.';
+  return `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Damage per round calculator — ${esc(cv.person.name)}</title>
+<meta name="description" content="${esc(description)}">
+<link rel="canonical" href="${SITE}/tools/dpr/app/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Damage per round calculator">
+<meta property="og:description" content="${esc(description)}">
+<meta property="og:url" content="${SITE}/tools/dpr/app/">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#D6C094" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1E160F" media="(prefers-color-scheme: dark)">
+${THEME_SCRIPT}
+<link rel="preload" href="/assets/fonts/fondamento.woff" as="font" type="font/woff" crossorigin>
+<link rel="preload" href="/assets/fonts/sanguine-eye-v9.woff" as="font" type="font/woff" crossorigin>
+<link rel="stylesheet" href="/assets/css/dpr.css">
+<script type="application/json" id="np-dpr-config">${config}</script>
+<script type="module" src="/assets/js/dpr.js"></script>
+<script src="/assets/js/site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the calculator</a>
+<div class="desk">
+<svg class="desk__texture" aria-hidden="true" focusable="false">
+<filter id="sk-grain"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="matrix" values="0 0 0 0 0.42  0 0 0 0 0.30  0 0 0 0 0.16  0 0 0 0.5 0"/></filter>
+<filter id="sk-mottle"><feTurbulence type="fractalNoise" baseFrequency="0.006 0.011" numOctaves="4" seed="21"/><feColorMatrix type="matrix" values="0 0 0 0 0.45  0 0 0 0 0.32  0 0 0 0 0.15  0 0 0 0.9 -0.32"/></filter>
+<rect width="100%" height="100%" filter="url(#sk-mottle)"/>
+<rect width="100%" height="100%" filter="url(#sk-grain)" opacity=".55"/>
+</svg>
+<div class="sheet-wrap">
+<main id="main" class="sheet">
+
+<header class="head">
+<a class="back" href="/tools/dpr/">About this calculator</a>
+<h1 class="title">Damage per Round</h1>
+<svg class="underline" width="360" height="10" viewBox="0 0 360 10" aria-hidden="true"><path d="M1 5.2 L40 4.3 L130 3.5 L260 3.9 L359 4.8 L359 5.6 L260 6.3 L130 6.9 L40 6.1 Z"/></svg>
+<p class="lede">Notes on who hits harder, for 5e-compatible games. Set the fighters down below, pick a range of armour, and the sums come out exact.</p>
+</header>
+
+<section class="section" aria-labelledby="h-terms">
+<h2 id="h-terms" class="h2">The terms</h2>
+<div class="terms">
+<label>Lowest AC<input id="ac-min" type="number" inputmode="numeric" min="1" max="40" step="1"></label>
+<label>Highest AC<input id="ac-max" type="number" inputmode="numeric" min="1" max="40" step="1"></label>
+<label>Look closely at AC<input id="ac-focus" type="number" inputmode="numeric" min="1" max="40" step="1"></label>
+</div>
+<div class="checks">
+<label class="check"><input id="nat1" type="checkbox">A natural 1 always misses</label>
+<label class="check"><input id="nat20" type="checkbox">A natural 20 always hits</label>
+</div>
+<p class="error" id="terms-error" role="alert"></p>
+</section>
+
+<section class="section" aria-labelledby="h-fighters">
+<h2 id="h-fighters" class="h2">The fighters</h2>
+<div class="add-row">
+<label>Add a fighter, starting from<select id="preset-pick"></select></label>
+<button type="button" class="btn" id="add-fighter">+ add a fighter</button>
+</div>
+<p class="status" id="preset-status" aria-live="polite"></p>
+<div class="fighters" id="fighters"></div>
+</section>
+
+<section class="section" aria-labelledby="h-sums">
+<h2 id="h-sums" class="h2">The sums</h2>
+<div id="results" class="section"></div>
+<div><button type="button" class="btn" id="csv">Download the numbers (CSV)</button></div>
+</section>
+
+<footer class="foot">
+<span>5e-compatible. Not an official product.</span>
+<a href="/tools/dpr/#how">How the numbers are worked out</a>
+</footer>
+<noscript><p class="error">The calculator needs JavaScript to run. Everything happens in your browser.</p></noscript>
+</main>
+</div>
+</div>
+
+<dialog id="save-dialog" aria-labelledby="save-title">
+<form method="dialog" class="dialog">
+<h2 id="save-title" class="h3">Save for everyone</h2>
+<p class="public-note"><strong>Saved presets are public.</strong> Anyone who uses this calculator will be able to see and load <span id="save-name"></span>. You can't edit or delete it after saving. Don't put personal information in any name.</p>
+<div id="dpr-turnstile"></div>
+<p class="error" id="save-error" role="alert"></p>
+<div class="dialog__actions">
+<button type="submit" value="cancel" class="btn">Cancel</button>
+<button type="button" class="btn btn--solid" id="save-confirm">Save for everyone</button>
+</div>
+</form>
+</dialog>
+</body>
+</html>
+`;
 }

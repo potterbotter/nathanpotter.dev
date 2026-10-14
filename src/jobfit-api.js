@@ -15,10 +15,12 @@ const monthKey = (ms = Date.now()) => dayKey(ms).slice(0, 7);
 const json = (data, status = 200) => new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } });
 const fail = (status, code, message) => json({ error: code, message }, status);
 
-async function ipKey(env, day, ip) {
+// One-way key for counting a visitor's requests per day. The daily salt is deleted after a day, so keys can't be
+// linked across days or back to an IP. `scope` keeps each tool's keys separate.
+export async function ipKey(env, day, ip, scope = 'jobfit') {
   await env.DB.prepare('INSERT OR IGNORE INTO salts (day, salt) VALUES (?1, ?2)').bind(day, crypto.randomUUID()).run();
   const { salt } = await env.DB.prepare('SELECT salt FROM salts WHERE day = ?1').bind(day).first();
-  const d = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(`jobfit|${salt}|${ip}`));
+  const d = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(`${scope}|${salt}|${ip}`));
   return Array.from(new Uint8Array(d).slice(0, 8), (b) => b.toString(16).padStart(2, '0')).join('');
 }
 
@@ -38,7 +40,7 @@ export async function monthSpend(env, month = monthKey(), { admin = false } = {}
   return { spent: row.spent, runs: row.runs, budget };
 }
 
-async function verifyTurnstile(env, token, ip) {
+export async function verifyTurnstile(env, token, ip) {
   if (!env.TURNSTILE_SECRET) return true; // not configured yet
   if (!token) return false;
   const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
